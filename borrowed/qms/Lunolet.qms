@@ -1,0 +1,1555 @@
+﻿//#compatible:debug
+
+#intro
+
+Знаменитый рейс Кон-Тики! Триумфальное возвращение Михаила Коршунова с Луны на Землю! 
+На ржавом корыте!
+
+Очень хочется видеть это в форме квеста, но для этого в квестовый движок придётся засунуть *Б3-34*. 
+Что из всего этого получится, пока не ясно...
+
+Но вы можете опробовать альфа-версию... На свой страх и риск...
+
+#congratulation
+
+Вам правда это удалось? От всей души поздравляю!
+
+А также выражаю крайнюю признательность Михаилу Пухову, Евгению Катышеву, да и всему коллективу редакции "Техники Молодёжи" в целом.
+
+Не будь этого журнала и не будь рубрики КЭИ в нём, моя жизнь, вероятно, сложилась бы совсем по-другому.
+
+#global:S:S
+#global:DC:100
+#global:rgd:1
+
+#var:rRR #range:0..100000000 #default:0 #order:100
+
+#var:rXn #range:-100000000..100000000 #default:0 #order:200
+#var:rXd #range:1..100000000 #default:1 #order:300
+#var:rYn #range:-100000000..100000000 #default:0 #order:400
+#var:rYd #range:1..100000000 #default:1 #order:500
+#var:rZn #range:-100000000..100000000 #default:0 #order:600
+#var:rZd #range:1..100000000 #default:1 #order:700
+#var:rTn #range:-100000000..100000000 #default:0 #order:800
+#var:rTd #range:1..100000000 #default:1 #order:900
+#var:rRn #range:-100000000..100000000 #default:0 #order:1000
+#var:rRd #range:1..100000000 #default:1 #order:1100
+
+#var:r0n #range:-100000000..100000000 #default:0 #order:1200
+#var:r0d #range:1..100000000 #default:1 #order:1300
+#var:r1n #range:-100000000..100000000 #default:0 #order:1400
+#var:r1d #range:1..100000000 #default:1 #order:1500
+#var:r2n #range:-100000000..100000000 #default:0 #order:1600
+#var:r2d #range:1..100000000 #default:1 #order:1700
+#var:r3n #range:-100000000..100000000 #default:0 #order:1800
+#var:r3d #range:1..100000000 #default:1 #order:1900
+#var:r4n #range:-100000000..100000000 #default:0 #order:2000
+#var:r4d #range:1..100000000 #default:1 #order:2100
+#var:r5n #range:-100000000..100000000 #default:0 #order:2200
+#var:r5d #range:1..100000000 #default:1 #order:2300
+#var:r6n #range:-100000000..100000000 #default:0 #order:2400
+#var:r6d #range:1..100000000 #default:1 #order:2500
+#var:r7n #range:-100000000..100000000 #default:0 #order:2600
+#var:r7d #range:1..100000000 #default:1 #order:2700
+#var:r8n #range:-100000000..100000000 #default:0 #order:2800
+#var:r8d #range:1..100000000 #default:1 #order:2900
+#var:r9n #range:-100000000..100000000 #default:0 #order:3000
+#var:r9d #range:1..100000000 #default:1 #order:3100
+#var:rAn #range:-100000000..100000000 #default:0 #order:3200
+#var:rAd #range:1..100000000 #default:1 #order:3300
+#var:rBn #range:-100000000..100000000 #default:0 #order:3400
+#var:rBd #range:1..100000000 #default:1 #order:3500
+#var:rCn #range:-100000000..100000000 #default:0 #order:3600
+#var:rCd #range:1..100000000 #default:1 #order:3700
+#var:rDn #range:-100000000..100000000 #default:0 #order:3800
+#var:rDd #range:1..100000000 #default:1 #order:3900
+#var:rEn #range:-100000000..100000000 #default:0 #order:4000
+#var:rEd #range:1..100000000 #default:1 #order:4100
+
+#var:rA  #range:0..100000000 #default:0 #order:4200
+#var:rB  #range:0..100000000 #default:0 #order:4300
+#var:rC  #range:0..100000000 #default:0 #order:4400
+#var:rD  #range:0..100000000 #default:0 #order:4500
+#var:rE  #range:0..100000000 #default:0 #order:4600
+#var:eMD #range:0..2 #default:0 #order:4700
+
+#var:stage   #range:0..2 #default:0
+#var:coffe   #range:0..10 #default:0
+#var:bet     #range:0..1000 #default:500 #order:2
+#var:cred    #range:0..10000 #default:1000 #money #order:1
+#var:variant #range:1..10 #default:1
+#var:fuel    #range:0..100 #default:0
+#var:time    #range:1..100 #default:10
+#var:angl    #range:-180..180 #default:0
+  #text:-180..179 ''
+  #text:180..180 'Реверс тяги!'
+
+#macro:r:NM:DC
+{$r[$NM]n div $r[$NM]d}<clr>.<clrEnd>{((($r[$NM]n*[$DC]) div $r[$NM]d) mod [$DC])*(1-2*($r[$NM]n<0))}
+#end
+
+#site:gcd // НОД
+#case:gcd_1 #priority:1 {$rXn>0}
+$rA=$rXn
+$rB=$rXd
+#case:gcd_1 #priority:1 {$rXn<0}
+$rA=-$rXn
+$rB=$rXd
+#case:gcd_3 #priority:10 {$rXn=0}
+$rXd=1
+#site:gcd_1
+#case:gcd_3 #priority:100 {$rA>10 and $rB>10000 and $rB>$rA}
+$rB=$rA
+#case:gcd_3 #priority:100 {$rA>10000 and $rB>10 and $rA>$rB}
+$rA=$rB
+#case:gcd_2 {$rA<$rB and $rA>0} #priority:1
+$rB=$rB mod $rA
+#case:gcd_2 {$rA>$rB and $rB>0} #priority:1
+$rA=$rA mod $rB
+#case:gcd_3 {$rA=$rB and $rA>0} #priority:10
+#case:gcd_3 {$rA=0} #priority:10
+$rA=$rB
+#case:gcd_3 {$rB=0} #priority:10
+$rB=$rA
+#site:gcd_2
+#case:gcd_1
+#site:gcd_3
+#return
+
+#site:sqrt
+$rA=$rXn div $rXd
+$rB=1
+$rC=0
+#case:sqrt_1
+#site:sqrt_1
+#case:sqrt_2 {$rA>=$rB}
+$rA=$rA-$rB
+$rB=$rB+2
+$rC=$rC+1
+#case:sqrt_3 {$rA<$rB}
+$rXn=$rC
+$rXd=1
+#site:sqrt_2
+#case:sqrt_1
+#site:sqrt_3
+$rXn=$rXn*$rRd*$rXn+$rRn*$rXd*$rXd
+$rXd=$rXd*$rXn*$rRd*2
+#case:gcd #return:sqrt_4
+#site:sqrt_4
+#case:sqrt_5 {$rA>1}
+#case:sqrt_6 {$rA<2}
+#site:sqrt_5
+$rXn=$rXn div $rA
+$rXd=$rXd div $rA
+#case:sqrt_6
+#site:sqrt_6
+#return
+
+#site:rg // Радианы в градусы
+$rXn=$rXn*180*113
+$rXd=$rXd*355
+#case:gcd #return:gg_1
+#site:gg // Грады в градусы
+$rXn=$rXn*9
+$rXd=$rXd*10
+#case:gcd #return:gg_1
+#site:gg_1
+#case:gg_2 {$rA>1} #priority:10
+$rXn=$rXn div $rA
+$rXd=$rXd div $rA
+#case:gg_2 {$rA<=1} #priority:1
+#site:gg_2
+#return
+
+#site:cos
+$rXn=90*$rXd-$rXn
+#case:sin
+#site:sin
+#case:sin_1 #priority:10 {$rXn>360*$rXd}
+$rXn=$rXn-360*$rXd
+#case:sin_1 #priority:10 {$rXn<0}
+$rXn=$rXn+360*$rXd
+#case:sin_2 #priority:1 {$rXn>=0 and $rXn<=360*$rXd}
+#site:sin_1
+#case:sin
+#site:sin_2
+#case:sin_3 #priority:10 {$rXn>180*$rXd}
+$rXn=$rXn-180*$rXd
+$rC=-1
+#case:sin_3 #priority:1 {$rXn<=180*$rXd}
+$rC=1
+#site:sin_3
+$rXn=(180*$rXd-$rXn)*$rXn
+$rXd=$rXd*$rXd
+#case:sin_4
+#site:sin_4
+$rA=40500*$rXd-$rXn
+$rB=$rXd
+$rXn=$rXn*4
+#case:sin_5
+#site:sin_5
+$rXn=$rXn*$rB*$rC
+$rXd=$rXd*$rA
+#case:sin_6
+#site:sin_6
+#case:gcd #return:sin_7
+#site:sin_7
+#case:sin_8 {$rA>1}
+#case:sin_9 {$rA<2}
+#site:sin_8
+$rXn=$rXn div $rA
+$rXd=$rXd div $rA
+#case:sin_9
+#site:sin_9
+#return
+
+#site:ERROR #lose
+#page:1 #image:lunolet_7.jpg
+ЕГГОГ
+#case:watch 'Далее...'
+
+#macro:eOn
+    $eMD=1
+#end
+
+#macro:eOff
+    $eMD=0
+#end
+
+#macro:up
+    $rTn=$rZn
+    $rTd=$rZd
+    $rZn=$rYn
+    $rZd=$rYd
+    $rYn=$rXn
+    $rYd=$rXd
+#end
+
+#macro:dn
+    $rZn=$rTn
+    $rZd=$rTd
+    $rYn=$rZn
+    $rYd=$rZd
+#end
+
+#macro:save
+    $rRn=$rXn
+    $rRd=$rXd
+#end
+
+#macro:A:N // Переход по адресу
+  #site:[$S][$NN]
+    #case:[$S][$N]
+#end:NN
+
+#macro:N:X // Ввод числа
+  #site:[$S][$NN]
+    #case:[$S][$NN]_1 {$eMD=0}
+    #case:[$S][$NN]_2 {$eMD=1}
+      $rXn=$rXn*10
+    #case:[$S][$NN]_2 {$eMD=2}
+      $rXn=0
+  #site:[$S][$NN]_1
+      #up
+      $rXn=0
+      $rXd=1
+    #case:[$S][$NN]_2
+  #site:[$S][$NN]_2
+      #eOn
+      $rXn=$rXn+[$X]
+      #case:[$S][$NN+1]
+#end:NN
+
+#macro:C0B // /-/
+  #site:[$S][$NN]
+    #eOff
+    $rXn=-$rXn
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C0F // Вх
+  #site:[$S][$NN]
+    #eOff
+    #up
+    $rXn=$rRn
+    $rXd=$rRd
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C10 // +
+  #site:[$S][$NN]
+    #eOff
+    #save
+    #case:[$S][$NN]_2 {$rXd=$rYd} #priority:10
+    #case:[$S][$NN]_1 {$rXd<>$rYd} #priority:1
+  #site:[$S][$NN]_1
+    $rXn=$rXn*$rYd
+    $rXd=$rXd*$rYd
+    $rYn=$rYn*$rXd
+    $rYd=$rYd*$rXd
+    #case:[$S][$NN]_2
+  #site:[$S][$NN]_2
+    #dn
+    $rXn=$rXn+$rYn
+    #case:gcd #return:[$S][$NN]_3
+  #site:[$S][$NN]_3
+    #case:[$S][$NN]_5 {$rA<=1} #priority:1
+    #case:[$S][$NN]_4 {$rA>1} #priority:10
+  #site:[$S][$NN]_4
+    $rXn=$rXn div $rA
+    $rXd=$rXd div $rA
+    #case:[$S][$NN]_5
+  #site:[$S][$NN]_5
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C11 // -
+  #site:[$S][$NN]
+    #eOff
+    #save
+    #case:[$S][$NN]_2 {$rXd=$rYd} #priority:10
+    #case:[$S][$NN]_1 {$rXd<>$rYd} #priority:1
+  #site:[$S][$NN]_1
+    $rXn=$rXn*$rYd
+    $rXd=$rXd*$rYd
+    $rYn=$rYn*$rXd
+    $rYd=$rYd*$rXd
+    #case:[$S][$NN]_2
+  #site:[$S][$NN]_2
+    #dn
+    $rXn=$rYn-$rXn
+    #case:gcd #return:[$S][$NN]_3
+  #site:[$S][$NN]_3
+    #case:[$S][$NN]_5 {$rA<=1} #priority:1
+    #case:[$S][$NN]_4 {$rA>1} #priority:10
+  #site:[$S][$NN]_4
+    $rXn=$rXn div $rA
+    $rXd=$rXd div $rA
+    #case:[$S][$NN]_5
+  #site:[$S][$NN]_5
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C12 // x
+  #site:[$S][$NN]
+    #eOff
+    #dn
+    #save
+    $rXn=$rXn*$rYn
+    $rXd=$rXd*$rYd
+    #case:gcd #return:[$S][$NN]_1
+  #site:[$S][$NN]_1
+    #case:[$S][$NN]_3 {$rA<=1} #priority:1
+    #case:[$S][$NN]_2 {$rA>1} #priority:10
+  #site:[$S][$NN]_2
+    $rXn=$rXn div $rA
+    $rXd=$rXd div $rA
+    #case:[$S][$NN]_3
+  #site:[$S][$NN]_3
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C13 // /
+  #site:[$S][$NN]
+    #eOff
+    #save
+    #case:ERROR {$rXn=0} #priority:10
+    #case:[$S][$NN]_1 {$rXn<0} #priority:10
+    $rXn=-$rXn
+    $rYn=-$rYn
+    #case:[$S][$NN]_1 {$rXn>0} #priority:1
+  #site:[$S][$NN]_1
+    #dn
+    $rXn=$rXd*$rYn
+    $rXd=$rXn*$rYd
+    #case:gcd #return:[$S][$NN]_2 {$rXd<>0} #priority:1
+  #site:[$S][$NN]_2
+    #case:[$S][$NN]_4 {$rA<=1} #priority:1
+    #case:[$S][$NN]_3 {$rA>1} #priority:10
+  #site:[$S][$NN]_3
+    $rXn=$rXn div $rA
+    $rXd=$rXd div $rA
+    #case:[$S][$NN]_4
+  #site:[$S][$NN]_4
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C1C // sin
+  #site:[$S][$NN]
+    #eOff
+    #save
+    #case:rg #return:[$S][$NN]_1 {[$rgd]=0} // Радианы
+    #case:gg #return:[$S][$NN]_1 {[$rgd]=2} // Грады
+    #case:[$S][$NN]_1 {[$rgd]=1}            // Градусы
+  #site:[$S][$NN]_1
+    #case:sin #return:[$S][$NN]_2
+  #site:[$S][$NN]_2
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C1D // cos
+  #site:[$S][$NN]
+    #eOff
+    #save
+    #case:rg #return:[$S][$NN]_1 {[$rgd]=0} // Радианы
+    #case:gg #return:[$S][$NN]_1 {[$rgd]=2} // Грады
+    #case:[$S][$NN]_1 {[$rgd]=1}            // Градусы
+  #site:[$S][$NN]_1
+    #case:cos #return:[$S][$NN]_2
+  #site:[$S][$NN]_2
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C21 // sqrt
+  #site:[$S][$NN]
+    #eOff
+    #save
+    #case:ERROR {$rXn<0} #priority:10
+    #case:[$S][$NN]_1 {$rXn=0} #priority:10
+    #case:[$S][$NN]_1 {$rXn=1 and $rXd=1} #priority:10
+    #case:sqrt #return:[$S][$NN]_1 {$rXn>1 or $rXd<>1} #priority:1
+  #site:[$S][$NN]_1
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C22 // x^2
+  #site:[$S][$NN]
+    #eOff
+    #save
+    $rXn=$rXn*$rXn
+    $rXd=$rXd*$rXd
+    #case:gcd #return:[$S][$NN]_1
+  #site:[$S][$NN]_1
+    #case:[$S][$NN]_3 {$rA<=1} #priority:1
+    #case:[$S][$NN]_2 {$rA>1} #priority:10
+  #site:[$S][$NN]_2
+    $rXn=$rXn div $rA
+    $rXd=$rXd div $rA
+    #case:[$S][$NN]_3
+  #site:[$S][$NN]_3
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C25 // o
+  #site:[$S][$NN]
+    #eOff
+    #dn
+    $rXn=$rYn
+    $rXd=$rYd
+    $rTn=$rXn
+    $rTd=$rXd
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C40 // П0
+  #site:[$S][$NN]
+    #eOff
+    $r0n=$rXn
+    $r0d=$rXd
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C41 // П1
+  #site:[$S][$NN]
+    #eOff
+    $r1n=$rXn
+    $r1d=$rXd
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C42 // П2
+  #site:[$S][$NN]
+    #eOff
+    $r2n=$rXn
+    $r2d=$rXd
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C43 // П3
+  #site:[$S][$NN]
+    #eOff
+    $r3n=$rXn
+    $r3d=$rXd
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C48 // П8
+  #site:[$S][$NN]
+    #eOff
+    $r8n=$rXn
+    $r8d=$rXd
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C4A // ПA
+  #site:[$S][$NN]
+    #eOff
+    $rAn=$rXn
+    $rAd=$rXd
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C4B // ПB
+  #site:[$S][$NN]
+    #eOff
+    $rBn=$rXn
+    $rBd=$rXd
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C4C // ПC
+  #site:[$S][$NN]
+    #eOff
+    $rCn=$rXn
+    $rCd=$rXd
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C4D // ПD
+  #site:[$S][$NN]
+    #eOff
+    $rDn=$rXn
+    $rDd=$rXd
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C50 // С/П
+  #site:[$S][$NN]
+    $rRR=$rRR*100+[$NN+1]
+    #case:menu
+#end:NN
+
+#macro:C51 // БП
+  #site:[$S][$NN]
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C52 // В/О
+  #site:[$S][$NN]
+    #case:[$S]7 {$rRR mod 100 = 7}
+    $rRR=$rRR div 100
+    #case:[$S]56 {$rRR mod 100 = 56}
+    $rRR=$rRR div 100
+    #case:[$S]62 {$rRR mod 100 = 62}
+    $rRR=$rRR div 100
+    #case:[$S]66 {$rRR mod 100 = 66}
+    $rRR=$rRR div 100
+#end:NN
+
+#macro:C53 // ПП
+  #site:[$S][$NN]
+    $rRR=$rRR*100+[$NN+2]
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C57 // F x<>0
+  #site:[$S][$NN]
+    #case:[$S][$NN+1] {$rXn=0} #priority:10
+    #case:[$S][$NN+2] {$rXn<>0} #priority:1
+#end:NN
+
+#macro:C5C // F x<0
+  #site:[$S][$NN]
+    #case:[$S][$NN+2] {$rXn<0} #priority:10
+    #case:[$S][$NN+1] {$rXn>=0} #priority:1
+#end:NN
+
+#macro:C5E // F x=0
+  #site:[$S][$NN]
+    #case:[$S][$NN+2] {$rXn=0} #priority:10
+    #case:[$S][$NN+1] {$rXn<>0} #priority:1
+#end:NN
+
+#macro:C60 // ИП0
+  #site:[$S][$NN]
+    #eOff
+    #up
+    $rXn=$r0n
+    $rXd=$r0d
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C61 // ИП1
+  #site:[$S][$NN]
+    #eOff
+    #up
+    $rXn=$r1n
+    $rXd=$r1d
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C62 // ИП2
+  #site:[$S][$NN]
+    #eOff
+    #up
+    $rXn=$r2n
+    $rXd=$r2d
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C63 // ИП3
+  #site:[$S][$NN]
+    #eOff
+    #up
+    $rXn=$r3n
+    $rXd=$r3d
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C64 // ИП4
+  #site:[$S][$NN]
+    #eOff
+    #up
+    $rXn=$r4n
+    $rXd=$r4d
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C65 // ИП5
+  #site:[$S][$NN]
+    #eOff
+    #up
+    $rXn=$r5n
+    $rXd=$r5d
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C66 // ИП6
+  #site:[$S][$NN]
+    #eOff
+    #up
+    $rXn=$r6n
+    $rXd=$r6d
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C67 // ИП7
+  #site:[$S][$NN]
+    #eOff
+    #up
+    $rXn=$r7n
+    $rXd=$r7d
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C68 // ИП8
+  #site:[$S][$NN]
+    #eOff
+    #up
+    $rXn=$r8n
+    $rXd=$r8d
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C69 // ИП9
+  #site:[$S][$NN]
+    #eOff
+    #up
+    $rXn=$r9n
+    $rXd=$r9d
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C6A // ИПA
+  #site:[$S][$NN]
+    #eOff
+    #up
+    $rXn=$rAn
+    $rXd=$rAd
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C6B // ИПB
+  #site:[$S][$NN]
+    #eOff
+    #up
+    $rXn=$rBn
+    $rXd=$rBd
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C6C // ИПC
+  #site:[$S][$NN]
+    #eOff
+    #up
+    $rXn=$rCn
+    $rXd=$rCd
+    #case:[$S][$NN+1]
+#end:NN
+
+#macro:C6D // ИПD
+  #site:[$S][$NN]
+    #eOff
+    #up
+    $rXn=$rDn
+    $rXd=$rDd
+    #case:[$S][$NN+1]
+#end:NN
+
+#C6A  // 00 ИПА
+#C5C  // 01 Fx<0
+#A:14 // 02 14
+#N:2  // 03 2
+#C12  // 04 x
+#C53  // 05 ПП
+#A:82 // 06 82
+#C22  // 07 x^2
+#C10  // 08 +
+#C21  // 09 sqrt
+#C6B  // 10 ИПB
+#C11  // 11 -
+#C51  // 12 БП
+#A:78 // 13 78
+
+#C57  // 14 Fx<>0
+#A:31 // 15 31
+#N:0  // 16 0
+#C63  // 17 ИП3
+#C67  // 18 ИП7
+#C11  // 19 -
+#C5C  // 20 Fx<0
+#A:26 // 21 26
+#C6D  // 22 ИПД
+#C5E  // 23 Fx=0
+#A:30 // 24 30
+#C66  // 25 ИП6
+#C69  // 26 ИП9
+#C50  // 27 С/П
+#C51  // 28 БП
+#A:33 // 29 33
+
+#C6A  // 30 ИПA
+#C50  // 31 С/П
+#C41  // 32 П1
+#C25  // 33 o
+#C42  // 34 П2
+#C13  // 35 /
+#C48  // 36 П8
+#C65  // 37 ИП5
+#C6D  // 38 ИПД
+#C10  // 39 +
+#C13  // 40 /
+#C66  // 41 ИП6
+#C12  // 42 x
+#C43  // 43 П3
+#C6C  // 44 ИПC
+#C63  // 45 ИП3
+#C61  // 46 ИП1
+#C1C  // 47 sin
+#C12  // 48 x
+#C62  // 49 ИП2
+#C12  // 50 x
+#C60  // 51 ИП0
+#C10  // 52 +
+#C40  // 53 П0
+#C53  // 54 ПП
+#A:91 // 55 91
+#C11  // 56 -
+#C4C  // 57 ПC
+#C62  // 58 ИП2
+#C0B  // 59 /-/
+#C53  // 60 ПП
+#A:82 // 61 82
+#C10  // 62 +
+#C4B  // 63 ПB
+#C53  // 64 ПП
+#A:91 // 65 91
+#C6A  // 66 ИПA
+#C10  // 67 +
+#C4A  // 68 ПA
+#C6D  // 69 ИПД
+#C68  // 70 ИП8
+#C62  // 71 ИП2
+#C12  // 72 x
+#C11  // 73 -
+#C4D  // 74 ПД
+#C5C  // 75 Fx<0
+#A:0  // 76 00
+#C68  // 77 ИП8
+#C13  // 78 /
+#C42  // 79 П2
+#C51  // 80 БП
+#A:44 // 81 44
+#C64  // 82 ИП4
+#C63  // 83 ИП3
+#C61  // 84 ИП1
+#C1D  // 85 cos
+#C12  // 86 x
+#C11  // 87 -
+#C12  // 88 x
+#C6B  // 89 ИПB
+#C52  // 90 B/O
+
+#C0F  // 91 FBx
+#C10  // 92 +
+#N:2  // 93 2
+#C13  // 94 /
+#C62  // 95 ИП2
+#C12  // 96 x
+#C52  // 97 B/O
+
+#site:start
+#case:S28 {$rRR mod 100 = 28}
+$rRR=$rRR div 100
+#case:S32 {$rRR mod 100 = 32}
+$rRR=$rRR div 100
+
+#site:entry #default #hide:angl
+#page:1 #image:lunolet_6.jpg
+
+Самое увлекательное приключение XXI века началось с чашки кофе. Мы с Эдиком Рыжковским завтракали в буфете астровокзала на девятом этаже. Лучший лунный кофе делали здесь, но получить его было непросто. 
+
+Совсем недавно на раздачу установили игровой автомат и с этих пор, для получения чашки вожделенного напитка, приходилось решать астронавигационные задачи. Кофе помогал в их решении, но именно его то и не было.
+
+- Спорим на $bet кредов, что железка опять тебя прокатит? - сказал Эдик
+
+Недавно он совершил почти невозможное: выиграл целых две кружки подряд, но похоже, что полоса его везения на этом закончилась.
+
+#case:speak 'Сегодня обойдёмся без полётов'
+#case:game_1 'Деньги - ничто, жажда - всё'
+$bet = 0
+#case:game_1 'Идёт' {$cred>=500}
+$bet = 500
+$cred = $cred - 500
+#case:game_1 'Спорим на тысячу' {$cred>=1000}
+$bet = 1000
+$cred = $cred - 1000
+
+Мелко, Эдик, если спорить, то уж на все деньги!
+
+#site:game_1
+#page:1: #image:lunolet_10.jpg
+
+Я поднялся на ноги, потянулся и не спеша побрёл к игровому автомату. В последнюю неделю, он мучал нас всех посадкой на безатмосферное тело.
+
+Аппарат с химическим реактивным двигателем начинал своё движение к Луне на произвольно заданной высоте, от соискателя же требовалось подавать команды двигателю таким образом, чтобы завершить движение у самой поверхности со скоростью не более *5* метров в секунду.
+
+Превышать ускорение свыше *3g* также не рекомендовалась. Аппарат имитировал потерю пилотом сознания, а за то время что он "приходил в себя" можно было и в Луну врезаться...
+
+#case:game_2 'Посмотрим что тут у нас'
+
+#site:game_2
+$r0n=0          // Начальная горизонтальная скорость
+$r0d=1
+$r1n=0
+$r1d=1
+$r2n=0
+$r2d=1
+$r3n=0
+$r3d=1
+$r4n=162        // Ускорение свободного падения
+$r4d=100
+$r5n=2250       // Масса корабля
+$r5d=1
+$r6n=3660       // Скорость истечения продуктов сгорания
+$r6d=1
+$r7n=2943       // Предельное ускорение
+$r7d=100
+$r8n=0
+$r8d=1
+$r9n=505
+$r9d=1
+$rAn=<300..800> // Начальная высота
+$rAd=1
+$rBn=0          // Начальная вертикальная скорость
+$rBd=1
+$rCn=0          // Расстояние до цели
+$rCd=1
+$rDn=<200..500> // Запас топлива
+$rDd=1
+$rEn=0
+$rEd=1
+$rXn=0
+$rXd=1
+$rYn=0
+$rYd=1
+$rZn=0
+$rZd=1
+$rTn=0
+$rTd=1
+$rRn=0
+$rRd=1
+$rRR=0
+#page:1
+^ Высота: #r:A м^
+^ Запас топлива: #r:D кг^
+#case:S0 'Полетели!' {$coffe<10} // TODO
+#case:speak 'Хватит полётов на сегодня' {$coffe>0}
+#case:speak 'Обойдёмся без полётов сегодня' {$coffe=0}
+
+Согласно показаниям, погода была нелётная и я вернулся за столик.
+
+#site:speak {($coffe>0)+1}
+$stage=1
+#page:1 #image:lunolet_1.jpg
+
+Мы с Эдиком продолжали сидеть за столиком. Кофе хотелось мучительно. В этом состоянии мы и пребывали, когда в помещение вошёл незнакомый нам человек. Он вошёл уверенной лунной походкой, какая замечается лишь у коренных "селенитов". На Луне все ходят замедленно, но у тех кто недавно прилетел с Земли или Марса, это выглядит неуклюже.
+
+Наш незнакомец шагал настоящей лунной походкой и это было странно - мы хорошо знаем всех местных жителей, не так уж нас и много. Внешность у него была запоминающаяся - подтянутый, среднего роста, глаза голубые, на голове короткий ёжик совершенно седых волос.
+
+Он направился прямо к стойке, взял несколько бутербродов, стакан оранджа, окинул взглядом зал, подошёл к нашему столику и попросил разрешения сесть.
+
+#page:2 #image:lunolet_1.jpg
+
+Мы с Эдиком смаковали честно заработанный кофе, когда в помещение вошёл незнакомый нам человек. Он вошёл уверенной лунной походкой, какая замечается лишь у коренных "селенитов". На Луне все ходят замедленно, но у тех кто недавно прилетел с Земли или Марса, это выглядит неуклюже.
+
+Наш незнакомец шагал настоящей лунной походкой и это было странно - мы хорошо знаем всех местных жителей, не так уж нас и много. Внешность у него была запоминающаяся - подтянутый, среднего роста, глаза голубые, на голове короткий ёжик совершенно седых волос.
+
+Он направился прямо к стойке, взял несколько бутербродов, стакан оранджа, окинул взглядом зал, подошёл к нашему столику и попросил разрешения сесть.
+
+#case:speak_1 'Конечно присоединяйтесь'
+$variant=1
+#case:speak_1 'Мы уже уходим, кофе всё равно нет'
+$variant=2
+
+#site:speak_1 {$variant}
+#page:1
+
+Отхлебнув оранджа, незнакомец повёл носом. В воздухе плавал кофейный аромат.
+
+- Вы с какой-нибудь дальней базы? - спросил Эдик.
+- С дальней? - незнакомец прищурился. - Можно и так сказать. А почему вы так решили?
+- Селенита видно по походке, - объяснил Эдик. В Центре мы вас раньше не встречали, да и во всех ближних точках я тоже бывал.
+- Понял вашу логику, - кивнул незнакомец, но скажите, где взять кофе? В баре я видел только это, - он поднял свой стакан, - и минеральную воду.
+- Кофе в автомате. - Эдик махнул рукой. - Только не выиграешь. Раздобыть сразу две чашки выпадает раз в жизни.
+- А что за игра? Шахматы? Или какой-нибудь "Стартрек"?
+- Нет, здесь игра для профессионалов, чтобы кофе шёл основному лётному составу, а не всяким там...
+
+Незнакомец посмотрел на Эдика с недоумением.
+
+- Надо попробовать. - Он встал со своего места. - Вам принести?
+- Я, право, не знаю... - заколебался я.
+- Несите, - сказал Элик. В голосе его звучало злорадство. - Две..., нет, лучше три чашки...
+
+#page:2
+
+- А где взять кофе? В баре я видел только это, - он поднял свой стакан, - и минеральную воду.
+- Кофе в автомате. - Эдик махнул рукой. - Только не выиграешь. Раздобыть две чашки выпадает раз в жизни.
+- А что за игра? Шахматы? Или какой-нибудь "Стартрек"?
+- Нет, здесь игра для профессионалов, чтобы кофе шёл основному лётному составу, а не всяким там...
+
+Незнакомец посмотрел на Эдика с недоумением.
+
+- Надо попробовать. - Он встал со своего места. - Вам принести?
+- Я, право, не знаю... - заколебался я.
+- Несите, - сказал Элик. В голосе его звучало злорадство. - Две..., нет, лучше три чашки...
+
+#case:speak_2 'Незнакомец встал и пошёл в дальний конец зала'
+
+#site:speak_2
+#page:1 #image:lunolet_5.jpg
+
+- Я его прищемил, - сказал Эдик. - Думает, раз он профессионал, всё получится. Как бы не так!
+- Зачем ты так? Ты же его не знаешь.
+- Человека видно по походке, - произнёс Эдик. - Обыкновенный пижон...
+
+Он замолчал, потому что по залу пронёсся восхищённый ропот. Наш новый знакомый возвращался, балансируя подносом, уставленным чашками кофе.
+
+- Себе я взял две, если не возражаете, - сказал он, опускаясь в кресло. - А вам по три, как и просили...
+
+#case:speak_3 'Восемь чашек???'
+
+#site:speak_3
+#page:1 #image:lunolet_1.jpg
+
+Эдик сидел, опустив глаза. Лицо у него полыхало. Он, обжигаясь, пил кофе большими глотками.
+
+- А где вы раньше летали? - спросил я чуть погодя.
+- Юпитер, - сказал он. - Ио, Европа, Каллисто... А сейчас в отставке... По возрасту.
+- И что теперь?
+- Теперь на Землю, - сказал он.
+
+#case:speak_4 'Давайте полетим вместе'
+
+#site:speak_4
+#page:1
+
+Я тоже туда собираюсь. В отпуск.
+
+- По рукам. Вы мне нравитесь. Пойдёте со мной штурманом? Меня зовут Михаил Коршунов. Профессиональная кличка Лунный Коршун. Так договорились - летим вместе?
+- Договорились, - сказал я. Меня зовут <Ranger>. Только лайнер ушёл вчера. Теперь две недели ждать...
+
+Михаил поморщился. Лайнер. Скукотища... Стюардесса разносит конфеты и воду. Заставляют сидеть в кресле...
+
+- А как же иначе? Космический лифт пока не построили.
+- Вот и я думаю, - сказал Михаил Коршунов. - Простите, Эдуард, если не ошибаюсь? Вы говорили что много летаете? Не знаете, где можно раздобыть корабль? Хотя бы плохонький?
+
+#case:speak_5 'Эдик поднял лицо'
+
+#site:speak_5
+#page:1
+
+Краска с него уже схлынула, а в глазах появилось выражение, которое мне очень не понравилось. Что-то нехорошое, мстительное.
+
+- Плохонький? - повторил он.
+- Меня устроит любой, лишь бы двигатель был цел.
+- Тогда я вам помогу. У меня есть именно то что вам нужно.
+
+#case:speak_5_1 'Это безумие! Я отказываюсь принимать в этом участие!'
+#case:speak_6 'Эдик, имей совесть'
+
+#site:speak_5_1 #lose
+#page:1 #image:lunolet_8.jpg
+
+Я решительно встал из-за стола. Лунный Коршун смотрел на меня с недоумением и... какой-то жалостью?
+Развернувшись, я зашагал к выходу. Я дождался своего лайнера, там были стюардесса, вода и конфеты...
+А про завершение этой истории я узнал из газет. 
+
+Знаменитый рейс Кон-Тики! Лунный Коршун в одиночку осуществляет перелёт с Луны на Землю!
+Триумфальный рейс на ржавом корыте, завершившийся где-то в Атлантике. Там Михаил вызвал спасателей.
+Лунный Коршун не умел плавать...
+
+Именно из газет я узнал о самом интересном приключении XXI-го века, в котором так и не принял участие.
+
+#site:speak_6
+#page:1
+
+Я знал что было у Эдика. Ведь именно на этом корыте я чуть не разбился пару недель назад!
+
+- На этом нельзя летать! Даже на орбиту нельзя выйти!
+- Давайте, посмотрим описание? - сказал Лунный Коршун.
+
+Эдик выложил на стол паспорт - да-да, того самого лунолёта!
+
+Коршунов погрузился в чтение. Он шевелил губами, иногда повторяя вслух: сухая масса - две тонны. Топливо - керосин и кислород. Предназначен для перелётов вдоль поверхности Луны на расстояния не свыше 1000 километров...
+
+#case:speak_7 'Вдруг Коршунов захохотал!'
+
+#site:speak_7
+$r0n=0      // Начальная горизонтальная скорость
+$r0d=1
+$r1n=0
+$r1d=1
+$r2n=0
+$r2d=1
+$r3n=0
+$r3d=1
+$r4n=162    // Ускорение свободного падения
+$r4d=100
+$r5n=2250   // Масса корабля
+$r5d=1
+$r6n=3660   // Скорость истечения продуктов сгорания
+$r6d=1
+$r7n=2943   // Предельное ускорение
+$r7d=100
+$r8n=0
+$r8d=1
+$r9n=505
+$r9d=1
+$rAn=0      // Начальная высота
+$rAd=1
+$rBn=0      // Начальная вертикальная скорость
+$rBd=1
+$rCn=250000 // Расстояние до цели
+$rCd=1
+$rDn=1000   // Запас топлива
+$rDd=1
+$rEn=0
+$rEd=1
+$rXn=0
+$rXd=1
+$rYn=0
+$rYd=1
+$rZn=0
+$rZd=1
+$rTn=0
+$rTd=1
+$rRn=0
+$rRd=1
+$rRR=0
+
+#page:1 #image:lunolet_3.jpg
+
+Он смеялся долго и искренне. Эдик тоже засмеялся - сначала робко, потом всё уверенней. На них оглядывались. Я молча ждал, пытаясь сообразить, во что может вылиться эта ситуация.
+
+- Ну и колымага!- отсмеявшись сказал Коршунов. - Но зачем все эти дурацкие ограничители? На ускорение, на расход, на время манёвра? Учтите - я всё это выброшу.
+
+Лицо у Эдика Рыжковского стало растерянным.
+
+- Да вы что... берёте?
+- Конечно. Мы же с вами договорились. Разве не так?
+- Но я же просто пошутил! - воскликнул Эдик. - Прошу вас меня извинить...
+- Извинения не принимаются, - холодно заявил Дунный Коршун. Я беру ваше судно.
+- Но это безумие! - рассвирипел Эдик. Эта машина никогда не поднималась на орбиту, идти на ней в космос - это всё равно что переплывать океан на плоту!
+- Но ведь переплывали же, - спокойно возразил Коршунов. С вашего разрешения, нарекаю это судно "Кон-Тики".
+
+Так началась эта удивительная история. Мы выбросили с Кон-Тики всё лишнее, установили на него дополнительные баки...
+
+#case:S0 'но перед этим...'
+
+Предстояло перегнать наш лунолёт за *250* км. в Море Спокойствия. Там мы собирались его дооборудовать, провести испытательные полёты и стартовать, наконец, к Земле.
+
+Пилотировать аппарат предстояло мне, поскольку Коршунов остался улаживать юридические формальности.
+
+#site:menu
+#case:menu_1 {$rRR=32 and $stage=0}
+#case:menu_2 {$rRR=32 and $stage>0}
+#case:overload {$rRR=28}
+
+#site:overload
+#page:1
+*!!! ПЕРЕГРУЗКА !!!*
+#case:start 'Прийти в себя'
+
+#macro:aim_1
+#page:1
+^ Высота: #r:X м^
+^ Запас топлива: #r:Y кг^
+^ Вертикальная скорость: #r:B м/с^
+^ -----------------------------^
+^ Расход топлива: $fuel кг^
+^ Время: $time с^
+^ @angl^
+#end
+
+#site:menu_1
+#case:win_1 {$rXn<$rXd and -$rBn<5*$rBd} #priority:100
+#case:death_1 {$rXn<$rXd and -$rBn>=5*$rBd} #priority:50
+#case:menu_1_aim #priority:1
+
+#site:win_1
+$coffe = $coffe + 1
+#aim_1
+
+*!!! Поздравляем с успешным прилунением !!!*
+#case:speak 'На сегодня достаточно'
+$cred = $cred + 2*$bet
+#case:game_2 'Сыграем ещё разок?'
+
+#site:death_1
+#aim_1
+
+*!!! Вы разбились !!!*
+#case:speak 'На сегодня достаточно'
+#case:game_2 'Сыграем ещё разок?'
+
+#site:menu_1_aim
+#aim_1
+#case:fuel_1 'Задать расход топлива' order:1
+#case:time_1 'Задать время расхода' order:2
+#case:angl_1 'Реверс тяги' order:3
+$angl=180-$angl
+#case:speak 'Прервать игру' order:5
+#case:start 'Применить' {$time>0 and $fuel*$rDd<=$rDn} order:4
+$rTn=$rXn
+$rTd=$rXd
+$rZn=$fuel
+$rZd=1
+$rYn=$time
+$rYd=1
+$rXn=$angl
+$rXd=1
+
+#site:angl_1
+#case:menu_1_aim
+
+#site:fuel_1
+#aim_1
+#case:fuel_1_1 'Расход топлива: +1' order:1
+$fuel=$fuel+1
+#case:fuel_1_1 'Расход топлива: +10' order:2
+$fuel=$fuel+10
+#case:fuel_1_1 'Сбросить' order:3
+$fuel=0
+#case:menu_1_aim 'Назад' order:9
+
+#site:fuel_1_1
+#case:fuel_1
+
+#site:time_1
+#aim_1
+#case:time_1_1 'Время расхода: +1' order:1
+$time=$time+1
+#case:time_1_1 'Время расхода: +10' order:2
+$time=$time+10
+#case:time_1_1 'Сбросить' order:3
+$time=0
+#case:menu_1_aim 'Назад' order:9
+
+#site:time_1_1
+#case:time_1
+
+#macro:aim_2
+#page:1
+^ Высота: #r:X м^
+^ Запас топлива: #r:Y кг^
+^ Вертикальная скорость: #r:B м/с^
+^ Горизонтальная скорость: #r:0 м/с^
+^ Расстояние до цели: #r:C км^
+^ -----------------------------^
+^ Расход топлива: $fuel кг^
+^ Время: $time с^
+^ Угол: $angl г^
+#end
+
+#site:menu_2
+#case:win_2 {$rXn<$rXd and $stage=2 and -$rBn<5*$rBd and -$r0n<5*$r0d and $r0n<5*$r0d and $rCn<10*$rCd and -$rCn<10*$rCd} #priority:100
+#case:lose_2 {$rXn<$rXd and $stage=2 and -$rBn<5*$rBd and -$r0n<5*$r0d and $r0n<5*$r0d and ($rCn>=10*$rCd or -$rCn>=10*$rCd)} #priority:90
+#case:death_2 {$rXn<$rXd and (-$rBn>=5*$rBd or -$r0n>=5*$r0d or $r0n>=5*$r0d)} #priority:50
+#case:menu_2_aim {$rXn>=50*$rXd and $stage<2} #priority:10
+$stage=2
+#case:menu_2_aim #priority:1
+
+#site:win_2 #win #image:lunolet_4.jpg
+#aim_2
+
+Вот так я успешно приземлился в Море Спокойствия. 
+
+С этого небольшого перелёта началась наша знаменитая эпопея. Перелёт Кон-Тики с Луны на Землю. Нам предстояло многое - стыковка с орбитальной станцией, выход в точку либрации, вход в атмосферу и успешное приводнение в Атлантическом океане...
+
+Но это уже другая история.
+
+#site:lose_2 #lose #image:lunolet_7.jpg
+#aim_2 
+
+Не представляю, как это могло получиться. Прилунился я вполне удачно, но не совсем там где планировалось.
+Коршунов много и с выражением ругался. В результате, меня спасли до того как кончился кислород, Коршунов перегнал корабль сам и полетел один.
+
+Об успешном завершении рейса Кон-Тики я узнал из газет. А в отпуск на Землю полетел как и все, на лайнере.
+Со стюардессами, водой и конфетами...
+
+#site:death_2 #lose #image:lunolet_7.jpg
+#aim_2
+
+Вот так, не начавшись, завершилась эта история. 
+
+Мне удалось выпрыгнуть в последний момент, но аппарат разбился вдребезги.
+
+На Землю мы полетели на лайнере. Коршунов со мной не разговаривал.
+
+#site:menu_2_aim
+#aim_2
+#case:fuel_2 'Задать расход топлива' order:1
+#case:time_2 'Задать время расхода' order:2
+#case:angl_2 'Задать угол' order:3
+//#case:flush 'Слить топливо' {$fuel*$rDd<=$rDn} order:5
+#case:start 'Применить' {$time>0 and $fuel*$rDd<=$rDn} order:4
+$rTn=$rXn
+$rTd=$rXd
+$rZn=$fuel
+$rZd=1
+$rYn=$time
+$rYd=1
+$rXn=$angl
+$rXd=1
+
+#site:flush
+$rDn = $rDn - $fuel*$rDd
+$rYn = $rDn
+$rYd = $rDd
+$fuel = 0
+#case:menu_2_aim
+
+#site:angl_2
+#aim_2
+#case:menu_2 'Угол: 0 градусов' order:1
+$angl=0
+#case:menu_2 'Угол: 45 градусов' order:2
+$angl=45
+#case:menu_2 'Угол: -45 градусов' order:3
+$angl=-45
+#case:menu_2 'Угол: 90 градусов' order:4
+$angl=90
+#case:menu_2 'Угол: -90 градусов' order:5
+$angl=-90
+#case:menu_2 'Угол: 135 градусов' order:6
+$angl=135
+#case:menu_2 'Угол: -135 градусов' order:7
+$angl=-135
+#case:menu_2 'Угол: 180 градусов' order:8
+$angl=180
+
+#site:fuel_2
+#aim_2
+#case:fuel_2_1 'Расход топлива: +1' order:1
+$fuel=$fuel+1
+#case:fuel_2_1 'Расход топлива: +10' order:2
+$fuel=$fuel+10
+#case:fuel_2_1 'Сбросить' order:3
+$fuel=0
+#case:menu_2_aim 'Назад' order:9
+
+#site:fuel_2_1
+#case:fuel_2
+
+#site:time_2
+#aim_2
+#case:time_2_1 'Время расхода: +1' order:1
+$time=$time+1
+#case:time_2_1 'Время расхода: +10' order:2
+$time=$time+10
+#case:time_2_1 'Сбросить' order:3
+$time=0
+#case:menu_2_aim 'Назад' order:9
+
+#site:time_2_1
+#case:time_2
+
+#position:gcd:1888:567
+#position:gcd_1:1952:567
+#position:gcd_3:1888:609
+#position:gcd_2:1952:609
+#position:sqrt_6:1888:357
+#position:rg:928:147
+#position:gg:992:147
+#position:sqrt_4:1952:357
+#position:gg_1:1056:147
+#position:sin_4:1888:861
+#position:sin_5:1952:861
+#position:sin_2:1952:819
+#position:sin_3:1888:819
+#position:sin_6:1952:777
+#position:sin:1888:777
+#position:sin_1:1952:735
+#position:cos:1888:735
+#position:sin_9:1888:651
+#position:sin_8:1888:693
+#position:sin_7:1952:693
+#position:gg_2:1056:189
+#position:sqrt:1888:399
+#position:sqrt_1:1952:399
+#position:sqrt_5:1952:315
+#position:menu:1376:189
+#position:menu_2:1440:189
+#position:menu_1:1312:189
+#position:flush:1376:231
+#position:angl_1:1632:189
+#position:sqrt_3:1952:441
+#position:sqrt_2:1888:441
+#position:start:1440:147
+#position:S3_1:416:315
+#position:S3_2:416:357
+#position:S4_1:480:315
+#position:S4_2:480:357
+#position:S4_3:480:399
+#position:S7_1:672:315
+#position:S7_2:672:357
+#position:S7_3:672:399
+#position:S8_1:736:315
+#position:S8_2:736:357
+#position:S9_1:800:315
+#position:S8_3:736:399
+#position:S8_4:736:441
+#position:S8_5:736:483
+#position:S11_1:928:315
+#position:S11_2:928:357
+#position:S11_3:928:399
+#position:S11_4:928:441
+#position:S11_5:928:483
+#position:S16_1:1248:315
+#position:S16_2:1248:357
+#position:S19_1:1440:315
+#position:S19_2:1440:357
+#position:S19_3:1440:399
+#position:S19_4:1440:441
+#position:S19_5:1440:483
+#position:S35_1:1184:567
+#position:S35_2:1184:609
+#position:S35_3:1184:651
+#position:S35_4:1184:693
+#position:S39_1:1440:567
+#position:S39_2:1440:609
+#position:S39_3:1440:651
+#position:S39_4:1440:693
+#position:S39_5:1440:735
+#position:S40_1:224:819
+#position:S40_2:224:861
+#position:S40_3:224:903
+#position:S40_4:224:945
+#position:S42_1:352:819
+#position:S42_2:352:861
+#position:S42_3:352:903
+#position:S47_1:672:819
+#position:S47_2:672:861
+#position:S48_1:736:819
+#position:S48_2:736:861
+#position:S48_3:736:903
+#position:S50_1:864:819
+#position:S50_2:864:861
+#position:S50_3:864:903
+#position:S52_1:992:819
+#position:S52_2:992:861
+#position:S52_3:992:903
+#position:S52_4:992:945
+#position:S52_5:992:987
+#position:S56_1:1248:819
+#position:S56_2:1248:861
+#position:S56_3:1248:903
+#position:S56_4:1248:945
+#position:S56_5:1248:987
+#position:S62_1:352:1071
+#position:S62_2:352:1113
+#position:S62_3:352:1155
+#position:S62_4:352:1197
+#position:S62_5:352:1239
+#position:S67_1:672:1071
+#position:S67_2:672:1113
+#position:S67_3:672:1155
+#position:S67_4:672:1197
+#position:S67_5:672:1239
+#position:S72_1:992:1071
+#position:S72_2:992:1113
+#position:S72_3:992:1155
+#position:S73_1:1056:1071
+#position:S73_2:1056:1113
+#position:S73_3:1056:1155
+#position:S73_4:1056:1197
+#position:S73_5:1056:1239
+#position:S78_1:1376:1071
+#position:S78_2:1376:1113
+#position:S78_3:1376:1155
+#position:S78_4:1376:1197
+#position:S96_1:1248:1323
+#position:S96_2:1248:1365
+#position:S96_3:1248:1407
+#position:S94_1:1120:1323
+#position:S94_2:1120:1365
+#position:S94_3:1120:1407
+#position:S94_4:1120:1449
+#position:S93_1:1056:1323
+#position:S93_2:1056:1365
+#position:S92_1:992:1323
+#position:S92_2:992:1365
+#position:S92_3:992:1407
+#position:S92_4:992:1449
+#position:S92_5:992:1491
+#position:S88_1:736:1323
+#position:S88_2:736:1365
+#position:S88_3:736:1407
+#position:S87_1:672:1323
+#position:S87_2:672:1365
+#position:S87_3:672:1407
+#position:S87_4:672:1449
+#position:S87_5:672:1491
+#position:S86_1:608:1323
+#position:S86_2:608:1365
+#position:S86_3:608:1407
+#position:S85_1:544:1323
+#position:S85_2:544:1365
+#position:S0:224:273
+#position:S1:288:273
+#position:S3:416:273
+#position:S4:480:273
+#position:S5:544:273
+#position:S6:608:273
+#position:S2:352:273
+#position:S7:672:273
+#position:S8:736:273
+#position:S9:800:273
+#position:S10:864:273
+#position:S11:928:273
+#position:S12:992:273
+#position:S13:1056:273
+#position:S14:1120:273
+#position:S15:1184:273
+#position:S16:1248:273
+#position:S17:1312:273
+#position:S18:1376:273
+#position:S19:1440:273
+#position:S20:224:525
+#position:S21:288:525
+#position:S22:352:525
+#position:S23:416:525
+#position:S24:480:525
+#position:S25:544:525
+#position:S26:608:525
+#position:S27:672:525
+#position:S28:736:525
+#position:S29:800:525
+#position:S30:864:525
+#position:S31:928:525
+#position:S32:992:525
+#position:S33:1056:525
+#position:S34:1120:525
+#position:S35:1184:525
+#position:S36:1248:525
+#position:S37:1312:525
+#position:S38:1376:525
+#position:S39:1440:525
+#position:S40:224:777
+#position:S41:288:777
+#position:S42:352:777
+#position:S43:416:777
+#position:S44:480:777
+#position:S45:544:777
+#position:S46:608:777
+#position:S47:672:777
+#position:S48:736:777
+#position:S49:800:777
+#position:S50:864:777
+#position:S51:928:777
+#position:S52:992:777
+#position:S53:1056:777
+#position:S54:1120:777
+#position:S55:1184:777
+#position:S56:1248:777
+#position:S57:1312:777
+#position:S58:1376:777
+#position:S59:1440:777
+#position:S60:224:1029
+#position:S61:288:1029
+#position:S62:352:1029
+#position:S63:416:1029
+#position:S64:480:1029
+#position:S65:544:1029
+#position:S66:608:1029
+#position:S67:672:1029
+#position:S68:736:1029
+#position:S69:800:1029
+#position:S70:864:1029
+#position:S71:928:1029
+#position:S72:992:1029
+#position:S73:1056:1029
+#position:S74:1120:1029
+#position:S75:1184:1029
+#position:S76:1248:1029
+#position:S77:1312:1029
+#position:S78:1376:1029
+#position:S79:1440:1029
+#position:S80:224:1281
+#position:S81:288:1281
+#position:S82:352:1281
+#position:S83:416:1281
+#position:S84:480:1281
+#position:S85:544:1281
+#position:S86:608:1281
+#position:S87:672:1281
+#position:S88:736:1281
+#position:S89:800:1281
+#position:S90:864:1281
+#position:S91:928:1281
+#position:S92:992:1281
+#position:S93:1056:1281
+#position:S94:1120:1281
+#position:S95:1184:1281
+#position:S96:1248:1281
+#position:S97:1312:1281
+#position:entry:224:189
+#position:game_1:224:147
+#position:game_2:352:189
+#position:speak:288:189
+#position:speak_1:288:147
+#position:speak_2:352:147
+#position:speak_3:416:147
+#position:speak_4:416:189
+#position:speak_5:480:147
+#position:speak_5_1:480:189
+#position:speak_6:544:147
+#position:speak_7:544:189
+#position:lose_2:1504:189
+#position:death_2:1504:147
+#position:win_2:1504:231
+#position:menu_2_aim:1440:231
+#position:menu_1_aim:1568:189
+#position:ERROR:1888:903
+#position:fuel_1:1568:147
+#position:time_1:1632:147
+#position:overload:1376:147
+#position:win_1:1184:147
+#position:angl_2:1248:231
+#position:time_2:1248:147
+#position:fuel_2:1248:189
+#position:time_1_1:1632:273
+#position:fuel_1_1:1696:273
+#position:time_2_1:1376:189
+#position:fuel_2_1:1248:231

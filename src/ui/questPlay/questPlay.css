@@ -1,0 +1,40 @@
+.game-text {
+  white-space: pre-wrap;
+}
+.game-fix {
+  font-family: monospace;
+  white-space: pre;
+}
+
+.game-root {
+  color: #9eacac;
+}
+.game-root a {
+  color: #9eacac;
+}
+
+.game-root .game-inactive {
+  /* color: #747e80; */
+  color: #60696b;
+  pointer-events: none;
+  cursor: default;
+}
+.game-root .game-clr {
+  color: #ffd863;
+}
+
+.game-debug-textarea {
+  background-color: #353535;
+  color: #9eacac;
+  font-family: monospace;
+  resize: none;
+
+  height: 100%;
+}
+
+.game-debug-input {
+  background-color: #353535;
+  color: #9eacac;
+  font-family: monospace;
+  width: 100%;
+}
