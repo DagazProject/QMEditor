@@ -19,6 +19,7 @@ function getBasenameWithoutExtension(filename: string) {
     .replace(/\.qmm$/, "")
     .replace(/\.qm$/, "")
     .replace(/\.qms$/, "")
+    .replace(/\.qms.gz$/, "")
     .replace(/\.qmm.gz$/, "")
     .replace(/\.qm.gz$/, "");
 }
@@ -90,7 +91,7 @@ export function LoadOverlay({
           <input
             type="file"
             className="form-control-file"
-            accept=".qm,.qmm,.qms,.qmm.gz,.qm.gz"
+            accept=".qm,.qmm,.qms,.qmm.gz,.qm.gz,.qms.gz"
             onChange={(e) => {
               if (!e.target.files) {
                 return;
@@ -108,7 +109,7 @@ export function LoadOverlay({
                     ? Buffer.from(pako.ungzip(Buffer.from(questArrayBuffer)))
                     : Buffer.from(questArrayBuffer);
 
-                  const quest = file.name.endsWith(".qms")
+                  const quest = file.name.endsWith(".qms") || file.name.endsWith(".qms.gz")
                   ? loadQms(unzipped)
                   : parse(unzipped);
 
