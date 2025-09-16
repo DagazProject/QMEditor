@@ -314,7 +314,7 @@ function parseMacro(line: string, ctx: ParseContext) {
     }
 }
 
-function parseForeach(line: string, ctx: ParseContext) {
+function parseFor(line: string, ctx: ParseContext) {
     const r = line.match(/^\s*#for:([^\s:]+):([^\s]+)/);
     if (r) {
         const scope = createScope(SCOPE_TYPE.FOR);
@@ -332,12 +332,12 @@ function parseForeach(line: string, ctx: ParseContext) {
 }
 
 function parseIf(line: string, ctx: ParseContext) {
-    const r = line.match(/\[[^\]]+\]/);
+    const r = line.match(/^\s*#if:([^\s:]+)/);
     if (r) {
         const scope = createScope(SCOPE_TYPE.FOR);
         scope.macro = createMacro('for');
         scope.macro.params.push('_');
-        scope.macro.ranges.push('1..' + String(r));
+        scope.macro.ranges.push('1..' + String(r[1]));
         ctx.scopes.push(scope);
     }
 }
@@ -613,30 +613,6 @@ function getMacro(name: string, ctx: ParseContext): Macro|null {
     return null;
 }
 
-function findValue(name: string, c: Global[]): number|null {
-    for (let i = 0; i < c.length; i++) {
-        if (c[i].name === name) {
-          return i;
-        }
-    }
-    return null;
-}
-
-function substParam(s: string, c: Global[]): string {
-    let r = s.match(/\$([^\s$+\-*\/.\]]+)/);
-    while (r) {
-        const name = r[1];
-        const ix = findValue(name, c);
-        if (ix !== null) {
-            s = s.replace('$' + name, `[p${(+ix+1)}]`);
-        } else {
-            s = s.replace('$' + name, '0');
-        }
-        r = s.match(/\$([^\s$+\-*\/.\]]+)/);
-    }
-    return s;
-}
-
 function expandMacro(s: string, c: Global[]): string {
     let r = s.match(/\[([^\]]+)\]/);
     while (r) {
@@ -757,7 +733,7 @@ function parseCommand(cmd:string, line: string, ctx: ParseContext) {
         parseMacro(line, ctx);
     } else
     if (cmd === 'for') {
-        parseForeach(line, ctx);
+        parseFor(line, ctx);
     } else
     if (cmd === 'if') {
         parseIf(line, ctx);
@@ -787,6 +763,7 @@ function parseCommand(cmd:string, line: string, ctx: ParseContext) {
                 s.x = Number(r[2]);
                 s.y = Number(r[3]);
             }
+            closeScopes(ctx);
         }
     } else
     if (cmd === 'text') {
@@ -1314,7 +1291,7 @@ function getShowingType(show: string, hide: string, name: string) {
     return 0;
 }
 
-export function closeContext(ctx: ParseContext):QM {
+function closeScopes(ctx: ParseContext) {
     while (ctx.scopes.length > 0) {
         const s = ctx.scopes.pop();
         if (s) {
@@ -1332,6 +1309,10 @@ export function closeContext(ctx: ParseContext):QM {
             }
         }
     }
+}
+
+export function closeContext(ctx: ParseContext):QM {
+    closeScopes(ctx);
     for (let i = 0; i < ctx.vars.length; i++) {
         const v: Var = ctx.vars[i];
         if (v.order === null) {
