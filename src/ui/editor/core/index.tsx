@@ -43,7 +43,7 @@ import { Game } from "../../../packGameData/defs";
 import { LoadOverlay } from "./overlays/load/loadOverlay";
 import { writeQmm } from "../../../lib/qmwriter";
 import { HelpOverlay } from "./overlays/helpOverlay";
-import { downloadQuest } from "./download";
+import { decompileQuest, downloadQuest } from "./download";
 import { QuestName } from "./namechange";
 import { CloudQuestsProps } from "../defs";
 import { CloudQuestsOverlay } from "./overlays/cloudQuests";
@@ -583,6 +583,17 @@ export function EditorCore({
           }}
         >
           <i className="fa fa-download fa-fw" title="Скачать" />
+        </button>
+
+        <button
+          className={classNames("mr-3", "btn", "btn-light")}
+          aria-label="Декомпилировать"
+          onClick={() => {
+            decompileQuest(quest);
+          }}
+        >
+
+          <i className="fa fa-download fa-fw" title="Декомпилировать" />
         </button>
 
         <button
