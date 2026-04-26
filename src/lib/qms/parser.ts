@@ -1,4 +1,6 @@
-﻿import { calculate } from "../formula";
+// https://chat.deepseek.com/share/1mhsjnykh35c7g3qxd
+
+import { calculate } from "../formula";
 import {
   addJump,
   addLocation,
@@ -69,6 +71,12 @@ interface Text {
   value: string;
 }
 
+/** Описание одного разряда составной переменной */
+interface Field {
+  name: string;
+  texts: Text[];
+}
+
 interface Var {
   name: string;
   id: number | null;
@@ -84,6 +92,12 @@ interface Var {
   isMoney: boolean;
   isShowingZero: boolean;
   order: number | null;
+  /** Основание системы счисления, если переменная состоит из полей */
+  mod: number | null;
+  /** Разряды (поля) переменной */
+  fields: Field[];
+  /** Активное поле во время парсинга (временное) */
+  currentField: Field | null;
 }
 
 interface Statement {
@@ -173,6 +187,9 @@ function createVar(name: string): Var {
     isMoney: false,
     isShowingZero: true,
     order: null,
+    mod: null,
+    fields: [],
+    currentField: null,
   };
 }
 
@@ -341,6 +358,7 @@ class ParseContext {
     while (this.scopes.length > 0) {
       const scope = this.scopes.pop()!;
       if (scope.type === SCOPE_TYPE.VAR && scope.vars) {
+        expandVarFields(scope.vars);
         this.addVar(scope.vars);
       } else if (scope.type === SCOPE_TYPE.CASE && scope.case) {
         const parent = this.currentScope();
@@ -445,6 +463,64 @@ function expandMacro(source: string, constants: Global[]): string {
                .replace(/}}/g, "]");
 }
 
+/**
+ * Разворачивает поля переменной в плоский список текстов.
+ * Модифицирует переданный объект Var.
+ */
+function expandVarFields(v: Var): void {
+  if (v.mod === null || v.fields.length === 0) {
+    return;
+  }
+
+  const rangeMatch = v.range.match(/(-?\d+)\.\.(-?\d+)/);
+  if (!rangeMatch) {
+    throw new Error(`Invalid range for var with fields: ${v.range}`);
+  }
+  const min = Number(rangeMatch[1]);
+  const max = Number(rangeMatch[2]);
+  const mod = v.mod;
+
+  const newTexts: Text[] = [];
+
+  for (let val = min; val <= max; val++) {
+    let idx = val - min;
+    const parts: string[] = [];
+
+    // Поля перебираются с конца: последнее объявленное поле – младший разряд
+    for (let i = v.fields.length - 1; i >= 0; i--) {
+      const digit = idx % mod;
+      idx = Math.floor(idx / mod);
+
+      const field = v.fields[i];
+      const txt = field.texts.find(t => {
+        const rm = t.range.match(/(-?\d+)\.\.(-?\d+)/);
+        if (!rm) return false;
+        const from = Number(rm[1]);
+        const to = Number(rm[2]);
+        return digit >= from && digit <= to;
+      });
+
+      if (!txt) {
+        throw new Error(
+          `No text for digit ${digit} in field "${field.name}" ` +
+          `(var value ${val})`
+        );
+      }
+
+      parts.unshift(txt.value);
+    }
+
+    newTexts.push({
+      range: `${val}..${val}`,
+      value: parts.join(''),
+    });
+  }
+
+  v.texts = newTexts;
+  v.fields = [];
+  v.currentField = null;
+}
+
 // ======================== Парсинг директив ========================
 
 function parseMacro(line: string, ctx: ParseContext) {
@@ -539,6 +615,7 @@ function parseVar(line: string, ctx: ParseContext) {
   while (ctx.currentScope()?.type === SCOPE_TYPE.VAR) {
     const scope = ctx.popScope()!;
     if (scope.vars) {
+      expandVarFields(scope.vars);
       ctx.addVar(scope.vars);
     }
   }
@@ -569,6 +646,10 @@ function parseVar(line: string, ctx: ParseContext) {
   if (p) {
     v.order = Number(p[1]);
   }
+  p = line.match(/#mod:(\d+)/);
+  if (p) {
+    v.mod = Number(p[1]);
+  }
 }
 
 function parseSite(line: string, ctx: ParseContext) {
@@ -578,6 +659,7 @@ function parseSite(line: string, ctx: ParseContext) {
   while (ctx.currentScope()?.type === SCOPE_TYPE.VAR) {
     const scope = ctx.popScope()!;
     if (scope.vars) {
+      expandVarFields(scope.vars);
       ctx.addVar(scope.vars);
     }
   }
@@ -640,6 +722,7 @@ function parseCase(line: string, ctx: ParseContext) {
   while (ctx.currentScope()?.type === SCOPE_TYPE.VAR) {
     const scope = ctx.popScope()!;
     if (scope.vars) {
+      expandVarFields(scope.vars);
       ctx.addVar(scope.vars);
     }
   }
@@ -768,7 +851,13 @@ function parseText(line: string, ctx: ParseContext) {
     if (s) {
       t.value = s[1];
     }
-    scope.vars.texts.push(t);
+
+    const v = scope.vars;
+    if (v.currentField) {
+      v.currentField.texts.push(t);
+    } else {
+      v.texts.push(t);
+    }
   }
 }
 
@@ -944,6 +1033,22 @@ function parseCommand(cmd: string, line: string, ctx: ParseContext) {
     case "case":
       parseCase(line, ctx);
       break;
+    case "field": {
+      const scope = ctx.currentScope();
+      if (scope?.type === SCOPE_TYPE.VAR && scope.vars) {
+        const match = line.match(/^\s*#field:(\S+)/);
+        if (match) {
+          if (scope.vars.mod === null) {
+            ctx.error(`#mod not specified for var with fields`);
+            return;
+          }
+          const field: Field = { name: match[1], texts: [] };
+          scope.vars.fields.push(field);
+          scope.vars.currentField = field;
+        }
+      }
+      break;
+    }
     case "intro":
       ctx.pushScope(SCOPE_TYPE.INTRO);
       break;
