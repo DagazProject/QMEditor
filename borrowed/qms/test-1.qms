@@ -1,0 +1,15 @@
+﻿#var:X #range:0..15 #default:0 #mod:4
+  #field:H
+    #text:0..0 '..'
+    #text:1..1 '.*'
+    #text:2..2 '*.'
+    #text:3..3 '**'
+  #field:L
+    #text:0..0 '--'
+    #text:1..1 '-+'
+    #text:2..2 '+-'
+    #text:3..3 '++'
+
+#site:entry #default
+$X=0
+Test @X

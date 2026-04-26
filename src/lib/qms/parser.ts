@@ -1,4 +1,4 @@
-// https://chat.deepseek.com/share/1mhsjnykh35c7g3qxd
+// https://chat.deepseek.com/share/i1wcjs0vme5ic2pb08
 
 import { calculate } from "../formula";
 import {
@@ -75,6 +75,10 @@ interface Text {
 interface Field {
   name: string;
   texts: Text[];
+  // CHANGE: индивидуальное основание (приоритет над общим mod переменной)
+  mod: number | null;
+  // CHANGE: значение по умолчанию для этого разряда
+  def: string | null;
 }
 
 interface Var {
@@ -92,11 +96,8 @@ interface Var {
   isMoney: boolean;
   isShowingZero: boolean;
   order: number | null;
-  /** Основание системы счисления, если переменная состоит из полей */
   mod: number | null;
-  /** Разряды (поля) переменной */
   fields: Field[];
-  /** Активное поле во время парсинга (временное) */
   currentField: Field | null;
 }
 
@@ -466,9 +467,12 @@ function expandMacro(source: string, constants: Global[]): string {
 /**
  * Разворачивает поля переменной в плоский список текстов.
  * Модифицирует переданный объект Var.
+ * CHANGE: поддержка индивидуальных оснований у полей (#mod внутри #field).
+ *          Если поле не имеет своего mod, используется общий mod переменной.
+ *          Произведение оснований должно равняться размеру диапазона переменной.
  */
 function expandVarFields(v: Var): void {
-  if (v.mod === null || v.fields.length === 0) {
+  if (v.fields.length === 0) {
     return;
   }
 
@@ -478,19 +482,49 @@ function expandVarFields(v: Var): void {
   }
   const min = Number(rangeMatch[1]);
   const max = Number(rangeMatch[2]);
-  const mod = v.mod;
+  const totalValues = max - min + 1;
+
+  // Определяем основание для каждого поля
+  const bases: number[] = [];
+  for (const field of v.fields) {
+    const b = field.mod ?? v.mod;
+    if (b === null) {
+      throw new Error(
+        `Field "${field.name}" in var "${v.name}" has no mod (neither global nor local)`
+      );
+    }
+    bases.push(b);
+  }
+
+  // Проверяем, что произведение оснований покрывает весь диапазон
+  let product = 1;
+  for (const b of bases) {
+    product *= b;
+  }
+  if (product !== totalValues) {
+    throw new Error(
+      `Mismatch in var "${v.name}": ` +
+      `fields bases product = ${product}, but range ${v.range} gives ${totalValues} values`
+    );
+  }
 
   const newTexts: Text[] = [];
 
   for (let val = min; val <= max; val++) {
     let idx = val - min;
-    const parts: string[] = [];
+    const digits: number[] = new Array(v.fields.length);
 
-    // Поля перебираются с конца: последнее объявленное поле – младший разряд
+    // Раскладываем число по основаниям, начиная с младшего разряда (последнее поле)
     for (let i = v.fields.length - 1; i >= 0; i--) {
-      const digit = idx % mod;
-      idx = Math.floor(idx / mod);
+      const b = bases[i];
+      digits[i] = idx % b;
+      idx = Math.floor(idx / b);
+    }
 
+    // Формируем строку, соединяя тексты разрядов в порядке объявления (старший → младший)
+    const parts: string[] = [];
+    for (let i = 0; i < v.fields.length; i++) {
+      const digit = digits[i];
       const field = v.fields[i];
       const txt = field.texts.find(t => {
         const rm = t.range.match(/(-?\d+)\.\.(-?\d+)/);
@@ -499,15 +533,13 @@ function expandVarFields(v: Var): void {
         const to = Number(rm[2]);
         return digit >= from && digit <= to;
       });
-
       if (!txt) {
         throw new Error(
           `No text for digit ${digit} in field "${field.name}" ` +
-          `(var value ${val})`
+          `(var "${v.name}", value ${val})`
         );
       }
-
-      parts.unshift(txt.value);
+      parts.push(txt.value);
     }
 
     newTexts.push({
@@ -905,7 +937,7 @@ function parseReturn(line: string, ctx: ParseContext) {
 }
 
 function parseGlobal(line: string, ctx: ParseContext) {
-  const match = line.match(/^\s*#global:([^:]+):(\S+)/);
+  const match = line.match(/^\s*#global:([^:]+):([^\s]+)/);
   if (match) {
     const g = ctx.getGlobal(match[1]);
     g.value = match[2];
@@ -1038,11 +1070,18 @@ function parseCommand(cmd: string, line: string, ctx: ParseContext) {
       if (scope?.type === SCOPE_TYPE.VAR && scope.vars) {
         const match = line.match(/^\s*#field:(\S+)/);
         if (match) {
-          if (scope.vars.mod === null) {
-            ctx.error(`#mod not specified for var with fields`);
-            return;
+          // CHANGE: извлекаем локальные #mod и #default
+          const field: Field = { name: match[1], texts: [], mod: null, def: null };
+          let pm = line.match(/#mod:(\d+)/);
+          if (pm) field.mod = Number(pm[1]);
+          pm = line.match(/#default:(\S+)/);
+          if (pm) field.def = pm[1];
+
+          // Проверка, что хотя бы где-то есть основание
+          if (field.mod === null && scope.vars.mod === null) {
+            ctx.error(`#mod not specified for var "${scope.vars.name}" or field "${field.name}"`);
           }
-          const field: Field = { name: match[1], texts: [] };
+
           scope.vars.fields.push(field);
           scope.vars.currentField = field;
         }
