@@ -1,0 +1,11 @@
+﻿#var:X #range:0..9999 #mod:100
+  #field:A #mod:10 #default:1
+  #field:B #default:0
+  #field:C #mod:10 #default:8
+
+#site:entry #default
+$X.B=$X.A
+#page:1
+X=$X
+
+

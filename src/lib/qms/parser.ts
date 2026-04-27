@@ -1,4 +1,4 @@
-// https://chat.deepseek.com/share/i1wcjs0vme5ic2pb08
+﻿// https://chat.deepseek.com/share/i4aho7lgj35barlhye
 
 import { calculate } from "../formula";
 import {
@@ -75,10 +75,14 @@ interface Text {
 interface Field {
   name: string;
   texts: Text[];
-  // CHANGE: индивидуальное основание (приоритет над общим mod переменной)
   mod: number | null;
-  // CHANGE: значение по умолчанию для этого разряда
   def: string | null;
+}
+
+/** Информация о поле для подстановки в выражения */
+interface FieldInfo {
+  base: number;
+  multiplier: number;
 }
 
 interface Var {
@@ -281,6 +285,9 @@ class ParseContext {
 
   errors: string[] = [];
 
+  /** Информация о полях переменных: <varName, <fieldName, FieldInfo>> */
+  fieldInfoMap: Map<string, Map<string, FieldInfo>> = new Map();
+
   getSite(name: string): Site | undefined {
     return this.sites.get(name);
   }
@@ -359,6 +366,7 @@ class ParseContext {
     while (this.scopes.length > 0) {
       const scope = this.scopes.pop()!;
       if (scope.type === SCOPE_TYPE.VAR && scope.vars) {
+        registerFieldInfo(scope.vars, this);
         expandVarFields(scope.vars);
         this.addVar(scope.vars);
       } else if (scope.type === SCOPE_TYPE.CASE && scope.case) {
@@ -465,26 +473,15 @@ function expandMacro(source: string, constants: Global[]): string {
 }
 
 /**
- * Разворачивает поля переменной в плоский список текстов.
- * Модифицирует переданный объект Var.
- * CHANGE: поддержка индивидуальных оснований у полей (#mod внутри #field).
- *          Если поле не имеет своего mod, используется общий mod переменной.
- *          Произведение оснований должно равняться размеру диапазона переменной.
+ * Сохраняет информацию о полях переменной в контексте и
+ * вычисляет начальное значение переменной из значений полей по умолчанию.
  */
-function expandVarFields(v: Var): void {
+function registerFieldInfo(v: Var, ctx: ParseContext) {
   if (v.fields.length === 0) {
     return;
   }
 
-  const rangeMatch = v.range.match(/(-?\d+)\.\.(-?\d+)/);
-  if (!rangeMatch) {
-    throw new Error(`Invalid range for var with fields: ${v.range}`);
-  }
-  const min = Number(rangeMatch[1]);
-  const max = Number(rangeMatch[2]);
-  const totalValues = max - min + 1;
-
-  // Определяем основание для каждого поля
+  // Определяем основания полей
   const bases: number[] = [];
   for (const field of v.fields) {
     const b = field.mod ?? v.mod;
@@ -496,47 +493,105 @@ function expandVarFields(v: Var): void {
     bases.push(b);
   }
 
-  // Проверяем, что произведение оснований покрывает весь диапазон
+  // Вычисляем множители для каждого поля (умножение оснований справа)
+  const multipliers: number[] = new Array(v.fields.length);
+  multipliers[v.fields.length - 1] = 1;
+  for (let i = v.fields.length - 2; i >= 0; i--) {
+    multipliers[i] = multipliers[i + 1] * bases[i + 1];
+  }
+
+  // Сохраняем информацию в контексте
+  const fieldMap = new Map<string, FieldInfo>();
+  for (let i = 0; i < v.fields.length; i++) {
+    fieldMap.set(v.fields[i].name, {
+      base: bases[i],
+      multiplier: multipliers[i],
+    });
+  }
+  ctx.fieldInfoMap.set(v.name, fieldMap);
+
+  // Вычисляем начальное значение переменной из умолчательных значений полей
+  let startValue = 0;
+  for (let i = 0; i < v.fields.length; i++) {
+    const def = v.fields[i].def;
+    const digit = def !== null ? Number(def) : 0;
+    startValue += digit * multipliers[i];
+  }
+  v.def = String(startValue);
+}
+
+/**
+ * Разворачивает поля переменной в плоский список текстов.
+ * Если ни одно поле не содержит текстов, поля просто очищаются.
+ * В противном случае требует, чтобы для каждого разряда каждого поля был задан текст.
+ */
+function expandVarFields(v: Var): void {
+  if (v.fields.length === 0) {
+      return;
+  }
+
+  // Если ни в одном поле нет текстов, то и составной текст не формируется
+  const hasTexts = v.fields.some(f => f.texts.length > 0);
+  if (!hasTexts) {
+    v.fields = [];
+    v.currentField = null;
+    return;
+  }
+
+  // Иначе строим тексты как обычно (требуя полный набор)
+  const rangeMatch = v.range.match(/(-?\d+)\.\.(-?\d+)/);
+  if (!rangeMatch) {
+    throw new Error(`Invalid range for var with fields: ${v.range}`);
+  }
+  const min = Number(rangeMatch[1]);
+  const max = Number(rangeMatch[2]);
+  const totalValues = max - min + 1;
+
+  const bases: number[] = [];
+  for (const field of v.fields) {
+    const b = field.mod ?? v.mod;
+    if (b === null) {
+      throw new Error(`Field "${field.name}" in var "${v.name}" has no mod`);
+    }
+    bases.push(b);
+  }
+
   let product = 1;
   for (const b of bases) {
-    product *= b;
+      product *= b;
   }
   if (product !== totalValues) {
     throw new Error(
-      `Mismatch in var "${v.name}": ` +
-      `fields bases product = ${product}, but range ${v.range} gives ${totalValues} values`
+      `Mismatch in var "${v.name}": fields bases product = ${product}, but range ${v.range} gives ${totalValues} values`
     );
   }
 
   const newTexts: Text[] = [];
-
   for (let val = min; val <= max; val++) {
     let idx = val - min;
     const digits: number[] = new Array(v.fields.length);
-
-    // Раскладываем число по основаниям, начиная с младшего разряда (последнее поле)
     for (let i = v.fields.length - 1; i >= 0; i--) {
       const b = bases[i];
       digits[i] = idx % b;
       idx = Math.floor(idx / b);
     }
 
-    // Формируем строку, соединяя тексты разрядов в порядке объявления (старший → младший)
     const parts: string[] = [];
     for (let i = 0; i < v.fields.length; i++) {
       const digit = digits[i];
       const field = v.fields[i];
       const txt = field.texts.find(t => {
         const rm = t.range.match(/(-?\d+)\.\.(-?\d+)/);
-        if (!rm) return false;
+        if (!rm) {
+            return false;
+        }
         const from = Number(rm[1]);
         const to = Number(rm[2]);
         return digit >= from && digit <= to;
       });
       if (!txt) {
         throw new Error(
-          `No text for digit ${digit} in field "${field.name}" ` +
-          `(var "${v.name}", value ${val})`
+          `No text for digit ${digit} in field "${field.name}" (var "${v.name}", value ${val})`
         );
       }
       parts.push(txt.value);
@@ -647,6 +702,7 @@ function parseVar(line: string, ctx: ParseContext) {
   while (ctx.currentScope()?.type === SCOPE_TYPE.VAR) {
     const scope = ctx.popScope()!;
     if (scope.vars) {
+      registerFieldInfo(scope.vars, ctx);
       expandVarFields(scope.vars);
       ctx.addVar(scope.vars);
     }
@@ -691,6 +747,7 @@ function parseSite(line: string, ctx: ParseContext) {
   while (ctx.currentScope()?.type === SCOPE_TYPE.VAR) {
     const scope = ctx.popScope()!;
     if (scope.vars) {
+      registerFieldInfo(scope.vars, ctx);
       expandVarFields(scope.vars);
       ctx.addVar(scope.vars);
     }
@@ -754,6 +811,7 @@ function parseCase(line: string, ctx: ParseContext) {
   while (ctx.currentScope()?.type === SCOPE_TYPE.VAR) {
     const scope = ctx.popScope()!;
     if (scope.vars) {
+      registerFieldInfo(scope.vars, ctx);
       expandVarFields(scope.vars);
       ctx.addVar(scope.vars);
     }
@@ -795,20 +853,20 @@ function parseCase(line: string, ctx: ParseContext) {
   }
   p = line.match(/#hide:(\S+)/);
   if (p) {
-    c.hide = p[1];
+      c.hide = p[1];
   }
   c.isDay = /#day/.test(line);
   p = line.match(/#count:(\d+)/);
   if (p) {
-    c.cnt = Number(p[1]);
+      c.cnt = Number(p[1]);
   }
   p = line.match(/'([^']+)'/);
   if (p) {
-    c.text = p[1];
+      c.text = p[1];
   }
   p = line.match(/{([^}]+)}/);
   if (p) {
-    c.expr = p[1];
+      c.expr = p[1];
   }
   p = line.match(/#return:(\S+)/);
   if (p) {
@@ -984,18 +1042,60 @@ function parseElse(line: string, ctx: ParseContext) {
   }
 }
 
+/**
+ * Обрабатывает присваивание значения полю переменной.
+ * Преобразует "$X.B = expr" в "$X = $X - (( $X div mult) mod base) * mult + (expr) * mult".
+ * Переменные остаются с символом $ для последующей замены через prepareFormula.
+ */
+function parseFieldAssignment(varName: string, fieldName: string, rhs: string, ctx: ParseContext, scope: Scope) {
+  const fieldMap = ctx.fieldInfoMap.get(varName);
+  if (!fieldMap) {
+    ctx.error(`Unknown variable "${varName}" for field assignment`);
+    return;
+  }
+  const info = fieldMap.get(fieldName);
+  if (!info) {
+    ctx.error(`Unknown field "${fieldName}" in variable "${varName}"`);
+    return;
+  }
+
+  const formula = `$${varName} - (($${varName} div ${info.multiplier}) mod ${info.base}) * ${info.multiplier} + (${rhs}) * ${info.multiplier}`;
+
+  const stmt = createStatement(varName, formula);
+  if (scope.type === SCOPE_TYPE.SITE && scope.site) {
+    scope.site.stmts.push(stmt);
+  } else if (scope.type === SCOPE_TYPE.CASE && scope.case) {
+    scope.case.stmts.push(stmt);
+  } else {
+    ctx.error(`Field assignment must be inside a site or case`);
+  }
+}
+
 function parseStatement(line: string, ctx: ParseContext) {
   const scope = ctx.currentScope();
   if (!scope) {
-    return;
+      return;
   }
 
   const match = line.match(/^\s*\$([^\s=]+)\s*=\s*(\S.*)/);
   if (!match) {
+      return;
+  }
+
+  const left = match[1];
+  const rhs = match[2];
+
+  // Проверяем, является ли левая часть присваиванием полю
+  const dotIdx = left.indexOf('.');
+  if (dotIdx !== -1) {
+    const varName = left.substring(0, dotIdx);
+    const fieldName = left.substring(dotIdx + 1);
+    parseFieldAssignment(varName, fieldName, rhs, ctx, scope);
     return;
   }
 
-  const stmt = createStatement(match[1], match[2]);
+  // Обычное присваивание переменной
+  const stmt = createStatement(left, rhs);
   if (scope.type === SCOPE_TYPE.SITE && scope.site) {
     scope.site.stmts.push(stmt);
   } else if (scope.type === SCOPE_TYPE.CASE && scope.case) {
@@ -1070,18 +1170,19 @@ function parseCommand(cmd: string, line: string, ctx: ParseContext) {
       if (scope?.type === SCOPE_TYPE.VAR && scope.vars) {
         const match = line.match(/^\s*#field:(\S+)/);
         if (match) {
-          // CHANGE: извлекаем локальные #mod и #default
           const field: Field = { name: match[1], texts: [], mod: null, def: null };
           let pm = line.match(/#mod:(\d+)/);
-          if (pm) field.mod = Number(pm[1]);
+          if (pm) {
+              field.mod = Number(pm[1]);
+          }
           pm = line.match(/#default:(\S+)/);
-          if (pm) field.def = pm[1];
+          if (pm) {
+              field.def = pm[1];
+          }
 
-          // Проверка, что хотя бы где-то есть основание
           if (field.mod === null && scope.vars.mod === null) {
             ctx.error(`#mod not specified for var "${scope.vars.name}" or field "${field.name}"`);
           }
-
           scope.vars.fields.push(field);
           scope.vars.currentField = field;
         }
@@ -1163,20 +1264,34 @@ export function parseLine(line: string, ctx: ParseContext) {
 
 // ======================== Подготовка и генерация QM ========================
 
+/**
+ * Заменяет $var.field на выражение чтения поля.
+ */
+function replaceFieldAccess(expr: string, prefix: string, varId: number, mult: number, base: number): string {
+  return `((${prefix}${varId}] div ${mult}) mod ${base})`;
+}
+
 function prepareFormula(ctx: ParseContext, expr: string): string {
-  return expr
-    .replace(/\$([a-zA-Z0-9_]+)/g, (_, name) => {
-      const v = ctx.getVar(name);
-      if (v) {
-        if (v.id === null) {
-          v.id = ++ctx.vid;
-          ctx.varsById.set(v.id, v);
-        }
-        return `[p${v.id}]`;
+  return expr.replace(/\$([a-zA-Z0-9_]+)(?:\.([a-zA-Z0-9_]+))?/g, (_, name, field) => {
+    const v = ctx.getVar(name);
+    if (!v) {
+        return "";
+    }
+    if (v.id === null) {
+      v.id = ++ctx.vid;
+      ctx.varsById.set(v.id, v);
+    }
+    if (field) {
+      const fieldMap = ctx.fieldInfoMap.get(name);
+      if (!fieldMap || !fieldMap.has(field)) {
+        ctx.error(`Unknown field "${field}" in variable "${name}"`);
+        return "";
       }
-      return "";
-    })
-    .replace(/<([0-9.-]+)>/g, "[$1]");
+      const info = fieldMap.get(field)!;
+      return replaceFieldAccess("", "[p", v.id, info.multiplier, info.base);
+    }
+    return `[p${v.id}]`;
+  }).replace(/<([0-9.-]+)>/g, "[$1]");
 }
 
 function prepareText(ctx: ParseContext, text: string, isParam: boolean): string {
@@ -1213,40 +1328,46 @@ function prepareText(ctx: ParseContext, text: string, isParam: boolean): string 
     return `<<${formula}>>`;
   }).replace(/\*/g, "&&");
 
-  // Обработка %...% (жирный текст)
   let match = result.match(/%([^*]+)%/);
   while (match) {
     result = result.replace(`%${match[1]}%`, `<clr>${match[1]}<clrEnd>`);
     match = result.match(/%([^*]+)%/);
   }
 
-  // Обработка ^...^ (фиксированный шрифт)
   match = result.match(/\^([^\^]+)\^/);
   while (match) {
     result = result.replace(`^${match[1]}^`, `<fix>${match[1]}</fix>`);
     match = result.match(/\^([^\^]+)\^/);
   }
 
-  result = result.replace(/(\$|@)([a-zA-Z0-9_]+)/g, (_, prefix, name) => {
+  result = result.replace(/(\$|@)([a-zA-Z0-9_]+)(?:\.([a-zA-Z0-9_]+))?/g, (_, prefix, name, field) => {
     const v = ctx.getVar(name);
-    if (v) {
-      if (v.id === null) {
-        v.id = ++ctx.vid;
-        ctx.varsById.set(v.id, v);
-      }
-      return prefix === "$" ? `[p${v.id}]` : `[d${v.id}]`;
+    if (!v) {
+        return "";
     }
-    return "";
+    if (v.id === null) {
+      v.id = ++ctx.vid;
+      ctx.varsById.set(v.id, v);
+    }
+    const varPrefix = prefix === "$" ? "[p" : "[d";
+    if (field) {
+      const fieldMap = ctx.fieldInfoMap.get(name);
+      if (!fieldMap || !fieldMap.has(field)) {
+        ctx.error(`Unknown field "${field}" in variable "${name}"`);
+        return "";
+      }
+      const info = fieldMap.get(field)!;
+      return replaceFieldAccess("", varPrefix, v.id, info.multiplier, info.base);
+    }
+    return `${varPrefix}${v.id}]`;
   });
 
   if (isParam) {
     result = result.replace(/\$/g, "<>");
   }
 
-  // Восстанавливаем && обратно в *
   result = result.replace(/&&/g, "*");
 
-  // Обработка спойлеров ~...~ (только в режиме COMPAT_TYPE.OFF)
   if (ctx.compatibleType === COMPAT_TYPE.OFF) {
     match = result.match(/~([^~]+)~/);
     while (match) {
@@ -1256,14 +1377,13 @@ function prepareText(ctx: ParseContext, text: string, isParam: boolean): string 
   }
 
   result = result.replace(/<</g, "{").replace(/>>/g, "}");
-
   return result;
 }
 
 function prepareLocation(ctx: ParseContext, site: Site) {
   site.loc = createLocation(site.id);
   if (site.isDay) {
-    site.loc.dayPassed = true;
+      site.loc.dayPassed = true;
   }
 
   let isEmpty = true;
@@ -1275,7 +1395,7 @@ function prepareLocation(ctx: ParseContext, site: Site) {
       if (processed.trim() !== "") {
         skip = false;
         if (!site.loc.texts[page.num - 1]) {
-          site.loc.texts[page.num - 1] = "";
+            site.loc.texts[page.num - 1] = "";
         }
         site.loc.texts[page.num - 1] += "\n".repeat(newlines) + processed + "\n";
         isEmpty = false;
@@ -1312,7 +1432,7 @@ function prepareLocation(ctx: ParseContext, site: Site) {
   }
 
   for (const stmt of site.stmts) {
-    prepareFormula(ctx, stmt.name);
+    // Оставляем name без изменений, prepareFormula для него не нужна (нет $)
     stmt.expr = prepareFormula(ctx, stmt.expr);
   }
 }
@@ -1352,7 +1472,7 @@ function prepareJump(ctx: ParseContext, c: Case) {
   }
 
   for (const stmt of c.stmts) {
-    prepareFormula(ctx, stmt.name);
+    // Аналогично, prepareFormula для имени не нужна
     stmt.expr = prepareFormula(ctx, stmt.expr);
   }
   if (c.expr) {
@@ -1550,7 +1670,6 @@ function finalizeContext(ctx: ParseContext): QM {
     }
 
     site.loc.paramsChanges = buildParamChanges(ctx, site.show, site.hide, site.stmts);
-
     addLocation(ctx.qm, site.loc);
 
     for (const c of site.cases) {
