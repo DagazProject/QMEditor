@@ -511,7 +511,7 @@ function iterateRangeEx(range: string): string[] {
 }
 
 function checkList(list: string, name: string): boolean {
-  return list.split(";").some((item) => item === name);
+  return list.split(":").some((item) => item === name);
 }
 
 function getShowingType(show: string, hide: string, name: string): 0 | 1 | 2 {
@@ -756,42 +756,6 @@ function parseEnd(line: string, ctx: ParseContext) {
 
   if (scope.type === SCOPE_TYPE.MACRO && scope.macro) {
     ctx.addMacro(scope.macro);
-    ctx.popScope();
-  } else if (scope.type === SCOPE_TYPE.FOR && scope.macro) {
-    // Извлекаем диапазон и значения
-    const ranges = scope.macro.ranges[0]?.split(";") ?? [];
-    let values: string[] = [];
-    for (const r of ranges) {
-      values = values.concat(iterateRangeEx(r));
-    }
-
-    const lines = scope.macro.lines;
-    const paramName = scope.macro.params[0]; // в примере один параметр
-    ctx.popScope(); // убираем scope FOR перед итерациями
-
-    if (values.length > 0 && paramName) {
-      for (const val of values) {
-        const g = createGlobal(paramName, val);
-        ctx.params.push(g);
-        const constants = ctx.getConstants();
-        for (const srcLine of lines) {
-          const expanded = expandMacro(srcLine, constants);
-          parseLine(expanded, ctx);
-        }
-        ctx.params.pop();
-      }
-    }
-
-    // Закрываем все scope VAR, оставшиеся после итераций
-    while (ctx.currentScope()?.type === SCOPE_TYPE.VAR) {
-      const varScope = ctx.popScope()!;
-      if (varScope.vars) {
-        registerFieldInfo(varScope.vars, ctx);
-        expandVarFields(varScope.vars);
-        ctx.addVar(varScope.vars);
-      }
-    }
-  } else {
     ctx.popScope();
   }
 }
@@ -1804,6 +1768,20 @@ function finalizeContext(ctx: ParseContext): QM {
       }
     }
 
+    if (site.loc.isStarting) {
+        for (let id = 1; id <= ctx.vid; id++) {
+           const v = ctx.varsById.get(id);
+           if (v) {
+               if (v.isShow) {
+                   site.show = site.show + ':' + v.name;
+               }
+               if (v.isHide) {
+                   site.hide = site.hide + ':' + v.name;
+               }
+           }
+        }
+    }
+    
     site.loc.paramsChanges = buildParamChanges(ctx, site.show, site.hide, site.stmts);
     addLocation(ctx.qm, site.loc);
 
