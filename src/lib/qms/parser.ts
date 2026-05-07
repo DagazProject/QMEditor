@@ -1,6 +1,4 @@
-﻿// https://chat.deepseek.com/share/i4aho7lgj35barlhye
-
-import { calculate } from "../formula";
+﻿import { calculate } from "../formula";
 import {
   addJump,
   addLocation,
@@ -14,7 +12,6 @@ import {
   Location,
   LocationId,
   QM,
-  QMParam,
 } from "../qmreader";
 import { randomFromMathRandom } from "../randomFunc";
 
@@ -105,6 +102,24 @@ interface Var {
   currentField: Field | null;
 }
 
+interface Iterator {
+  name: string;
+  min: number;
+  max: number;
+  inc: number;
+}
+
+interface Loop {
+  iterators: Iterator[];
+  statements: Loop[];
+  lines: string[];
+}
+
+/*interface Subst {
+  name: string;
+  value: number;
+}*/
+
 interface Statement {
   name: string;
   expr: string;
@@ -164,9 +179,22 @@ interface Scope {
   site: Site | null;
   case: Case | null;
   vars: Var | null;
+  nestedCount: number;
 }
 
 // ======================== Фабрики ========================
+
+function createIterator(nm: string, mn: number, mx: number): Iterator {
+  return { name: nm, min: mn, max: mx, inc: 1 };
+}
+
+function createLoop(): Loop {
+  return { iterators: [], statements: [], lines: []};
+}
+
+/*function createSubst(nm: string, vl: number): Subst {
+  return { name: nm, value: vl };
+}*/
 
 function createMacro(name: string): Macro {
   return { name, params: [], lines: [], alt: [], altF: false, ranges: [] };
@@ -247,17 +275,18 @@ function createSite(name: string, id: LocationId): Site {
 }
 
 function createScope(type: ScopeType): Scope {
-  return { type, macro: null, site: null, case: null, vars: null };
+  return { type, macro: null, site: null, case: null, vars: null, nestedCount: 0 };
 }
 
-function createGlobal(name: string): Global {
-  return { name, value: "0", isIncremetable: false };
+function createGlobal(name: string, val: string): Global {
+  return { name, value: val, isIncremetable: false };
 }
 
 // ======================== Контекст парсинга ========================
 
 class ParseContext {
   qm: QM = createQm();
+  anonMacroCounter = 0;
 
   macros = new Map<string, Macro>();
   sites = new Map<string, Site>();
@@ -268,6 +297,7 @@ class ParseContext {
   varsById = new Map<number, Var>();
 
   scopes: Scope[] = [];
+  loops: Loop[] = [];
 
   compatibleType: CompatType = COMPAT_TYPE.ON;
 
@@ -287,6 +317,64 @@ class ParseContext {
 
   /** Информация о полях переменных: <varName, <fieldName, FieldInfo>> */
   fieldInfoMap: Map<string, Map<string, FieldInfo>> = new Map();
+
+  startLoop(name: string, min: number, max: number) {
+    const it = createIterator(name, min, max);
+    const s = createLoop();
+    s.iterators.push(it);
+    if (this.loops.length > 0) {
+        const p = this.loops[this.loops.length - 1];
+        p.statements.push(s);
+    }
+    this.loops.push(s);
+  }
+
+  iterateLoop(n: Loop, l: number, params: Global[]) {
+    let it = null;
+    if (n.iterators.length > 0) {
+        it = n.iterators[0];
+    } else {
+        it = createIterator('', 1, 1);
+    }
+    for (let v = it.min; v <= it.max; v += it.inc) {
+        if (it.name !== '') {
+            params[l] = createGlobal(it.name, String(v));
+        }
+        for (let ix = 0; ix < n.lines.length; ix++) {
+            const s = expandMacro(n.lines[ix], params);
+            parseLine(s, this);
+        }
+        for (let ix = 0; ix < n.statements.length; ix++) {
+            this.iterateLoop(n.statements[ix], l + 1, params);
+        }
+    }
+  }
+
+  endLoop(): boolean {
+    if (this.loops.length === 1) {
+        const s = this.loops[0];
+        const params: Global[] = [];
+        this.loops.pop();
+        this.iterateLoop(s, 0, params);
+        return true;
+    }
+    this.loops.pop();
+    return false;
+  }
+
+  addLineToLoop(s: string) {
+    if (this.loops.length > 0) {
+        const p = this.loops[this.loops.length - 1];
+        if (p.statements.length > 0) {
+            const q = createLoop();
+            q.lines.push(s);
+            p.statements.push(q);
+        } else {
+            p.lines.push(s);
+            return;
+        }
+    }
+  }
 
   getSite(name: string): Site | undefined {
     return this.sites.get(name);
@@ -321,7 +409,7 @@ class ParseContext {
     if (existing) {
       return existing;
     }
-    const g = createGlobal(name);
+    const g = createGlobal(name, "0");
     this.globals.set(name, g);
     return g;
   }
@@ -626,17 +714,11 @@ function parseMacro(line: string, ctx: ParseContext) {
 }
 
 function parseFor(line: string, ctx: ParseContext) {
-  const match = line.match(/^\s*#for:([^\s:]+):([^\s]+)/);
+  const match = line.match(/^\s*#for:([^\s:]+):(\d+)..(\d+)/);
   if (!match) {
-    return;
+      return;
   }
-
-  const scope = ctx.pushScope(SCOPE_TYPE.FOR);
-  scope.macro = createMacro("for");
-  const params = match[1].split(";");
-  scope.macro.params.push(...params);
-  const ranges = match[2].split(":");
-  scope.macro.ranges.push(...ranges);
+  ctx.startLoop(match[1], Number(match[2]), Number(match[3]));
 }
 
 function parseIf(line: string, ctx: ParseContext) {
@@ -652,8 +734,13 @@ function parseIf(line: string, ctx: ParseContext) {
 }
 
 function parseEnd(line: string, ctx: ParseContext) {
+  if (ctx.loops.length > 0) {
+      ctx.endLoop();
+      return;
+  }
+
   if (ctx.scopes.length === 0) {
-    return;
+      return;
   }
   const scope = ctx.currentScope()!;
 
@@ -671,25 +758,39 @@ function parseEnd(line: string, ctx: ParseContext) {
     ctx.addMacro(scope.macro);
     ctx.popScope();
   } else if (scope.type === SCOPE_TYPE.FOR && scope.macro) {
+    // Извлекаем диапазон и значения
     const ranges = scope.macro.ranges[0]?.split(";") ?? [];
     let values: string[] = [];
     for (const r of ranges) {
       values = values.concat(iterateRangeEx(r));
     }
 
-    const macroName = `@${ctx.scopes.length}`;
-    scope.macro.name = macroName;
-    ctx.addMacro(scope.macro);
-    ctx.popScope();
+    const lines = scope.macro.lines;
+    const paramName = scope.macro.params[0]; // в примере один параметр
+    ctx.popScope(); // убираем scope FOR перед итерациями
 
-    for (const val of values) {
-      const customLine = `#${macroName}:${val}`;
-      parseCustom(macroName, customLine, ctx);
+    if (values.length > 0 && paramName) {
+      for (const val of values) {
+        const g = createGlobal(paramName, val);
+        ctx.params.push(g);
+        const constants = ctx.getConstants();
+        for (const srcLine of lines) {
+          const expanded = expandMacro(srcLine, constants);
+          parseLine(expanded, ctx);
+        }
+        ctx.params.pop();
+      }
     }
-    if (values.length === 0) {
-      altCustom(macroName, ctx);
+
+    // Закрываем все scope VAR, оставшиеся после итераций
+    while (ctx.currentScope()?.type === SCOPE_TYPE.VAR) {
+      const varScope = ctx.popScope()!;
+      if (varScope.vars) {
+        registerFieldInfo(varScope.vars, ctx);
+        expandVarFields(varScope.vars);
+        ctx.addVar(varScope.vars);
+      }
     }
-    ctx.macros.delete(macroName);
   } else {
     ctx.popScope();
   }
@@ -881,6 +982,10 @@ function parseCase(line: string, ctx: ParseContext) {
   }
 }
 
+/**
+ * Вызов макроса: теперь аргументы сначала раскрываются с использованием текущих констант,
+ * а затем присваиваются параметрам макроса.
+ */
 function parseCustom(cmd: string, line: string, ctx: ParseContext) {
   const macro = ctx.getMacro(cmd);
   if (!macro) {
@@ -890,10 +995,12 @@ function parseCustom(cmd: string, line: string, ctx: ParseContext) {
   let addedParams = 0;
   const match = line.match(/^\s*#[^:\s]+:(\S+)/);
   if (match) {
-    const args = match[1].split(":");
-    for (let i = 0; i < args.length && i < macro.params.length; i++) {
-      const g = createGlobal(macro.params[i]);
-      g.value = args[i];
+    const rawArgs = match[1].split(":");
+    // Получаем текущие константы (до добавления параметров макроса)
+    const constants = ctx.getConstants();
+    for (let i = 0; i < rawArgs.length && i < macro.params.length; i++) {
+      const expanded = expandMacro(rawArgs[i], constants);
+      const g = createGlobal(macro.params[i], expanded);
       ctx.params.push(g);
       addedParams++;
     }
@@ -905,11 +1012,18 @@ function parseCustom(cmd: string, line: string, ctx: ParseContext) {
     parseLine(expanded, ctx);
   }
 
+  if (!macro.altF && macro.alt.length > 0) {
+    for (const srcLine of macro.alt) {
+      const expanded = expandMacro(srcLine, constants);
+      parseLine(expanded, ctx);
+    }
+  }
+
   ctx.params.splice(ctx.params.length - addedParams, addedParams);
 
   for (const paramName of macro.params) {
     const g = ctx.getGlobal(paramName);
-    if (g.isIncremetable) {
+    if (g && g.isIncremetable) {
       g.value = String(Number(g.value) + 1);
     }
   }
@@ -1237,14 +1351,36 @@ export function parseLine(line: string, ctx: ParseContext) {
   const insideMacroLike = ctx.isInsideMacroLike();
   const cmdMatch = line.match(/^\s*#([^:\s]+)/);
 
+  const match = line.match(/^\s*#(for|end)/);
+  if (!match && (ctx.loops.length > 0)) {
+      ctx.addLineToLoop(line);
+      return;
+  }
+
   if (insideMacroLike) {
     if (cmdMatch) {
-      if (cmdMatch[1] === "else") {
-        parseElse(line, ctx);
+      const cmd = cmdMatch[1];
+      const scope = ctx.currentScope()!;
+      if (cmd === "end") {
+        if (scope.nestedCount > 0) {
+          scope.nestedCount--;
+          parseString(line, ctx);
+        } else {
+          parseEnd(line, ctx);
+        }
         return;
       }
-      if (cmdMatch[1] === "end") {
-        parseEnd(line, ctx);
+      if (cmd === "else") {
+        if (scope.nestedCount > 0) {
+          parseString(line, ctx);
+        } else {
+          parseElse(line, ctx);
+        }
+        return;
+      }
+      if (cmd === "for" || cmd === "if") {
+        scope.nestedCount++;
+        parseString(line, ctx);
         return;
       }
     }
@@ -1305,8 +1441,7 @@ function prepareText(ctx: ParseContext, text: string, isParam: boolean): string 
     if (args) {
       const argVals = args.split(":");
       for (let i = 0; i < macro.params.length && i < argVals.length; i++) {
-        const g = createGlobal(macro.params[i]);
-        g.value = argVals[i];
+        const g = createGlobal(macro.params[i], argVals[i]);
         constants.push(g);
       }
     }
@@ -1711,6 +1846,9 @@ export function loadQms(input: string | Buffer, encoding = "utf-8"): QM {
     const decoder = new TextDecoder(encoding);
     text = decoder.decode(input);
   }
+
+  // Удаляем BOM, если он есть в начале файла
+  text = text.replace(/^\uFEFF/, '');
 
   const lines = text.split(/\r\n|\n|\r/);
   const ctx = createContext();

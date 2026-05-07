@@ -1,0 +1,11 @@
+#for:y:0..6
+  #for:x:0..3
+    #var:V[$y][$x] #range:0..1000 #default:[$x*$y]
+  #end
+#end
+
+#site:entry #default
+#page:1
+V01 = $V01
+V12 = $V12
+V53 = $V53

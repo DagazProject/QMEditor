@@ -1,0 +1,37 @@
+#macro:cell:A:B:DF
+  #var:cl[$A][$B] #range:0..99 #default:[$DF] #mod:10 #hide
+    #field:H
+      #text:0..0 ' '
+      #text:1..1 '1'
+      #text:2..2 '2'
+      #text:3..3 '3'
+      #text:4..4 '4'
+      #text:5..5 '5'
+      #text:6..6 '6'
+      #text:7..7 '7'
+      #text:8..8 '8'
+      #text:9..9 '.'
+    #field:L
+      #text:0..0 '  '
+      #text:1..1 ' 1'
+      #text:2..2 ' 2'
+      #text:3..3 ' 3'
+      #text:4..4 ' 4'
+      #text:5..5 ' 5'
+      #text:6..6 ' 6'
+      #text:7..7 ' 7'
+      #text:8..8 ' 8'
+      #text:9..9 ' .'
+#end
+
+#for:y:0..6
+  #cell:[$y]:0:99
+#end
+
+#macro:aim
+#page:1
+@cl00
+#end
+
+#site:entry #default
+#aim
