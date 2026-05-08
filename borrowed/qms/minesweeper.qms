@@ -1,13 +1,29 @@
-﻿#var:col #range:-1..7 #default:-1 #hide
-  #text:-1..-1 ''
-  #text:0..0   '^  * B C D E F G H  ^'
-  #text:1..1   '^  A * C D E F G H  ^'
-  #text:2..2   '^  A B * D E F G H  ^'
-  #text:3..3   '^  A B C * E F G H  ^'
-  #text:4..4   '^  A B C D * F G H  ^'
-  #text:5..5   '^  A B C D E * G H  ^'
-  #text:6..6   '^  A B C D E F * H  ^'
-  #text:7..7   '^  A B C D E F G *  ^'
+﻿#var:rA #range:0..99999999 #default:0 #hide
+#var:rB #range:0..99999999 #default:0 #hide
+#var:rC #range:0..99999999 #default:0 #hide
+
+#macro:mine:ix
+  #var:mn[$ix] #range:0..99999999 #mod:100 #hide
+    #field:A
+    #field:B
+    #field:C
+    #field:D
+#end
+
+#for:i:0..3
+  #mine:[$i]
+#end
+
+#var:col #range:-1..7 #default:-1 #hide
+  #text:-1..-1 '^  A B C D E F G H ^'
+  #text:0..0   '^  * B C D E F G H ^'
+  #text:1..1   '^  A * C D E F G H ^'
+  #text:2..2   '^  A B * D E F G H ^'
+  #text:3..3   '^  A B C * E F G H ^'
+  #text:4..4   '^  A B C D * F G H ^'
+  #text:5..5   '^  A B C D E * G H ^'
+  #text:6..6   '^  A B C D E F * H ^'
+  #text:7..7   '^  A B C D E F G * ^'
 #var:row #range:-1..5 #default:-1 #hide
 
 #macro:cell:A:B:DF
@@ -45,16 +61,118 @@
 #macro:aim
 #page:1
 ^+-----------------+^
-^| @cl00 @cl01 @cl02 @cl03 |^
-^| @cl10 @cl11 @cl12 @cl13 |^
-^| @cl20 @cl21 @cl22 @cl23 |^
-^| @cl30 @cl31 @cl32 @cl33 |^
-^| @cl40 @cl41 @cl42 @cl43 |^
-^| @cl50 @cl51 @cl52 @cl53 |^
-^| @cl60 @cl61 @cl62 @cl63 |^
+^| @cl00 @cl01 @cl02 @cl03 | 7^
+^| @cl10 @cl11 @cl12 @cl13 | 6^
+^| @cl20 @cl21 @cl22 @cl23 | 5^
+^| @cl30 @cl31 @cl32 @cl33 | 4^
+^| @cl40 @cl41 @cl42 @cl43 | 3^
+^| @cl50 @cl51 @cl52 @cl53 | 2^
+^| @cl60 @cl61 @cl62 @cl63 | 1^
 ^+-----------------+^
 @col
 #end
 
 #site:entry #default
 #aim
+#case:init 'Старт'
+
+// Расстановка мин
+#site:init
+#case:setup #return:init_1
+#site:init_1
+$mn0=$rA
+#case:setup #return:init_2
+#site:init_2
+$mn1=$rA
+#case:setup #return:init_3
+#site:init_3
+$mn2=$rA
+#case:setup #return:init_4
+#site:init_4
+$mn3=$rA
+#case:view
+
+// Отображение мин
+#site:v
+$rA=$mn0
+#case:view #return:v_1
+#site:v_1
+$rA=$mn1
+#case:view #return:v_2
+#site:v_2
+$rA=$mn2
+#case:view #return:v_3
+#site:v_3
+$rA=$mn3
+#case:view #return:v_4
+#site:v_4 #win
+#aim
+
+// Подпрограммы
+#site:setup
+$rA=0
+$rC=0
+#case:setup_1
+#site:setup_1
+$rB=<0..5>*10+<0..7>
+#case:check #return:setup_2
+#site:setup_2
+#case:setup_1 {$rX=0}
+#case:setup_3 {$rX>0}
+#site:setup_3
+$rA=$rA*100+$rB
+$rC=$rC+1
+#case:setup_1 {$rC<4}
+#case:setup_4 {$rC>=4}
+#site:setup_4
+#return
+
+#site:check
+#case:check_1 {$mn0.A<>$rB and $mn0.B<>$rB and $mn0.C<>$rB and $mn0.D<>$rB}
+#case:check_4 {$mn0.A=$rB}
+#case:check_4 {$mn0.B=$rB}
+#case:check_4 {$mn0.C=$rB}
+#case:check_4 {$mn0.D=$rB}
+#site:check_1
+#case:check_2 {$mn1.A<>$rB and $mn1.B<>$rB and $mn1.C<>$rB and $mn1.D<>$rB}
+#case:check_4 {$mn1.A=$rB}
+#case:check_4 {$mn1.B=$rB}
+#case:check_4 {$mn1.C=$rB}
+#case:check_4 {$mn1.D=$rB}
+#site:check_2
+#case:check_3 {$mn2.A<>$rB and $mn2.B<>$rB and $mn2.C<>$rB and $mn2.D<>$rB}
+#case:check_4 {$mn2.A=$rB}
+#case:check_4 {$mn2.B=$rB}
+#case:check_4 {$mn2.C=$rB}
+#case:check_4 {$mn2.D=$rB}
+#site:check_3
+#case:check_5 {$mn3.A<>$rB and $mn3.B<>$rB and $mn3.C<>$rB and $mn3.D<>$rB}
+#case:check_4 {$mn3.A=$rB}
+#case:check_4 {$mn3.B=$rB}
+#case:check_4 {$mn3.C=$rB}
+#case:check_4 {$mn3.D=$rB}
+#site:check_4
+$rB=0
+#case:check_5
+#site:check_5
+#return
+
+#site:view
+$rB=$rA mod 100
+$rA=$rA div 100
+#case:view_1
+#site:view_1
+#for:y:0..5
+  #case:view_2_[$y] {($rB div 10)=[$y]}
+#end
+#for:y:0..5
+  #site:view_2_[$y]
+  #for:x:0..3
+    #case:view_3 {($rB div 2)=[$x] and ($rB mod 2)=1}
+      cl[$y][$x].H=9
+    #case:view_3 {($rB div 2)=[$x] and ($rB mod 2)=0}
+      cl[$y][$x].L=9
+  #end
+#end
+#site:view_3
+#return
