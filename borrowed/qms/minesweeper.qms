@@ -27,7 +27,7 @@
 #var:row #range:-1..5 #default:-1 #hide
 
 #macro:cell:A:B:DF
-  #var:cl[$A][$B] #range:0..99 #default:[$DF] #mod:10 #hide // default не работает
+  #var:cl[$A][$B] #range:0..99 #default:[$DF] #mod:10 #hide
     #field:H
       #text:0..0 ' '
       #text:1..1 '1'
@@ -76,77 +76,6 @@
 #aim
 #case:init 'Старт'
 
-// Расстановка мин
-#site:init
-#case:setup #return:init_1
-#site:init_1
-$mn0=$rA
-#case:setup #return:init_2
-#site:init_2
-$mn1=$rA
-#case:setup #return:init_3
-#site:init_3
-$mn2=$rA
-#case:setup #return:init_4
-#site:init_4
-$mn3=$rA
-#case:view
-
-// Отображение мин
-#site:v
-$rA=$mn0
-#case:view #return:v_1
-#site:v_1
-$rA=$mn1
-#case:view #return:v_2
-#site:v_2
-$rA=$mn2
-#case:view #return:v_3
-#site:v_3
-$rA=$mn3
-#case:view #return:v_4
-#site:v_4 #win
-#aim
-
-// Подпрограммы
-#site:view
-$rB=$rA mod 100
-$rA=$rA div 100
-#case:view_1
-#site:view_1
-#for:y:0..5
-  #case:view_2_[$y] {($rB div 10)=[$y]}
-#end
-#for:y:0..5
-  #site:view_2_[$y]
-  #for:x:0..3
-    #case:view_3 {($rB div 2)=[$x] and ($rB mod 2)=1}
-      cl[$y][$x].H=9
-    #case:view_3 {($rB div 2)=[$x] and ($rB mod 2)=0}
-      cl[$y][$x].L=9
-  #end
-#end
-#site:view_3
-#return
-
-#site:setup
-$rA=0
-$rC=0
-#case:setup_1
-#site:setup_1
-$rB=<0..5>*10+<0..7>
-#case:check #return:setup_2
-#site:setup_2
-#case:setup_1 {$rB=0} // fixed
-#case:setup_3 {$rB>0} // fixed
-#site:setup_3
-$rA=$rA*100+$rB
-$rC=$rC+1
-#case:setup_1 {$rC<4}
-#case:setup_4 {$rC>=4}
-#site:setup_4
-#return               // ???
-
 #site:check
 #case:check_1 {$mn0.A<>$rB and $mn0.B<>$rB and $mn0.C<>$rB and $mn0.D<>$rB}
 #case:check_4 {$mn0.A=$rB}
@@ -176,3 +105,74 @@ $rB=0
 #case:check_5
 #site:check_5
 #return
+
+#site:setup
+$rA=0
+$rC=0
+#case:setup_1
+#site:setup_1
+$rB=<0..5>*10+<0..7>
+#case:check #return:setup_2
+#site:setup_2
+#case:setup_1 {$rB=0}
+#case:setup_3 {$rB>0}
+#site:setup_3
+$rA=$rA*100+$rB
+$rC=$rC+1
+#case:setup_1 {$rC<4}
+#case:setup_4 {$rC>=4}
+#site:setup_4
+#return               // ???
+
+// Расстановка мин
+#site:init
+#case:setup #return:init_1
+#site:init_1
+$mn0=$rA
+#case:setup #return:init_2
+#site:init_2
+$mn1=$rA
+#case:setup #return:init_3
+#site:init_3
+$mn2=$rA
+#case:setup #return:init_4
+#site:init_4
+$mn3=$rA
+#case:view
+
+// Подпрограммы
+#site:view
+$rB=$rA mod 100
+$rA=$rA div 100
+#case:view_1
+#site:view_1
+#for:y:0..5
+  #case:view_2_[$y] {($rB div 10)=[$y]}
+#end
+#for:y:0..5
+  #site:view_2_[$y]
+  #for:x:0..3
+    #case:view_3 {($rB div 2)=[$x] and ($rB mod 2)=1}
+      $cl[$y][$x].H=9
+    #case:view_3 {($rB div 2)=[$x] and ($rB mod 2)=0}
+      $cl[$y][$x].L=9
+  #end
+#end
+#site:view_3
+#return
+
+// Отображение мин
+#site:v
+$rA=$mn0
+#case:view #return:v_1
+#site:v_1
+$rA=$mn1
+#case:view #return:v_2
+#site:v_2
+$rA=$mn2
+#case:view #return:v_3
+#site:v_3
+$rA=$mn3
+#case:view #return:v_4
+#site:v_4 #win
+#aim
