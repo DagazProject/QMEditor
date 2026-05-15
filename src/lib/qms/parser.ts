@@ -115,11 +115,6 @@ interface Loop {
   lines: string[];
 }
 
-/*interface Subst {
-  name: string;
-  value: number;
-}*/
-
 interface Statement {
   name: string;
   expr: string;
@@ -191,10 +186,6 @@ function createIterator(nm: string, mn: number, mx: number): Iterator {
 function createLoop(): Loop {
   return { iterators: [], statements: [], lines: []};
 }
-
-/*function createSubst(nm: string, vl: number): Subst {
-  return { name: nm, value: vl };
-}*/
 
 function createMacro(name: string): Macro {
   return { name, params: [], lines: [], alt: [], altF: false, ranges: [] };
@@ -597,15 +588,6 @@ function registerFieldInfo(v: Var, ctx: ParseContext) {
     });
   }
   ctx.fieldInfoMap.set(v.name, fieldMap);
-
-  // Вычисляем начальное значение переменной из умолчательных значений полей
-  let startValue = 0;
-  for (let i = 0; i < v.fields.length; i++) {
-    const def = v.fields[i].def;
-    const digit = def !== null ? Number(def) : 0;
-    startValue += digit * multipliers[i];
-  }
-  v.def = String(startValue);
 }
 
 /**

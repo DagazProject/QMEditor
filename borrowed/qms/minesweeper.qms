@@ -27,9 +27,9 @@
 #var:row #range:-1..5 #default:-1 #hide
 
 #macro:cell:A:B:DF
-  #var:cl[$A][$B] #range:0..99 #default:[$DF] #mod:10 #hide
+  #var:cl[$A][$B] #range:0..99 #default:[$DF] #mod:10 #hide // default не работает
     #field:H
-      #text:0..0 '.'
+      #text:0..0 ' '
       #text:1..1 '1'
       #text:2..2 '2'
       #text:3..3 '3'
@@ -38,9 +38,9 @@
       #text:6..6 '6'
       #text:7..7 '7'
       #text:8..8 '8'
-      #text:9..9 '+'
+      #text:9..9 '.'
     #field:L
-      #text:0..0 ' .'
+      #text:0..0 '  '
       #text:1..1 ' 1'
       #text:2..2 ' 2'
       #text:3..3 ' 3'
@@ -49,7 +49,7 @@
       #text:6..6 ' 6'
       #text:7..7 ' 7'
       #text:8..8 ' 8'
-      #text:9..9 ' +'
+      #text:9..9 ' .'
 #end
 
 #for:y:0..6
@@ -61,13 +61,13 @@
 #macro:aim
 #page:1
 ^+-----------------+^
-^| @cl00 @cl01 @cl02 @cl03 | 7^
-^| @cl10 @cl11 @cl12 @cl13 | 6^
-^| @cl20 @cl21 @cl22 @cl23 | 5^
-^| @cl30 @cl31 @cl32 @cl33 | 4^
-^| @cl40 @cl41 @cl42 @cl43 | 3^
-^| @cl50 @cl51 @cl52 @cl53 | 2^
-^| @cl60 @cl61 @cl62 @cl63 | 1^
+^| @cl00 @cl01 @cl02 @cl03 |^ %7%
+^| @cl10 @cl11 @cl12 @cl13 |^ %6%
+^| @cl20 @cl21 @cl22 @cl23 |^ %5%
+^| @cl30 @cl31 @cl32 @cl33 |^ %4%
+^| @cl40 @cl41 @cl42 @cl43 |^ %3%
+^| @cl50 @cl51 @cl52 @cl53 |^ %2%
+^| @cl60 @cl61 @cl62 @cl63 |^ %1%
 ^+-----------------+^
 @col
 #end
@@ -109,6 +109,26 @@ $rA=$mn3
 #aim
 
 // Подпрограммы
+#site:view
+$rB=$rA mod 100
+$rA=$rA div 100
+#case:view_1
+#site:view_1
+#for:y:0..5
+  #case:view_2_[$y] {($rB div 10)=[$y]}
+#end
+#for:y:0..5
+  #site:view_2_[$y]
+  #for:x:0..3
+    #case:view_3 {($rB div 2)=[$x] and ($rB mod 2)=1}
+      cl[$y][$x].H=9
+    #case:view_3 {($rB div 2)=[$x] and ($rB mod 2)=0}
+      cl[$y][$x].L=9
+  #end
+#end
+#site:view_3
+#return
+
 #site:setup
 $rA=0
 $rC=0
@@ -117,15 +137,15 @@ $rC=0
 $rB=<0..5>*10+<0..7>
 #case:check #return:setup_2
 #site:setup_2
-#case:setup_1 {$rX=0}
-#case:setup_3 {$rX>0}
+#case:setup_1 {$rB=0} // fixed
+#case:setup_3 {$rB>0} // fixed
 #site:setup_3
 $rA=$rA*100+$rB
 $rC=$rC+1
 #case:setup_1 {$rC<4}
 #case:setup_4 {$rC>=4}
 #site:setup_4
-#return
+#return               // ???
 
 #site:check
 #case:check_1 {$mn0.A<>$rB and $mn0.B<>$rB and $mn0.C<>$rB and $mn0.D<>$rB}
@@ -155,24 +175,4 @@ $rC=$rC+1
 $rB=0
 #case:check_5
 #site:check_5
-#return
-
-#site:view
-$rB=$rA mod 100
-$rA=$rA div 100
-#case:view_1
-#site:view_1
-#for:y:0..5
-  #case:view_2_[$y] {($rB div 10)=[$y]}
-#end
-#for:y:0..5
-  #site:view_2_[$y]
-  #for:x:0..3
-    #case:view_3 {($rB div 2)=[$x] and ($rB mod 2)=1}
-      cl[$y][$x].H=9
-    #case:view_3 {($rB div 2)=[$x] and ($rB mod 2)=0}
-      cl[$y][$x].L=9
-  #end
-#end
-#site:view_3
 #return
