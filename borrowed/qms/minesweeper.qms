@@ -152,9 +152,9 @@ $rA=$rA div 100
 #for:y:0..5
   #site:view_2_[$y]
   #for:x:0..3
-    #case:view_3 {($rB div 2)=[$x] and ($rB mod 2)=1}
+    #case:view_3 {($rB div 2)=[$x*2] and ($rB mod 2)=1}
       $cl[$y][$x].H=9
-    #case:view_3 {($rB div 2)=[$x] and ($rB mod 2)=0}
+    #case:view_3 {($rB div 2)=[$x*2] and ($rB mod 2)=0}
       $cl[$y][$x].L=9
   #end
 #end
