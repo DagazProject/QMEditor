@@ -219,7 +219,7 @@ $tired = $tired + <20..40>
 $tired = $tired + <5..10>
 #case:sheep_2 'они так мило прыгают через изгородь...' {$sheep_stage mod 3 = 1 and $time < 180}
 $tired = $tired + <5..10>
-#case:sheep_2 'продолжаем считать...' {$sheep_stage mod 3 = 2 and $time < 180}
+#case:sheep_2 'продолжаем считать...' {$time < 180}
 $tired = $tired + <5..10>
 #case:sheep_2 'Время тянется' {$variant mod 3 = 0 and $tired > 10 and $tired < 50}
 $tired = $tired + <12..15>
