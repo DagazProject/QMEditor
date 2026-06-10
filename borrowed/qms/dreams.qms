@@ -89,6 +89,7 @@
 
 #var:variant #range:0..100 #default:1
 #var:sheep_stage #range:0..10 #default:0
+#var:book_stage #range:0..3 #default:0
 #var:eat #range:0..2 #default:0
 
 #intro
@@ -99,6 +100,7 @@
 5. Белый Корабль
 6. Коты Ултара
 7. Селефаис
+8. Дагон
 
 #site:start #default
 $blood = <-15..15>
@@ -107,18 +109,14 @@ $tired = <15..20>
 $Zug = <-1..1>
 $Cat = <-1..1>
 #page:1
-Сновидец - не тот кто видит сны, а тот, кто умеет проходить сквозь них, помнить каждую тропу и %возвращаться%... Некоторые сны заставляют сознание цепенеть от ужаса. 
-%Холодный разум% и %горячая кровь% - вот то, что позволяет не потерять рассудок посреди неописуемых кошмаров.
-
-Сумерки - врата между явью и миром грёз... %Врата% через которые надо пройти! 
-%Сегодня!% Во что бы то ни стало...
+Особняк представлял собой старинное, изрядно обветшавшее здание, построенное на окраине %Аркхема% в начале XIX века...
 #case:start_2 'Слегка перекусить'
 $time = $time + <10..15>
 $eat = 1
-$tired = $tired + <5..10>
+$tired = $tired + <0..7>
 $excited = $excited + <0..3>
 Нельзя %наедаться% перед сном.
-Немного сыра, зелени, хлеб, бокал вина...
+Немного сыра, зелени, хлеб, %бокал вина%...
 #case:book 'Пройти в библиотеку'
 $time = $time + <1..5>
 $tired = $tired + <0..3>
@@ -126,13 +124,13 @@ $excited = $excited + <5..10>
 #site:start_1 {($time > 180) + 1}
 $variant = <1..100>
 #page:1
-Сегодня ночью необходимо %уснуть%. 
-Уснуть, чтобы проникнуть в Страну грёз...
+В камине потрескивает огонь...
 #page:2
 Светает...
 #case:sleep 'Спать' {$tired > 60 and $excited < 30 and $time < 180}
+#case:dagon 'Спать' {$blood < -15 and $humor < -15 and  $tired > 60 and $excited < 30 and $time < 180}
 #case:dawn 'Сегодня заснуть уже не удастся' {$time >= 180}
-#case:book 'Пройти в библиотеку' {$time < 180} #count:1
+#case:book 'Пройти в библиотеку' {$book_stage < 3 and $time < 180}
 $time = $time + <1..5>
 #case:sheep 'Считать баранов' {$time < 180}
 $time = $time + <1..5>
@@ -189,7 +187,7 @@ $sheep_stage = 0
 $time = $time + <1..3>
 $excited = $excited + <1..5>
 Что за ерунда? Какие %бараны%?
-#case:sheep_1
+#case:sheep_1 {$tired >= 21}
 $variant = <1..100>
 #site:sheep_1 {$sheep_stage}
 $time = $time + <5..10>
@@ -215,38 +213,43 @@ $sheep_stage = $sheep_stage + 1
 $excited = $excited + <5..10>
 $tired = $tired + <20..40>
 %Какие бараны%???
-#case:sheep_2 'барашки, барашки, барашки...' {$sheep_stage mod 3 = 0 and $time < 180}
+#case:sheep_2 'продолжаем считать...' {$variant mod 3 = 0 and $time < 180}
+$tired = $tired + <1..3>
+#case:sheep_2 'не отвлекаться...' {$variant mod 3 = 1 and $time < 180}
+$tired = $tired + <1..3>
+#case:sheep_2 'считать дальше...' {$variant mod 3 = 2 and $time < 180}
+$tired = $tired + <1..3>
+#case:sheep_2 'барашки, барашки, барашки...' {$variant mod 5 = 0 and $time < 180}
+$tired = $tired + <2..7>
+#case:sheep_2 'они так мило прыгают через изгородь...' {$variant mod 7 = 0 and $time < 180}
+$tired = $tired + <1..5>
+#case:sheep_2 'Время тянется' {$variant mod 13 = 0 and $tired > 30 and $tired < 50}
 $tired = $tired + <5..10>
-#case:sheep_2 'они так мило прыгают через изгородь...' {$sheep_stage mod 3 = 1 and $time < 180}
-$tired = $tired + <5..10>
-#case:sheep_2 'продолжаем считать...' {$time < 180}
-$tired = $tired + <5..10>
-#case:sheep_2 'Время тянется' {$variant mod 3 = 0 and $tired > 10 and $tired < 50}
-$tired = $tired + <12..15>
 Оно как резина...
-#case:sheep_2 'Нет! Время - это пластилин!' {$variant mod 3 = 0 and $tired > 50} #count:1
+#case:sheep_2 'Нет! Время - это пластилин!' {$variant mod 13 = 1 and $tired > 50} #count:1
 $excited = $excited - <10..15>
 $tired = $tired + <30..40>
-#case:sheep_2 'Что там за этой полянкой? Что она скрывает?' {$variant mod 5 = 0 and $tired > 20 and $excited > 3} #count:1
-$excited = $excited + <5..10>
+#case:sheep_2 'Что там за этой полянкой? Что она скрывает?' {$variant mod 5 = 0 and $tired > 30 and $excited > 3} #count:1
+$excited = $excited + <15..20>
 $tired = $tired + <10..15>
-#case:start_1 'Это не бараны, это волки в овечьих шкурах!' {$variant mod 21 = 0 and $tired > 20 and $excited > 10} #count:1
+#case:start_1 'Это не бараны, это волки в овечьих шкурах!' {$variant mod 21 = 0 and $tired > 30 and $excited > 10} #count:1
 $excited = $excited + <20..30>
 $tired = $tired + <20..40>
-#case:sheep_2 'Иа! Иа! Шуб-Ниггурат!' {$variant mod 17 = 0 and $tired > 30 and $excited > 40}
+#case:sheep_2 'Иа! Иа! Шуб-Ниггурат!' {$variant mod 17 = 0 and $tired > 30 and $excited > 40} #count:1
 $excited=$excited + <40..50>
-$tired=$tired + <30..40>
-Козёл с легионом младых!
+$tired=$tired + <10..30>
+%Козёл% с легионом %младых%!
 #site:sheep_2
 #case:sheep_1
 
 #site:book
 #page:1
 Библиотека встретила меня гнетущей полутьмой и запахом вековой плесени, смешанным с тошнотворной сладостью увядшей бумаги. Высокие, уходящие во мрак дубовые стеллажи громоздились вдоль стен, словно молчаливые стражи запретных знаний. Пыльные тома в кожаных переплётах, покрытых паутиной, теснились на полках — их корешки, утратившие цвет, хранили лишь намёки на названия: «Некрономикон», «De Vermis Mysteriis», «Культ Невыразимого», «Хроники Йна», «Пнакотические манускрипты», «Седьмая книга Моисея», «Unaussprechlichen Kulten», «Книга Эйбона»... Некоторые фолианты были скованы цепями, другие — заперты в клетках из почерневшего железа.
-#case:book_1 'Взять книгу'
+#case:book_1 'Взять книгу' {$book_stage < 3}
 $time = $time + <1..3>
 #site:book_1 {$variant}
 $time = $time + <10..15>
+$book_stage=$book_stage+1
 $variant = <1..6>
 #page:1
 По массивному, сложенному из черного камня мосту улица эта пересекала темную реку, вдоль которой располагались кирпичные стены складских помещений с помутневшими окнами. Берега реки постоянно пребывали в тени, словно смрадный дым соседних фабрик навечно сделал ее недоступной солнечным лучам. Да и сама река являлась источником невыносимой, неведомой мне доселе %вони%. Кстати, как ни странно, именно с последним обстоятельством я связываю определенные надежды на отыскание нужного мне %дома%, поскольку никогда не забуду тот характерный запах.
@@ -271,7 +274,7 @@ $variant = <1..6>
 $tired=$tired + <0..1>
 #case:start_1 'Прервать чтение'
 $excited=$excited + <1..5>
-#case:book_1 'Взять другую книгу'
+#case:book_1 'Взять другую книгу' {$book_stage < 3}
 $tired=$tired + <1..2>
 $excited=$excited + <1..3>
 #site:book_2 {$variant}
@@ -296,28 +299,28 @@ $time = $time + <20..25>
 #page:6
 Он был романтиком, мечтал %видеть сны% и записывать их. Но все сделанные им записи вызывали %только смех%. Тогда он перестал показывать их кому - либо, а вскоре совсем прекратил описывать свои сны и мечты.
 #case:book_3 'Читать далее' {$variant=1}
-$tired=$tired + <10..15>
+$tired=$tired + <3..7>
 $excited=$excited + <0..3>
 $blood=$blood - <1..2>
 $humor=$humor + <5..7>
 #case:book_3 'Читать далее' {$variant=2}
-$tired=$tired + <15..20>
+$tired=$tired + <3..7>
 $excited=$excited + <1..5>
 $blood=$blood + <5..7>
 $humor=$humor + <7..10>
 #case:book_3 'Читать далее' {$variant=3}
-$tired=$tired + <17..30>
+$tired=$tired + <3..7>
 $excited=$excited + <5..10>
 $blood=$blood + <7..8>
 $humor=$humor - <3..7>
 #case:book_3 'Читать далее' {$variant=4}
-$tired=$tired + <5..10>
+$tired=$tired + <3..7>
 $excited=$excited - <10..15>
 $blood=$blood - <1..3>
 $humor=$humor - <1..5>
 #case:book_3 'Читать далее' {$variant=5}
 $Cat=$Cat + 1
-$tired=$tired + <10..15>
+$tired=$tired + <3..7>
 $excited=$excited + <1..3>
 $blood=$blood + <3..5>
 $humor=$humor + <3..5>
@@ -330,7 +333,7 @@ $humor=$humor + <5..7>
 #case:start_1 'Прервать чтение'
 $excited=$excited + <10..15>
 $tired=$tired - <1..10>
-#case:book_1 'Взять другую книгу'
+#case:book_1 'Взять другую книгу' {$book_stage < 3}
 $tired=$tired + <1..2>
 $excited=$excited + <10..20>
 #site:book_3 {$variant}
@@ -356,12 +359,15 @@ $time = $time + <30..35>
 Он вошел в город через мраморные ворота. Торговцы и погонщики верблюдов приветствовали идущего по ониксовой мостовой Кюранеса как будто он никогда и не покидал этот город. То же самое происходило и в %бирюзовом храме%, жрецы которого, увенчанные орхидеями, утверждали, что время не властно над долиной Ос-Наргай и %молодость% здесь длится %вечно%.
 #case:start_1 'Прервать чтение'
 $excited=$excited + <0..3>
-#case:book_1 'Взять другую книгу'
+#case:book_1 'Взять другую книгу' {$book_stage < 3}
 $tired=$tired + <3..5>
 
 #site:dawn #lose
 #page:1
 Ну что же, сновидца из вас %не получилось%...
+
+#site:dagon #lose
+...
 
 #site:sleep #win #hide:time:tired
 #page:1
