@@ -1409,7 +1409,7 @@ function prepareText(ctx: ParseContext, text: string, isParam: boolean): string 
     return `<<${formula}>>`;
   }).replace(/\*/g, "&&");
 
-  let match = result.match(/%([^*%]+)%/);
+  let match = result.match(/\%([^\%]+)\%/);
   while (match) {
     result = result.replace(`%${match[1]}%`, `<clr>${match[1]}<clrEnd>`);
     match = result.match(/%([^*]+)%/);
