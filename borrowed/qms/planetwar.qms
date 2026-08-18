@@ -1,0 +1,208 @@
+﻿#macro:race
+  #text:0..0 ''
+  #text:1..1 'Человек'
+  #text:2..2 'Пеленг'
+  #text:3..3 'Малок'
+  #text:4..4 'Фэянин'
+  #text:5..5 'Гаалец'
+#end
+
+#macro:bonus
+  #text:0..0 '-3'
+  #text:1..1 '-2'
+  #text:2..2 '-1'
+  #text:3..3 '0'
+  #text:4..4 '+1'
+  #text:5..5 '+2'
+  #text:6..6 '+3'
+#end
+
+#macro:chars:NM
+#var:[$NM] #range:0..2097151 #default:0 #mod:8 #hide
+  #field:reproduction // Воспроизводство населения
+    #bonus
+  #field:production   // Эффективность производства
+    #bonus
+  #field:chaotic      // Хаотичность
+    #bonus
+  #field:attack       // Эффективность атаки
+    #bonus
+  #field:defence      // Эффективность защиты
+    #bonus
+  #field:spy          // Эффективность разведки
+    #bonus
+  #field:science      // Эффективность исследований
+    #bonus
+#end
+
+#var:players #range:0..99 #default:0 #mod:10 #hide
+  #field:E // Противник
+  #field:F // Игрок
+#end
+
+#chars:echars // Характеристики противника
+#chars:fchars // Характеристики игрока
+
+#var:ebonus #range:0..3 #default:0 #hide // Нераспределённые бонусы противника
+#var:fbonus #range:0..3 #default:0 #hide // Нераспределённые бонусы игрока
+
+#var:variant #range:0..10 #default:0 #hide // Вариант выбора
+
+#site:entry #default
+#page:1
+Planet War
+#case:start 'Играть'
+
+#site:start
+$players.E           = <1..5>
+$echars              = 0
+$fchars              = 0
+#page:1
+Выбрать расу
+#case:race 'Человек' {$players.E <> 1}
+$players.F           = 1 // Человек
+$fchars.spy          = 5 // +2
+$fchars.attack       = 4 // +1
+$fbonus              = 2 // +2
+#case:race 'Пеленг'  {$players.E <> 2}
+$players.F           = 2 // Пеленг
+$fchars.reproduction = 4 // +1
+$fchars.defence      = 4 // +1
+$fchars.spy          = 5 // +2
+$fbonus              = 1 // +1
+#case:race 'Малок'   {$players.E <> 3}
+$players.F           = 3 // Малок
+$fchars.attack       = 6 // +3
+$fchars.science      = 1 // -2
+$fchars.chaotic      = 5 // +2
+$fbonus              = 2 // +2
+#case:race 'Фэянин'  {$players.E <> 4}
+$players.F           = 4 // Фэянин
+$fchars.attack       = 2 // -1
+$fchars.defence      = 5 // +2
+$fchars.science      = 4 // +1
+$fchars.spy          = 4 // +1
+$fbonus              = 2 // +2
+#case:race 'Гаалец'  {$players.E <> 5}
+$players.F           = 5 // Гаалец
+$fchars.attack       = 0 // -3
+$fchars.defence      = 4 // +1
+$fchars.spy          = 4 // +1
+$fbonus              = 3 // +3
+
+#macro:aim:chars:bonus
+#page:1
+^ Воспроизводство:  @[$chars].reproduction ^
+^ Производство:     @[$chars].production ^
+^ Хаотичность:      @[$chars].chaotic ^
+^ Атака:            @[$chars].attack ^
+^ Защита:           @[$chars].defence ^
+^ Шпионаж:          @[$chars].spy ^
+^ Наука:            @[$chars].science ^
+^ -------------------------------------- ^
+^ Не распределено:  $[$bonus] ^
+
+#site:race
+#aim:fchars:fbonus
+#case:inc 'Увеличить' { $fbonus > 0 } #order:1
+#case:dec 'Уменьшить' #order:2
+#case:rand_3 'Играть' { $fbonus = 0 } #order:3
+#case:rand_1 'Распределить случайно' { $fbonus > 0 } #order:4
+#case:start 'Выбрать другую расу' #order:5
+
+#site:inc
+#aim:fchars:fbonus
+#case:race 'Воспроизводство' { $fchars.reproduction < 6 } #order:1
+$fchars.reproduction = $fchars.reproduction + 1
+$fbonus = $fbonus - 1
+#case:race 'Производство' { $fchars.production < 6 } #order:2
+$fchars.production = $fchars.production + 1
+$fbonus = $fbonus - 1
+#case:race 'Хаотичность' { $fchars.chaotic < 6 } #order:3
+$fchars.chaotic = $fchars.chaotic + 1
+$fbonus = $fbonus - 1
+#case:race 'Атака' { $fchars.attack < 6 } #order:4
+$fchars.attack = $fchars.attack + 1
+$fbonus = $fbonus - 1
+#case:race 'Защита' { $fchars.defence < 6 } #order:5
+$fchars.defence = $fchars.defence + 1
+$fbonus = $fbonus - 1
+#case:race 'Шпионаж' { $fchars.spy < 6 } #order:6
+$fchars.spy = $fchars.spy + 1
+$fbonus = $fbonus - 1
+#case:race 'Наука' { $fchars.science < 6 } #order:7
+$fchars.science = $fchars.science + 1
+$fbonus = $fbonus - 1
+#case:race 'Вернуться' #order:8
+
+#site:dec
+#aim:fchars:fbonus
+#case:race 'Воспроизводство' { $fchars.reproduction > 0 } #order:1
+$fchars.reproduction = $fchars.reproduction - 1
+$fbonus = $fbonus + 1
+#case:race 'Производство' { $fchars.production > 0 } #order:2
+$fchars.production = $fchars.production - 1
+$fbonus = $fbonus + 1
+#case:race 'Хаотичность' { $fchars.chaotic > 0 } #order:3
+$fchars.chaotic = $fchars.chaotic - 1
+$fbonus = $fbonus + 1
+#case:race 'Атака' { $fchars.attack > 0 } #order:4
+$fchars.attack = $fchars.attack - 1
+$fbonus = $fbonus + 1
+#case:race 'Защита' { $fchars.defence > 0 } #order:5
+$fchars.defence = $fchars.defence - 1
+$fbonus = $fbonus + 1
+#case:race 'Шпионаж' { $fchars.spy > 0 } #order:6
+$fchars.spy = $fchars.spy - 1
+$fbonus = $fbonus + 1
+#case:race 'Наука' { $fchars.science > 0 } #order:7
+$fchars.science = $fchars.science - 1
+$fbonus = $fbonus + 1
+#case:race 'Вернуться' #order:8
+
+#site:rand_1
+#case:rand_3 { $fbonus = 0 }
+#case:rand_2 { $fbonus > 0 }
+
+#site:rand_2
+$variant = <1..7>
+$fbonus = $fbonus - 1
+#case:rand_1 { $variant = 1 }
+$fchars.reproduction = $fchars.reproduction + 1
+#case:rand_1 { $variant = 2 }
+$fchars.production = $fchars.production + 1
+#case:rand_1 { $variant = 3 }
+$fchars.chaotic = $fchars.chaotic + 1
+#case:rand_1 { $variant = 4 }
+$fchars.attack = $fchars.attack + 1
+#case:rand_1 { $variant = 5 }
+$fchars.defence = $fchars.defence + 1
+#case:rand_1 { $variant = 6 }
+$fchars.spy = $fchars.spy + 1
+#case:rand_1 { $variant = 7 }
+$fchars.science = $fchars.science + 1
+
+#site:rand_3
+#case:game { $ebonus = 0 }
+#case:rand_4 { $ebonus > 0 }
+
+#site:rand_4
+$variant = <1..7>
+$ebonus = $ebonus - 1
+#case:rand_3 { $variant = 1 }
+$echars.reproduction = $echars.reproduction + 1
+#case:rand_3 { $variant = 2 }
+$echars.production = $echars.production + 1
+#case:rand_3 { $variant = 3 }
+$echars.chaotic = $echars.chaotic + 1
+#case:rand_3 { $variant = 4 }
+$echars.attack = $echars.attack + 1
+#case:rand_3 { $variant = 5 }
+$echars.defence = $echars.defence + 1
+#case:rand_3 { $variant = 6 }
+$echars.spy = $echars.spy + 1
+#case:rand_3 { $variant = 7 }
+$echars.science = $echars.science + 1
+
+#site:game #win
+#page:1
