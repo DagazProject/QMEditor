@@ -66,22 +66,23 @@ $fchars              = 0
 Выбрать расу
 #case:race 'Человек' {$eplayer <> 1}
 $fplayer             = 1 // Человек
-$fchars              = 1 + 1*4 + 1*16 + 2*64 + 1*256 + 3*1024 + 1*4096
+$fchars              = 7573 //1 + 1*4 + 1*16 + 2*64 + 1*256 + 3*1024 + 1*4096
 $fbonus              = 2 // +2
 #case:race 'Пеленг'  {$eplayer <> 2}
 $fplayer             = 2 // Пеленг
-$fchars              = 2 + 1*4 + 1*16 + 1*64 + 2*256 + 3*1024 + 1*4096
+$fchars              = 7766 //2 + 1*4 + 1*16 + 1*64 + 2*256 + 3*1024 + 1*4096
 $fbonus              = 1 // +1
 #case:race 'Малок'   {$eplayer <> 3}
 $fplayer             = 3 // Малок
-$fchars              = 1 + 1*4 + 3*16 + 3*64 + 1*256 + 1*1024 + 0*4096
+$fchars              = 1525 //1 + 1*4 + 3*16 + 3*64 + 1*256 + 1*1024 + 0*4096
 $fbonus              = 2 // +2
 #case:race 'Фэянин'  {$eplayer <> 4}
 $fplayer             = 4 // Фэянин
-$fchars              = 1 + 2*4 + 1*16 + 0*64 + 3*256 + 2*1024 + 1*4096
+$fchars              = 6937 //1 + 2*4 + 1*16 + 0*64 + 3*256 + 2*1024 + 1*4096
+$fbonus              = 2 // +2
 #case:race 'Гаалец'  {$eplayer <> 5}
 $fplayer             = 5 // Гаалец
-$fchars              = 1 + 1*4 + 1*16 + 0*64 + 3*256 + 2*1024 + 3*4096
+$fchars              = 15125 //1 + 1*4 + 1*16 + 0*64 + 3*256 + 2*1024 + 3*4096
 $fbonus              = 1 // +1
 
 #macro:aim:L
@@ -110,31 +111,45 @@ $science      = $[$L]chars.science
 #aim:f
 #case:inc 'Увеличить' { $fbonus > 0 } #order:1
 #case:dec 'Уменьшить' #order:2
-#case:rand_3 'Играть' { $fbonus = 0 } #order:3
+#case:rand_3 'Играть' { $fbonus = 0 and $eplayer = 1 } #order:3
+$echars = 7573
+$ebonus = 2 
+#case:rand_3 'Играть' { $fbonus = 0 and $eplayer = 2 } #order:3
+$echars = 7766
+$ebonus = 1
+#case:rand_3 'Играть' { $fbonus = 0 and $eplayer = 3 } #order:3
+$echars = 1525
+$ebonus = 2
+#case:rand_3 'Играть' { $fbonus = 0 and $eplayer = 4 } #order:3
+$echars = 6937
+$ebonus = 2
+#case:rand_3 'Играть' { $fbonus = 0 and $eplayer = 5 } #order:3
+$echars = 15125
+$ebonus = 1
 #case:rand_1 'Распределить случайно' { $fbonus > 0 } #order:4
 #case:start 'Выбрать другую расу' #order:5
 
 #site:inc
 #aim:f
-#case:race 'Воспроизводство' { $fchars.reproduction < 6 } #order:1
+#case:race 'Воспроизводство' { $fchars.reproduction < 3 } #order:1
 $fchars.reproduction = $fchars.reproduction + 1
 $fbonus = $fbonus - 1
-#case:race 'Производство' { $fchars.production < 6 } #order:2
+#case:race 'Производство' { $fchars.production < 3 } #order:2
 $fchars.production = $fchars.production + 1
 $fbonus = $fbonus - 1
-#case:race 'Хаотичность' { $fchars.chaotic < 6 } #order:3
+#case:race 'Хаотичность' { $fchars.chaotic < 3 } #order:3
 $fchars.chaotic = $fchars.chaotic + 1
 $fbonus = $fbonus - 1
-#case:race 'Атака' { $fchars.attack < 6 } #order:4
+#case:race 'Атака' { $fchars.attack < 3 } #order:4
 $fchars.attack = $fchars.attack + 1
 $fbonus = $fbonus - 1
-#case:race 'Защита' { $fchars.defence < 6 } #order:5
+#case:race 'Защита' { $fchars.defence < 3 } #order:5
 $fchars.defence = $fchars.defence + 1
 $fbonus = $fbonus - 1
-#case:race 'Шпионаж' { $fchars.spy < 6 } #order:6
+#case:race 'Шпионаж' { $fchars.spy < 3 } #order:6
 $fchars.spy = $fchars.spy + 1
 $fbonus = $fbonus - 1
-#case:race 'Наука' { $fchars.science < 6 } #order:7
+#case:race 'Наука' { $fchars.science < 3 } #order:7
 $fchars.science = $fchars.science + 1
 $fbonus = $fbonus - 1
 #case:race 'Вернуться' #order:8
@@ -165,26 +180,39 @@ $fbonus = $fbonus + 1
 #case:race 'Вернуться' #order:8
 
 #site:rand_1
-#case:rand_3 { $fbonus = 0 }
+#case:race { $fbonus = 0 }
 #case:rand_2 { $fbonus > 0 }
 
 #site:rand_2
 $variant = <1..7>
-$fbonus = $fbonus - 1
-#case:rand_1 { $variant = 1 }
+#case:rand_1 { $variant = 1 and $fchars.reproduction = 3 }
+#case:rand_1 { $variant = 1 and $fchars.reproduction < 3 }
 $fchars.reproduction = $fchars.reproduction + 1
-#case:rand_1 { $variant = 2 }
+$fbonus = $fbonus - 1
+#case:rand_1 { $variant = 2 and $fchars.production = 3 }
+#case:rand_1 { $variant = 2 and $fchars.production < 3 }
 $fchars.production = $fchars.production + 1
-#case:rand_1 { $variant = 3 }
+$fbonus = $fbonus - 1
+#case:rand_1 { $variant = 3 and $fchars.chaotic = 3 }
+#case:rand_1 { $variant = 3 and $fchars.chaotic < 3 }
 $fchars.chaotic = $fchars.chaotic + 1
-#case:rand_1 { $variant = 4 }
+$fbonus = $fbonus - 1
+#case:rand_1 { $variant = 4 and $fchars.attack = 3 }
+#case:rand_1 { $variant = 4 and $fchars.attack < 3 }
 $fchars.attack = $fchars.attack + 1
-#case:rand_1 { $variant = 5 }
+$fbonus = $fbonus - 1
+#case:rand_1 { $variant = 5 and $fchars.defence = 3 }
+#case:rand_1 { $variant = 5 and $fchars.defence < 3 }
 $fchars.defence = $fchars.defence + 1
-#case:rand_1 { $variant = 6 }
+$fbonus = $fbonus - 1
+#case:rand_1 { $variant = 6 and $fchars.spy = 3 }
+#case:rand_1 { $variant = 6 and $fchars.spy < 3 }
 $fchars.spy = $fchars.spy + 1
-#case:rand_1 { $variant = 7 }
+$fbonus = $fbonus - 1
+#case:rand_1 { $variant = 7 and $fchars.science = 3 }
+#case:rand_1 { $variant = 7 and $fchars.science < 3 }
 $fchars.science = $fchars.science + 1
+$fbonus = $fbonus - 1
 
 #site:rand_3
 #case:game { $ebonus = 0 }
@@ -192,21 +220,47 @@ $fchars.science = $fchars.science + 1
 
 #site:rand_4
 $variant = <1..7>
-$ebonus = $ebonus - 1
-#case:rand_3 { $variant = 1 }
+#case:rand_3 { $variant = 1 and $echars.reproduction = 3 }
+#case:rand_3 { $variant = 1 and $echars.reproduction < 3 }
 $echars.reproduction = $echars.reproduction + 1
-#case:rand_3 { $variant = 2 }
+$ebonus = $ebonus - 1
+#case:rand_3 { $variant = 2 and $echars.production = 3 }
+#case:rand_3 { $variant = 2 and $echars.production < 3 }
 $echars.production = $echars.production + 1
-#case:rand_3 { $variant = 3 }
+$ebonus = $ebonus - 1
+#case:rand_3 { $variant = 3 and $echars.chaotic = 3}
+#case:rand_3 { $variant = 3 and $echars.chaotic < 3}
 $echars.chaotic = $echars.chaotic + 1
-#case:rand_3 { $variant = 4 }
+$ebonus = $ebonus - 1
+#case:rand_3 { $variant = 4 and $echars.attack = 3 }
+#case:rand_3 { $variant = 4 and $echars.attack < 3 }
 $echars.attack = $echars.attack + 1
-#case:rand_3 { $variant = 5 }
+$ebonus = $ebonus - 1
+#case:rand_3 { $variant = 5 and $echars.defence = 3 }
+#case:rand_3 { $variant = 5 and $echars.defence < 3 }
 $echars.defence = $echars.defence + 1
-#case:rand_3 { $variant = 6 }
+$ebonus = $ebonus - 1
+#case:rand_3 { $variant = 6 and $echars.spy = 3 }
+#case:rand_3 { $variant = 6 and $echars.spy < 3 }
 $echars.spy = $echars.spy + 1
-#case:rand_3 { $variant = 7 }
+$ebonus = $ebonus - 1
+#case:rand_3 { $variant = 7 and $echars.science = 3 }
+#case:rand_3 { $variant = 7 and $echars.science < 3 }
 $echars.science = $echars.science + 1
+$ebonus = $ebonus - 1
 
 #site:game #win
 #aim:e
+
+
+
+#position:entry:96:399
+#position:inc:96:441
+#position:dec:160:441
+#position:start:160:399
+#position:race:224:399
+#position:rand_3:288:399
+#position:rand_1:288:441
+#position:rand_4:352:441
+#position:rand_2:352:399
+#position:game:224:441
