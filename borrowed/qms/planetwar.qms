@@ -25,27 +25,27 @@
   #field:reproduction // 1    Воспроизводство населения
 #end
 
-#var:fplayer #range:0..5 #default:0 #hide
+#var:frace #range:0..5 #default:0 #hide
   #race
-#var:eplayer #range:0..5 #default:0 #hide
+#var:erace #range:0..5 #default:0 #hide
   #race
 
 #chars:echars // Характеристики противника
 #chars:fchars // Характеристики игрока
 
-#var:reproduction #range:0..3 #default:3 #hide
+#var:temp_1 #range:0..1000000 #default:3 #hide
   #bonus
-#var:production #range:0..3 #default:3 #hide
+#var:temp_2 #range:0..1000000 #default:3 #hide
   #bonus
-#var:chaotic #range:0..3 #default:3 #hide
+#var:temp_3 #range:0..1000000 #default:3 #hide
   #bonus
-#var:attack #range:0..3 #default:3 #hide
+#var:temp_4 #range:0..1000000 #default:3 #hide
   #bonus
-#var:defence #range:0..3 #default:3 #hide
+#var:temp_5 #range:0..1000000 #default:3 #hide
   #bonus
-#var:spy #range:0..3 #default:3 #hide
+#var:temp_6 #range:0..1000000 #default:3 #hide
   #bonus
-#var:science #range:0..3 #default:3 #hide
+#var:temp_7 #range:0..1000000 #default:3 #hide
   #bonus
 
 #var:ebonus #range:0..3 #default:0 #hide // Нераспределённые бонусы противника
@@ -59,78 +59,78 @@ Planet War
 #case:start 'Играть'
 
 #site:start
-$eplayer             = <1..5>
+$erace             = <1..5>
 $echars              = 0
 $fchars              = 0
 #page:1
 Выбрать расу
-#case:race 'Человек' {$eplayer <> 1}
-$fplayer             = 1 // Человек
-$fchars              = 7573 //1 + 1*4 + 1*16 + 2*64 + 1*256 + 3*1024 + 1*4096
+#case:race 'Человек' {$erace <> 1}
+$frace             = 1 // Человек
+$fchars              = 7573
 $fbonus              = 2 // +2
-#case:race 'Пеленг'  {$eplayer <> 2}
-$fplayer             = 2 // Пеленг
-$fchars              = 7766 //2 + 1*4 + 1*16 + 1*64 + 2*256 + 3*1024 + 1*4096
+#case:race 'Пеленг'  {$erace <> 2}
+$frace             = 2 // Пеленг
+$fchars              = 7766
 $fbonus              = 1 // +1
-#case:race 'Малок'   {$eplayer <> 3}
-$fplayer             = 3 // Малок
-$fchars              = 1525 //1 + 1*4 + 3*16 + 3*64 + 1*256 + 1*1024 + 0*4096
+#case:race 'Малок'   {$erace <> 3}
+$frace             = 3 // Малок
+$fchars              = 1525
 $fbonus              = 2 // +2
-#case:race 'Фэянин'  {$eplayer <> 4}
-$fplayer             = 4 // Фэянин
-$fchars              = 6937 //1 + 2*4 + 1*16 + 0*64 + 3*256 + 2*1024 + 1*4096
+#case:race 'Фэянин'  {$erace <> 4}
+$frace             = 4 // Фэянин
+$fchars              = 6937
 $fbonus              = 2 // +2
-#case:race 'Гаалец'  {$eplayer <> 5}
-$fplayer             = 5 // Гаалец
-$fchars              = 15125 //1 + 1*4 + 1*16 + 0*64 + 3*256 + 2*1024 + 3*4096
+#case:race 'Гаалец'  {$erace <> 5}
+$frace             = 5 // Гаалец
+$fchars              = 15125
 $fbonus              = 1 // +1
 
-#macro:aim:L
-$reproduction = $[$L]chars.reproduction
-$production   = $[$L]chars.production
-$chaotic      = $[$L]chars.chaotic
-$attack       = $[$L]chars.attack
-$defence      = $[$L]chars.defence
-$spy          = $[$L]chars.spy
-$science      = $[$L]chars.science
+#macro:raim:L
+$temp_1 = $[$L]chars.reproduction
+$temp_2 = $[$L]chars.production
+$temp_3 = $[$L]chars.chaotic
+$temp_4 = $[$L]chars.attack
+$temp_5 = $[$L]chars.defence
+$temp_6 = $[$L]chars.spy
+$temp_7 = $[$L]chars.science
 #page:1
-^ Раса: @[$L]player ^
+^ Раса: @[$L]race ^
 ^ -------------------------------------- ^
-^ Воспроизводство:  @reproduction ^
-^ Производство:     @production ^
-^ Хаотичность:      @chaotic ^
-^ Атака:            @attack ^
-^ Защита:           @defence ^
-^ Шпионаж:          @spy ^
-^ Наука:            @science ^
+^ Воспроизводство:  @temp_1 ^
+^ Производство:     @temp_2 ^
+^ Хаотичность:      @temp_3 ^
+^ Атака:            @temp_4 ^
+^ Защита:           @temp_5 ^
+^ Шпионаж:          @temp_6 ^
+^ Наука:            @temp_7 ^
 ^ -------------------------------------- ^
 ^ Не распределено:  $[$L]bonus ^
 #end
 
 #site:race
-#aim:f
+#raim:f
 #case:inc 'Увеличить' { $fbonus > 0 } #order:1
 #case:dec 'Уменьшить' #order:2
-#case:rand_3 'Играть' { $fbonus = 0 and $eplayer = 1 } #order:3
+#case:rand_3 'Играть' { $fbonus = 0 and $erace = 1 } #order:3
 $echars = 7573
 $ebonus = 2 
-#case:rand_3 'Играть' { $fbonus = 0 and $eplayer = 2 } #order:3
+#case:rand_3 'Играть' { $fbonus = 0 and $erace = 2 } #order:3
 $echars = 7766
 $ebonus = 1
-#case:rand_3 'Играть' { $fbonus = 0 and $eplayer = 3 } #order:3
+#case:rand_3 'Играть' { $fbonus = 0 and $erace = 3 } #order:3
 $echars = 1525
 $ebonus = 2
-#case:rand_3 'Играть' { $fbonus = 0 and $eplayer = 4 } #order:3
+#case:rand_3 'Играть' { $fbonus = 0 and $erace = 4 } #order:3
 $echars = 6937
 $ebonus = 2
-#case:rand_3 'Играть' { $fbonus = 0 and $eplayer = 5 } #order:3
+#case:rand_3 'Играть' { $fbonus = 0 and $erace = 5 } #order:3
 $echars = 15125
 $ebonus = 1
 #case:rand_1 'Распределить случайно' { $fbonus > 0 } #order:4
 #case:start 'Выбрать другую расу' #order:5
 
 #site:inc
-#aim:f
+#raim:f
 #case:race 'Воспроизводство' { $fchars.reproduction < 3 } #order:1
 $fchars.reproduction = $fchars.reproduction + 1
 $fbonus = $fbonus - 1
@@ -155,7 +155,7 @@ $fbonus = $fbonus - 1
 #case:race 'Вернуться' #order:8
 
 #site:dec
-#aim:f
+#raim:f
 #case:race 'Воспроизводство' { $fchars.reproduction > 0 } #order:1
 $fchars.reproduction = $fchars.reproduction - 1
 $fbonus = $fbonus + 1
@@ -215,7 +215,7 @@ $fchars.science = $fchars.science + 1
 $fbonus = $fbonus - 1
 
 #site:rand_3
-#case:game { $ebonus = 0 }
+#case:init { $ebonus = 0 }
 #case:rand_4 { $ebonus > 0 }
 
 #site:rand_4
@@ -249,8 +249,121 @@ $ebonus = $ebonus - 1
 $echars.science = $echars.science + 1
 $ebonus = $ebonus - 1
 
-#site:game #win
-#aim:e
+#macro:planet
+  #text:0..0 ''
+  #text:1..1 'Кабруния'
+  #text:2..2 'Катраз'
+  #text:3..3 'Авалон'
+  #text:4..4 'Гралгар'
+  #text:5..5 'Велорат'
+  #text:6..6 'Дралимия'
+#end
+
+#macro:ptype
+  #text:0..0 ''
+  #text:1..1 'Столица'
+#end
+
+#macro:pop:NN
+#var:pop_[$NN] #range:0..1000000000 #default:32001 #hide
+  #field:total #mod:10000000
+  #field:science #mod:8
+  #field:capital #mod:2
+  #field:friend #mod:2
+#end
+
+#macro:arm:NN
+#var:arm_[$NN] #range:0..1000000000 #default:0 #hide
+  #field:arty #mod:1000
+  #field:navy #mod:1000
+  #field:land #mod:1000
+#end
+
+#for:i:1..6
+  #pop:[$i]
+  #arm:[$i]
+#end
+
+#var:curr #range:1..6 #default:1 #hide
+  #planet
+
+#macro:paim
+#page:1
+^ Планета: @curr ^
+^ -------------------------------------- ^
+^ Население:  $temp_1 ^
+^ Пехота:     $temp_2 ^
+^ Авиация:    $temp_3 ^
+^ Артиллерия: $temp_4 ^
+^ Учёные:     $temp_6 ^
+#end
+
+#site:init
+$pop_1 = 32001
+$pop_2 = 3201
+$pop_3 = 3201
+$pop_4 = 32000
+$pop_5 = 3200
+$pop_6 = 3200
+#case:game
+
+#site:game
+#case:main { $curr = 1 }
+$temp_1 = $pop_1.total
+$temp_2 = $arm_1.land
+$temp_3 = $arm_1.navy
+$temp_4 = $arm_1.arty
+$temp_6 = $arm_1.science
+#case:main { $curr = 2 }
+$temp_1 = $pop_2.total
+$temp_2 = $arm_2.land
+$temp_3 = $arm_2.navy
+$temp_4 = $arm_2.arty
+$temp_6 = $arm_2.science
+#case:main { $curr = 3 }
+$temp_1 = $pop_3.total
+$temp_2 = $arm_3.land
+$temp_3 = $arm_3.navy
+$temp_4 = $arm_3.arty
+$temp_6 = $arm_3.science
+#case:main { $curr = 4 }
+$temp_1 = $pop_4.total
+$temp_2 = $arm_4.land
+$temp_3 = $arm_4.navy
+$temp_4 = $arm_4.arty
+$temp_6 = $arm_4.science
+#case:main { $curr = 5 }
+$temp_1 = $pop_5.total
+$temp_2 = $arm_5.land
+$temp_3 = $arm_5.navy
+$temp_4 = $arm_5.arty
+$temp_6 = $arm_5.science
+#case:main { $curr = 6 }
+$temp_1 = $pop_6.total
+$temp_2 = $arm_6.land
+$temp_3 = $arm_6.navy
+$temp_4 = $arm_6.arty
+$temp_6 = $arm_6.science
+
+#site:main
+#paim
+#case:select 'Другая планета' #order:1
+
+#site:select
+#paim
+#case:main 'Кабруния' { $pop_1.friend = 1 and $curr <> 1 } #order:1
+$curr = 1
+#case:main 'Катраз' { $pop_2.friend = 1 and $curr <> 2 } #order:2
+$curr = 2
+#case:main 'Авалон' { $pop_3.friend = 1 and $curr <> 3 } #order:3
+$curr = 3
+#case:main 'Гралгар' { $pop_4.friend = 1 and $curr <> 4 } #order:4
+$curr = 4
+#case:main 'Велорат' { $pop_5.friend = 1 and $curr <> 5 } #order:5
+$curr = 5
+#case:main 'Дралимия' { $pop_6.friend = 1 and $curr <> 6 } #order:6
+$curr = 6
+#case:main 'Вернуться' #order:7
 
 
 
