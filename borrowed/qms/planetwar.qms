@@ -59,29 +59,29 @@ Planet War
 #case:start 'Играть'
 
 #site:start
-$erace             = <1..5>
+$erace               = <1..5>
 $echars              = 0
 $fchars              = 0
 #page:1
 Выбрать расу
 #case:race 'Человек' {$erace <> 1}
-$frace             = 1 // Человек
+$frace               = 1 // Человек
 $fchars              = 7573
 $fbonus              = 2 // +2
 #case:race 'Пеленг'  {$erace <> 2}
-$frace             = 2 // Пеленг
+$frace               = 2 // Пеленг
 $fchars              = 7766
 $fbonus              = 1 // +1
 #case:race 'Малок'   {$erace <> 3}
-$frace             = 3 // Малок
+$frace               = 3 // Малок
 $fchars              = 1525
 $fbonus              = 2 // +2
 #case:race 'Фэянин'  {$erace <> 4}
-$frace             = 4 // Фэянин
+$frace               = 4 // Фэянин
 $fchars              = 6937
 $fbonus              = 2 // +2
 #case:race 'Гаалец'  {$erace <> 5}
-$frace             = 5 // Гаалец
+$frace               = 5 // Гаалец
 $fchars              = 15125
 $fbonus              = 1 // +1
 
@@ -279,9 +279,18 @@ $ebonus = $ebonus - 1
   #field:land #mod:1000
 #end
 
+#macro:transfer:L:NN
+#var:transfer_[$L][$NN] #range:0..1000000000 #default:0 #hide
+  #field:spy  #mod:100
+  #field:navy #mod:1000
+  #field:land #mod:1000
+#end
+
 #for:i:1..6
   #pop:[$i]
   #arm:[$i]
+  #transfer:f:[$i]
+  #transfer:e:[$i]
 #end
 
 #var:curr #range:1..6 #default:1 #hide
@@ -299,12 +308,12 @@ $ebonus = $ebonus - 1
 #end
 
 #site:init
-$pop_1 = 32001
-$pop_2 = 3201
-$pop_3 = 3201
-$pop_4 = 32000
-$pop_5 = 3200
-$pop_6 = 3200
+$pop_1 = ((($fchars.chaotic - 1) * <1..10>) + 1000) * 32 + 1
+$pop_2 = ((($fchars.chaotic - 1) * <1..10>) +  100) * 32 + 1
+$pop_3 = ((($fchars.chaotic - 1) * <1..10>) +  100) * 32 + 1
+$pop_4 = ((($fchars.chaotic - 1) * <1..10>) + 1000) * 32
+$pop_5 = ((($fchars.chaotic - 1) * <1..10>) +  100) * 32
+$pop_6 = ((($fchars.chaotic - 1) * <1..10>) +  100) * 32
 #case:game
 
 #site:game
@@ -313,37 +322,37 @@ $temp_1 = $pop_1.total
 $temp_2 = $arm_1.land
 $temp_3 = $arm_1.navy
 $temp_4 = $arm_1.arty
-$temp_6 = $arm_1.science
+$temp_6 = $pop_1.science
 #case:main { $curr = 2 }
 $temp_1 = $pop_2.total
 $temp_2 = $arm_2.land
 $temp_3 = $arm_2.navy
 $temp_4 = $arm_2.arty
-$temp_6 = $arm_2.science
+$temp_6 = $pop_2.science
 #case:main { $curr = 3 }
 $temp_1 = $pop_3.total
 $temp_2 = $arm_3.land
 $temp_3 = $arm_3.navy
 $temp_4 = $arm_3.arty
-$temp_6 = $arm_3.science
+$temp_6 = $pop_3.science
 #case:main { $curr = 4 }
 $temp_1 = $pop_4.total
 $temp_2 = $arm_4.land
 $temp_3 = $arm_4.navy
 $temp_4 = $arm_4.arty
-$temp_6 = $arm_4.science
+$temp_6 = $pop_4.science
 #case:main { $curr = 5 }
 $temp_1 = $pop_5.total
 $temp_2 = $arm_5.land
 $temp_3 = $arm_5.navy
 $temp_4 = $arm_5.arty
-$temp_6 = $arm_5.science
+$temp_6 = $pop_5.science
 #case:main { $curr = 6 }
 $temp_1 = $pop_6.total
 $temp_2 = $arm_6.land
 $temp_3 = $arm_6.navy
 $temp_4 = $arm_6.arty
-$temp_6 = $arm_6.science
+$temp_6 = $pop_6.science
 
 #site:main
 #paim
@@ -377,3 +386,6 @@ $curr = 6
 #position:rand_4:352:441
 #position:rand_2:352:399
 #position:game:224:441
+#position:init:96:357
+#position:main:96:315
+#position:select:96:231
