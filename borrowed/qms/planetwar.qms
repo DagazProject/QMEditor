@@ -360,17 +360,17 @@ $temp_6 = $pop_6.science
 
 #site:select
 #paim
-#case:main 'Кабруния' { $pop_1.friend = 1 and $curr <> 1 } #order:1
+#case:game 'Кабруния' { $pop_1.friend = 1 and $curr <> 1 } #order:1
 $curr = 1
-#case:main 'Катраз' { $pop_2.friend = 1 and $curr <> 2 } #order:2
+#case:game 'Катраз' { $pop_2.friend = 1 and $curr <> 2 } #order:2
 $curr = 2
-#case:main 'Авалон' { $pop_3.friend = 1 and $curr <> 3 } #order:3
+#case:game 'Авалон' { $pop_3.friend = 1 and $curr <> 3 } #order:3
 $curr = 3
-#case:main 'Гралгар' { $pop_4.friend = 1 and $curr <> 4 } #order:4
+#case:game 'Гралгар' { $pop_4.friend = 1 and $curr <> 4 } #order:4
 $curr = 4
-#case:main 'Велорат' { $pop_5.friend = 1 and $curr <> 5 } #order:5
+#case:game 'Велорат' { $pop_5.friend = 1 and $curr <> 5 } #order:5
 $curr = 5
-#case:main 'Дралимия' { $pop_6.friend = 1 and $curr <> 6 } #order:6
+#case:game 'Дралимия' { $pop_6.friend = 1 and $curr <> 6 } #order:6
 $curr = 6
 #case:main 'Вернуться' #order:7
 
