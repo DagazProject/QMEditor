@@ -48,6 +48,8 @@
 #var:temp_7 #range:0..1000000 #default:3 #hide
   #bonus
 
+#var:year #range:3027..4027 #default:3027
+
 #var:ebonus #range:0..3 #default:0 #hide // Нераспределённые бонусы противника
 #var:fbonus #range:0..3 #default:0 #hide // Нераспределённые бонусы игрока
 
@@ -298,12 +300,13 @@ $ebonus = $ebonus - 1
 
 #macro:paim
 #page:1
-^ Планета: @curr ^
+^ Планета: @curr (Год: $year) ^
 ^ -------------------------------------- ^
 ^ Население:  $temp_1 ^
 ^ Пехота:     $temp_2 ^
 ^ Авиация:    $temp_3 ^
 ^ Артиллерия: $temp_4 ^
+^ Разведка:   $temp_5 ^
 ^ Учёные:     $temp_6 ^
 #end
 
@@ -322,41 +325,53 @@ $temp_1 = $pop_1.total
 $temp_2 = $arm_1.land
 $temp_3 = $arm_1.navy
 $temp_4 = $arm_1.arty
+$temp_5 = $transfer_f1.spy
 $temp_6 = $pop_1.science
 #case:main { $curr = 2 }
 $temp_1 = $pop_2.total
 $temp_2 = $arm_2.land
 $temp_3 = $arm_2.navy
 $temp_4 = $arm_2.arty
+$temp_5 = $transfer_f2.spy
 $temp_6 = $pop_2.science
 #case:main { $curr = 3 }
 $temp_1 = $pop_3.total
 $temp_2 = $arm_3.land
 $temp_3 = $arm_3.navy
 $temp_4 = $arm_3.arty
+$temp_5 = $transfer_f3.spy
 $temp_6 = $pop_3.science
 #case:main { $curr = 4 }
 $temp_1 = $pop_4.total
 $temp_2 = $arm_4.land
 $temp_3 = $arm_4.navy
 $temp_4 = $arm_4.arty
+$temp_5 = $transfer_f4.spy
 $temp_6 = $pop_4.science
 #case:main { $curr = 5 }
 $temp_1 = $pop_5.total
 $temp_2 = $arm_5.land
 $temp_3 = $arm_5.navy
 $temp_4 = $arm_5.arty
+$temp_5 = $transfer_f5.spy
 $temp_6 = $pop_5.science
 #case:main { $curr = 6 }
 $temp_1 = $pop_6.total
 $temp_2 = $arm_6.land
 $temp_3 = $arm_6.navy
 $temp_4 = $arm_6.arty
+$temp_5 = $transfer_f6.spy
 $temp_6 = $pop_6.science
 
 #site:main
 #paim
-#case:select 'Другая планета' #order:1
+#case:select 'Другая планета'                        #order:1
+#case:train  'Тренировать'                           #order:2
+#case:transf 'Переместить'                           #order:3
+#case:attack 'Атаковать'    { $temp_2 + $temp_3 > 0} #order:4
+#case:scienc 'Исследования' { $temp_6 > 0 }          #order:5
+#case:intelg 'Разведка'     { $temp_5 > 0 }          #order:6
+#case:wait   'Ждать'                                 #order:7
 
 #site:select
 #paim
@@ -374,7 +389,40 @@ $curr = 5
 $curr = 6
 #case:main 'Вернуться' #order:7
 
+#site:train
+#paim
+#case:main 'Вернуться' #order:7
 
+#macro:taim
+#page:1
+^ Планета: @curr (Год: $year) ^
+^ -------------------------------------- ^
+^ Население:  $temp_1 ^
+^ Пехота:     $temp_2 ^
+^ Авиация:    $temp_3 ^
+^ Разведка:   $temp_5 ^
+#end
+
+#site:transf
+#taim
+#case:main 'Вернуться' #order:7
+
+#site:attack
+#page:1
+...
+#case:main 'Вернуться' #order:7
+
+#site:wait #win
+#page:1
+...
+
+#site:scienc #win
+#page:1
+...
+
+#site:intelg #win
+#page:1
+...
 
 #position:entry:96:399
 #position:inc:96:441
@@ -389,3 +437,9 @@ $curr = 6
 #position:init:96:357
 #position:main:96:315
 #position:select:96:231
+#position:train:160:315
+#position:transf:224:315
+#position:attack:288:315
+#position:scienc:352:315
+#position:intelg:416:315
+#position:wait:96:483
