@@ -47,6 +47,8 @@
   #bonus
 #var:temp_7 #range:0..1000000 #default:3 #hide
   #bonus
+#var:temp_8 #range:0..1000000 #default:0 #hide
+#var:variant #range:1..10 #default:1 #hide
 
 #var:year #range:3027..4027 #default:3027
 
@@ -394,18 +396,210 @@ $curr = 6
 #case:main 'Вернуться' #order:7
 
 #macro:taim
-#page:1
 ^ Планета: @curr (Год: $year) ^
 ^ -------------------------------------- ^
 ^ Население:  $temp_1 ^
 ^ Пехота:     $temp_2 ^
 ^ Авиация:    $temp_3 ^
-^ Разведка:   $temp_5 ^
 #end
 
 #site:transf
+#page:1
 #taim
+#case:transf_num 'Население' { $temp_1 > 0 } #order:1
+$variant = 1
+#case:transf_num 'Пехоту' { $temp_2 > 0 } #order:2
+$variant = 2
+#case:transf_num 'Авиацию' { $temp_3 > 0 } #order:2
+$variant = 3
 #case:main 'Вернуться' #order:7
+
+#site:transf_num { $variant }
+#page:1
+#taim
+^ -------------------------------------- ^
+^ Население:  $temp_8 ^
+#page:2
+#taim
+^ -------------------------------------- ^
+^ Пехота:     $temp_8 ^
+#page:3
+#taim
+^ -------------------------------------- ^
+^ Авиация:    $temp_8 ^
+#case:transf_temp 'Одного' { $variant = 1 and $temp_1 > 0 } #order:1
+$temp_1 = $temp_1 - 1
+$temp_8 = $temp_8 + 1
+#case:transf_temp 'Одного' { $variant = 2 and $temp_2 > 0 } #order:1
+$temp_2 = $temp_2 - 1
+$temp_8 = $temp_8 + 1
+#case:transf_temp 'Одного' { $variant = 3 and $temp_3 > 0 } #order:1
+$temp_3 = $temp_3 - 1
+$temp_8 = $temp_8 + 1
+#case:transf_temp 'Десяток' { $variant = 1 and $temp_1 > 10 } #order:2
+$temp_1 = $temp_1 - 10
+$temp_8 = $temp_8 + 10
+#case:transf_temp 'Десяток' { $variant = 2 and $temp_2 > 10 } #order:2
+$temp_2 = $temp_2 - 10
+$temp_8 = $temp_8 + 10
+#case:transf_temp 'Десяток' { $variant = 3 and $temp_3 > 10 } #order:2
+$temp_3 = $temp_3 - 10
+$temp_8 = $temp_8 + 10
+#case:transf_temp 'Всех' { $variant = 1 and $temp_1 > 1 } #order:3
+$temp_8 = $temp_8 + $temp_1
+$temp_1 = 0
+#case:transf_temp 'Всех' { $variant = 2 and $temp_2 > 1 } #order:3
+$temp_8 = $temp_8 + $temp_2
+$temp_2 = 0
+#case:transf_temp 'Всех' { $variant = 3 and $temp_3 > 1 } #order:3
+$temp_8 = $temp_8 + $temp_3
+$temp_3 = 0
+#case:transf_where 'Куда?' { $temp_8 > 0 } #order:4
+#case:main 'Отменить перевод' { $variant = 1 } #order:7
+$temp_1 = $temp_8
+$temp_8 = 0
+#case:main 'Отменить перевод' { $variant = 2 } #order:7
+$temp_2 = $temp_8
+$temp_8 = 0
+#case:main 'Отменить перевод' { $variant = 3 } #order:7
+$temp_3 = $temp_8
+$temp_8 = 0
+
+#site:transf_temp
+#case:transf_num
+
+#site:transf_where { $variant }
+#page:1
+#taim
+^ -------------------------------------- ^
+^ Население:  $temp_8 ^
+#page:2
+#taim
+^ -------------------------------------- ^
+^ Пехота:     $temp_8 ^
+#page:3
+#taim
+^ -------------------------------------- ^
+^ Авиация:    $temp_8 ^
+#case:transf_complete 'на Кабрунию' { $curr <> 1 and $pop_1.friend = 1 and $variant = 1 } #order:1
+$pop_1.total = $pop_1.total + $temp_8
+$temp_8 = $temp_1
+#case:transf_complete 'на Катраз'   { $curr <> 2 and $pop_2.friend = 1 and $variant = 1 } #order:1
+$pop_2.total = $pop_2.total + $temp_8
+$temp_8 = $temp_1
+#case:transf_complete 'на Авалон'   { $curr <> 3 and $pop_3.friend = 1 and $variant = 1 } #order:1
+$pop_3.total = $pop_3.total + $temp_8
+$temp_8 = $temp_1
+#case:transf_complete 'на Гралгар'  { $curr <> 4 and $pop_4.friend = 1 and $variant = 1 } #order:1
+$pop_4.total = $pop_4.total + $temp_8
+$temp_8 = $temp_1
+#case:transf_complete 'на Велорат'  { $curr <> 5 and $pop_5.friend = 1 and $variant = 1 } #order:1
+$pop_5.total = $pop_5.total + $temp_8
+$temp_8 = $temp_1
+#case:transf_complete 'на Дралимию' { $curr <> 6 and $pop_6.friend = 1 and $variant = 1 } #order:1
+$pop_6.total = $pop_6.total + $temp_8
+$temp_8 = $temp_1
+#case:transf_complete 'на Кабрунию' { $curr <> 1 and $pop_1.friend = 1 and $variant = 2 } #order:1
+$arm_1.land = $arm_1.land + $temp_8
+$temp_8 = $temp_2
+#case:transf_complete 'на Катраз'   { $curr <> 2 and $pop_2.friend = 1 and $variant = 2 } #order:1
+$arm_2.land = $arm_2.land + $temp_8
+$temp_8 = $temp_2
+#case:transf_complete 'на Авалон'   { $curr <> 3 and $pop_3.friend = 1 and $variant = 2 } #order:1
+$arm_3.land = $arm_3.land + $temp_8
+$temp_8 = $temp_2
+#case:transf_complete 'на Гралгар'  { $curr <> 4 and $pop_4.friend = 1 and $variant = 2 } #order:1
+$arm_4.land = $arm_4.land + $temp_8
+$temp_8 = $temp_2
+#case:transf_complete 'на Велорат'  { $curr <> 5 and $pop_5.friend = 1 and $variant = 2 } #order:1
+$arm_5.land = $arm_5.land + $temp_8
+$temp_8 = $temp_2
+#case:transf_complete 'на Дралимию' { $curr <> 6 and $pop_6.friend = 1 and $variant = 2 } #order:1
+$arm_6.land = $arm_6.land + $temp_8
+$temp_8 = $temp_2
+#case:transf_complete 'на Кабрунию' { $curr <> 1 and $pop_1.friend = 1 and $variant = 3 } #order:1
+$arm_1.navy = $arm_1.navy + $temp_8
+$temp_8 = $temp_3
+#case:transf_complete 'на Катраз'   { $curr <> 2 and $pop_2.friend = 1 and $variant = 3 } #order:1
+$arm_2.navy = $arm_2.navy + $temp_8
+$temp_8 = $temp_3
+#case:transf_complete 'на Авалон'   { $curr <> 3 and $pop_3.friend = 1 and $variant = 3 } #order:1
+$arm_3.navy = $arm_3.navy + $temp_8
+$temp_8 = $temp_3
+#case:transf_complete 'на Гралгар'  { $curr <> 4 and $pop_4.friend = 1 and $variant = 3 } #order:1
+$arm_4.navy = $arm_4.navy + $temp_8
+$temp_8 = $temp_3
+#case:transf_complete 'на Велорат'  { $curr <> 5 and $pop_5.friend = 1 and $variant = 3 } #order:1
+$arm_5.navy = $arm_5.navy + $temp_8
+$temp_8 = $temp_3
+#case:transf_complete 'на Дралимию' { $curr <> 6 and $pop_6.friend = 1 and $variant = 3 } #order:1
+$arm_6.navy = $arm_6.navy + $temp_8
+$temp_8 = $temp_3
+#case:main 'Отменить перевод' { $variant = 1 } #order:7
+$temp_1 = $temp_8
+$temp_8 = 0
+#case:main 'Отменить перевод' { $variant = 2 } #order:7
+$temp_2 = $temp_8
+$temp_8 = 0
+#case:main 'Отменить перевод' { $variant = 3 } #order:7
+$temp_3 = $temp_8
+$temp_8 = 0
+
+#site:transf_complete
+#case:game { $curr = 1 and $variant = 1 }
+$pop_1.total = $temp_8
+$temp_8 = 0
+#case:game { $curr = 2 and $variant = 1 }
+$pop_2.total = $temp_8
+$temp_8 = 0
+#case:game { $curr = 3 and $variant = 1 }
+$pop_3.total = $temp_8
+$temp_8 = 0
+#case:game { $curr = 4 and $variant = 1 }
+$pop_4.total = $temp_8
+$temp_8 = 0
+#case:game { $curr = 5 and $variant = 1 }
+$pop_5.total = $temp_8
+$temp_8 = 0
+#case:game { $curr = 6 and $variant = 1 }
+$pop_6.total = $temp_8
+$temp_8 = 0
+#case:game { $curr = 1 and $variant = 2 }
+$arm_1.land = $temp_8
+$temp_8 = 0
+#case:game { $curr = 2 and $variant = 2 }
+$arm_2.land = $temp_8
+$temp_8 = 0
+#case:game { $curr = 3 and $variant = 2 }
+$arm_3.land = $temp_8
+$temp_8 = 0
+#case:game { $curr = 4 and $variant = 2 }
+$arm_4.land = $temp_8
+$temp_8 = 0
+#case:game { $curr = 5 and $variant = 2 }
+$arm_5.land = $temp_8
+$temp_8 = 0
+#case:game { $curr = 6 and $variant = 2 }
+$arm_6.land = $temp_8
+$temp_8 = 0
+#case:game { $curr = 1 and $variant = 3 }
+$arm_1.navy = $temp_8
+$temp_8 = 0
+#case:game { $curr = 2 and $variant = 3 }
+$arm_2.navy = $temp_8
+$temp_8 = 0
+#case:game { $curr = 3 and $variant = 3 }
+$arm_3.navy = $temp_8
+$temp_8 = 0
+#case:game { $curr = 4 and $variant = 3 }
+$arm_4.navy = $temp_8
+$temp_8 = 0
+#case:game { $curr = 5 and $variant = 3 }
+$arm_5.navy = $temp_8
+$temp_8 = 0
+#case:game { $curr = 6 and $variant = 3 }
+$arm_6.navy = $temp_8
+$temp_8 = 0
 
 #site:attack
 #page:1
@@ -443,3 +637,7 @@ $curr = 6
 #position:scienc:352:315
 #position:intelg:416:315
 #position:wait:96:483
+#position:transf_num:224:231
+#position:transf_where:224:189
+#position:transf_temp:288:231
+#position:transf_complete:288:189
