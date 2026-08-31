@@ -27,6 +27,7 @@
   - Планетарный
     - Размен ВКС
     - Подавление ПКО силами ВКС
+    - Бомбардировка (урон населению и пехоте пропорционально но без ущерба для ВКС)
     - Высадка десанта (размен десанта)
     - Захват планеты
   - На марше
@@ -40,6 +41,7 @@
   - боевые дроны (+5 эффективность десанта)
 - Сообщения разведки
   - Сводка по планете
+  - концентрация сил
   - Вероятное нападения противника
   - Украденное исследование
   - Сообщение о диверсии
@@ -77,6 +79,9 @@
 - Топология
   - Спутники планеты доступны всегда
   - Планеты на разных орбитах с периодичностью раз в N лет (планета может двигаться в обратном направлении)
+    - Если окно закрыто силы накапливаются без нападения
+    - встречный бой всегда по отношению к планете завершившей ход успешной атакой
+    - периодичность может отличаться для противника (преимущества технологии)
   - Планеты на той же орбите недоступны
 - Миниквесты (активируются случайно, добавляет очки исследования при успехе, уменьшает при неудаче)
   - swap bishops (исследования)
@@ -86,3 +91,25 @@
 - Случайные события
   - нападение доминаторов (уменьшение численности ВКС)
   - нападения на учебные центры
+  - бунты (бои с населением, возможное отделение планеты)
+- Порядок обработки хода
+  - Завершение переводов
+  - Встречные бои
+  - Планетарные бои
+- Иллюстрации
+  - Шпионы: 60_Disk.jpg commando_00.jpg Deadoralive.jpg depth_00.jpg diver_00.jpg diver_01.jpg foncers_02.jpg foncers_03.jpg gaidnet_02.jpg mafia_02.jpg mafia_05.jpg stealth_00.jpg stealth_10.jpg
+  - ВКС: amnesia_01.jpg domoclan_00.jpg domoclan_01.jpg easywork_00.jpg easywork_03.jpg easywork_07.jpg fly.jpg jumper_00.jpg jumper_03.jpg olympiada_01.jpg penetrator_01.jpg penetrator_02.jpg pilot_02.jpg proprolog_01.jpg proprolog_03.jpg
+  - Штаб: amnesia_07.jpg borzukhan_05.jpg citadels_00.jpg diver_06.jpg election_00.jpg hachball_04.jpg xenolog_03.jpg xenolog_04.jpg
+  - Пеленг: amnesia_08.jpg bank_01.jpg bank_04.jpg examen_02.jpg examen_06.jpg newflora_00.jpg
+  - Малок: amnesia_09.jpg banket_00.jpg diamond_00.jpg
+  - Гаалец: bank_00.jpg ikebana_01.jpg Kidnapped_05.jpg
+  - Человек: examen_03.jpg foncers_00.jpg
+  - Фэянин: examen_04.jpg feipsycho_02.jpg
+  - Исследования: bank_05.jpg bank_07.jpg bank_08.jpg drugs_00.jpg drugs_01.jpg edelweiss_00.jpg faruk_00.jpg faruk_03.jpg gaidnet_01.jpg gaidnet_04.jpg olympiada_00.jpg xenopark_00.jpg
+  - Бомбардировка: bomber_01.jpg bomber_02.jpg bomber_03.jpg penetrator_04.jpg
+  - Ферма: bomber_04.jpg
+  - Десант: bomber_07.jpg borzukhan_08.jpg commando_03.jpg diamond_01.jpg drugs_04.jpg election_01.jpg Kidnapped_11.jpg robots_00.jpg robots_02.jpg robots_03.jpg
+  - Бунт: election_03.jpg
+  - Население: glavred_07.jpg moi_14.jpg stealth_05.jpg
+  - ПКО: jumper_02.jpg
+  - Разное: Kidnapped_02.jpg moi_12.jpg newflora_01.jpg park_01.jpg park_05.jpg player_00.jpg siege_01.jpg svarokok_xx.jpg xenolog_02.jpg
