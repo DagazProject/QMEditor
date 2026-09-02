@@ -96,6 +96,7 @@
   - Завершение переводов
   - Встречные бои
   - Планетарные бои
+  - Прирост населения
 - Иллюстрации
   - Шпионы: 60_Disk.jpg commando_00.jpg Deadoralive.jpg depth_00.jpg diver_00.jpg diver_01.jpg foncers_02.jpg foncers_03.jpg gaidnet_02.jpg mafia_02.jpg mafia_05.jpg stealth_00.jpg stealth_10.jpg
   - ВКС: amnesia_01.jpg domoclan_00.jpg domoclan_01.jpg easywork_00.jpg easywork_03.jpg easywork_07.jpg fly.jpg jumper_00.jpg jumper_03.jpg olympiada_01.jpg penetrator_01.jpg penetrator_02.jpg pilot_02.jpg proprolog_01.jpg proprolog_03.jpg

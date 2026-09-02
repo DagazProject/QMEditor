@@ -545,58 +545,58 @@ $temp_3 = $temp_8
 $temp_8 = 0
 
 #site:transf_complete
-#case:game { $curr = 1 and $variant = 1 }
+#case:pop_1 { $curr = 1 and $variant = 1 }
 $pop_1.total = $temp_8
 $temp_8 = 0
-#case:game { $curr = 2 and $variant = 1 }
+#case:pop_1 { $curr = 2 and $variant = 1 }
 $pop_2.total = $temp_8
 $temp_8 = 0
-#case:game { $curr = 3 and $variant = 1 }
+#case:pop_1 { $curr = 3 and $variant = 1 }
 $pop_3.total = $temp_8
 $temp_8 = 0
-#case:game { $curr = 4 and $variant = 1 }
+#case:pop_1 { $curr = 4 and $variant = 1 }
 $pop_4.total = $temp_8
 $temp_8 = 0
-#case:game { $curr = 5 and $variant = 1 }
+#case:pop_1 { $curr = 5 and $variant = 1 }
 $pop_5.total = $temp_8
 $temp_8 = 0
-#case:game { $curr = 6 and $variant = 1 }
+#case:pop_1 { $curr = 6 and $variant = 1 }
 $pop_6.total = $temp_8
 $temp_8 = 0
-#case:game { $curr = 1 and $variant = 2 }
+#case:pop_1 { $curr = 1 and $variant = 2 }
 $arm_1.land = $temp_8
 $temp_8 = 0
-#case:game { $curr = 2 and $variant = 2 }
+#case:pop_1 { $curr = 2 and $variant = 2 }
 $arm_2.land = $temp_8
 $temp_8 = 0
-#case:game { $curr = 3 and $variant = 2 }
+#case:pop_1 { $curr = 3 and $variant = 2 }
 $arm_3.land = $temp_8
 $temp_8 = 0
-#case:game { $curr = 4 and $variant = 2 }
+#case:pop_1 { $curr = 4 and $variant = 2 }
 $arm_4.land = $temp_8
 $temp_8 = 0
-#case:game { $curr = 5 and $variant = 2 }
+#case:pop_1 { $curr = 5 and $variant = 2 }
 $arm_5.land = $temp_8
 $temp_8 = 0
-#case:game { $curr = 6 and $variant = 2 }
+#case:pop_1 { $curr = 6 and $variant = 2 }
 $arm_6.land = $temp_8
 $temp_8 = 0
-#case:game { $curr = 1 and $variant = 3 }
+#case:pop_1 { $curr = 1 and $variant = 3 }
 $arm_1.navy = $temp_8
 $temp_8 = 0
-#case:game { $curr = 2 and $variant = 3 }
+#case:pop_1 { $curr = 2 and $variant = 3 }
 $arm_2.navy = $temp_8
 $temp_8 = 0
-#case:game { $curr = 3 and $variant = 3 }
+#case:pop_1 { $curr = 3 and $variant = 3 }
 $arm_3.navy = $temp_8
 $temp_8 = 0
-#case:game { $curr = 4 and $variant = 3 }
+#case:pop_1 { $curr = 4 and $variant = 3 }
 $arm_4.navy = $temp_8
 $temp_8 = 0
-#case:game { $curr = 5 and $variant = 3 }
+#case:pop_1 { $curr = 5 and $variant = 3 }
 $arm_5.navy = $temp_8
 $temp_8 = 0
-#case:game { $curr = 6 and $variant = 3 }
+#case:pop_1 { $curr = 6 and $variant = 3 }
 $arm_6.navy = $temp_8
 $temp_8 = 0
 
@@ -631,6 +631,31 @@ $transfer_3 = 0
 $transfer_4 = 0
 $transfer_5 = 0
 $transfer_6 = 0
+#case:pop_1
+
+#site:pop_1
+$temp_1 = 10 + $fchars.reproduction + $fchars.chaotic * <1..5>
+$temp_2 = 10 + $echars.reproduction + $echars.chaotic * <1..5>
+#case:pop_2
+
+#site:pop_2
+$pop_1.total = $pop_1.total + $pop_1.friend * (($temp_1 * $pop_1.total) div 100)
+$pop_2.total = $pop_2.total + $pop_2.friend * (($temp_1 * $pop_2.total) div 100)
+$pop_3.total = $pop_3.total + $pop_3.friend * (($temp_1 * $pop_3.total) div 100)
+$pop_4.total = $pop_4.total + $pop_4.friend * (($temp_1 * $pop_4.total) div 100)
+$pop_5.total = $pop_5.total + $pop_5.friend * (($temp_1 * $pop_5.total) div 100)
+$pop_6.total = $pop_6.total + $pop_6.friend * (($temp_1 * $pop_6.total) div 100)
+$temp_1 = 0
+#case:pop_3
+
+#site:pop_3
+$pop_1.total = $pop_1.total + (1 - $pop_1.friend) * (($temp_2 * $pop_1.total) div 100)
+$pop_2.total = $pop_2.total + (1 - $pop_2.friend) * (($temp_2 * $pop_2.total) div 100)
+$pop_3.total = $pop_3.total + (1 - $pop_3.friend) * (($temp_2 * $pop_3.total) div 100)
+$pop_4.total = $pop_4.total + (1 - $pop_4.friend) * (($temp_2 * $pop_4.total) div 100)
+$pop_5.total = $pop_5.total + (1 - $pop_5.friend) * (($temp_2 * $pop_5.total) div 100)
+$pop_6.total = $pop_6.total + (1 - $pop_6.friend) * (($temp_2 * $pop_6.total) div 100)
+$temp_2 = 0
 #case:game
 
 #site:attack
@@ -673,3 +698,6 @@ $transfer_6 = 0
 #position:transf_1:160:483
 #position:transf_2:224:483
 #position:transf_3:288:483
+#position:pop_1:160:357
+#position:pop_2:224:357
+#position:pop_3:288:357
