@@ -307,7 +307,7 @@ $ebonus = $ebonus - 1
 ^ Пехота:     $temp_2 ^
 ^ Авиация:    $temp_3 ^
 ^ Артиллерия: $temp_4 ^
-^ Разведка:   $temp_5 ^
+//^ Разведка:   $temp_5 ^
 ^ Учёные:     $temp_6 ^
 #end
 
@@ -326,52 +326,52 @@ $temp_1 = $pop_1.total
 $temp_2 = $arm_1.land
 $temp_3 = $arm_1.navy
 $temp_4 = $arm_1.arty
-$temp_5 = $transfer_1.spy
+//$temp_5 = $transfer_1.spy
 $temp_6 = $pop_1.science
 #case:main { $curr = 2 }
 $temp_1 = $pop_2.total
 $temp_2 = $arm_2.land
 $temp_3 = $arm_2.navy
 $temp_4 = $arm_2.arty
-$temp_5 = $transfer_2.spy
+//$temp_5 = $transfer_2.spy
 $temp_6 = $pop_2.science
 #case:main { $curr = 3 }
 $temp_1 = $pop_3.total
 $temp_2 = $arm_3.land
 $temp_3 = $arm_3.navy
 $temp_4 = $arm_3.arty
-$temp_5 = $transfer_3.spy
+//$temp_5 = $transfer_3.spy
 $temp_6 = $pop_3.science
 #case:main { $curr = 4 }
 $temp_1 = $pop_4.total
 $temp_2 = $arm_4.land
 $temp_3 = $arm_4.navy
 $temp_4 = $arm_4.arty
-$temp_5 = $transfer_4.spy
+//$temp_5 = $transfer_4.spy
 $temp_6 = $pop_4.science
 #case:main { $curr = 5 }
 $temp_1 = $pop_5.total
 $temp_2 = $arm_5.land
 $temp_3 = $arm_5.navy
 $temp_4 = $arm_5.arty
-$temp_5 = $transfer_5.spy
+//$temp_5 = $transfer_5.spy
 $temp_6 = $pop_5.science
 #case:main { $curr = 6 }
 $temp_1 = $pop_6.total
 $temp_2 = $arm_6.land
 $temp_3 = $arm_6.navy
 $temp_4 = $arm_6.arty
-$temp_5 = $transfer_6.spy
+//$temp_5 = $transfer_6.spy
 $temp_6 = $pop_6.science
 
 #site:main
 #paim
 #case:select 'Другая планета'                        #order:1
-#case:train  'Тренировать'                           #order:2
+//#case:train  'Тренировать'                           #order:2
 #case:transf 'Переместить'                           #order:3
-#case:attack 'Атаковать'    { $temp_2 + $temp_3 > 0} #order:4
-#case:scienc 'Исследования' { $temp_6 > 0 }          #order:5
-#case:intelg 'Разведка'     { $temp_5 > 0 }          #order:6
+//#case:attack 'Атаковать'    { $temp_2 + $temp_3 > 0} #order:4
+//#case:scienc 'Исследования' { $temp_6 > 0 }          #order:5
+//#case:intelg 'Разведка'     { $temp_5 > 0 }          #order:6
 #case:wait   'Ждать'                                 #order:7
 
 #site:select
@@ -636,7 +636,8 @@ $transfer_6 = 0
 #site:pop_1
 $temp_1 = 10 + $fchars.reproduction + $fchars.chaotic * <1..5>
 $temp_2 = 10 + $echars.reproduction + $echars.chaotic * <1..5>
-#case:pop_2
+//#case:pop_2
+#case:game
 
 #site:pop_2
 $pop_1.total = $pop_1.total + $pop_1.friend * (($temp_1 * $pop_1.total) div 100)
