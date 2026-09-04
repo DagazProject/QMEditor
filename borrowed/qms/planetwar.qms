@@ -307,8 +307,8 @@ $ebonus = $ebonus - 1
 ^ Пехота:     $temp_2 ^
 ^ Авиация:    $temp_3 ^
 ^ Артиллерия: $temp_4 ^
-//^ Разведка:   $temp_5 ^
 ^ Учёные:     $temp_6 ^
+//^ Разведка:   $temp_5 ^
 #end
 
 #site:init
@@ -634,10 +634,10 @@ $transfer_6 = 0
 #case:pop_1
 
 #site:pop_1
+$year = $year + 1
 $temp_1 = 10 + $fchars.reproduction + $fchars.chaotic * <1..5>
 $temp_2 = 10 + $echars.reproduction + $echars.chaotic * <1..5>
-//#case:pop_2
-#case:game
+#case:pop_2
 
 #site:pop_2
 $pop_1.total = $pop_1.total + $pop_1.friend * (($temp_1 * $pop_1.total) div 100)
