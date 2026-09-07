@@ -640,22 +640,22 @@ $temp_2 = 10 + $echars.reproduction + $echars.chaotic * <1..5>
 #case:pop_2
 
 #site:pop_2
-$pop_1.total = $pop_1.total + $pop_1.friend * (($temp_1 * $pop_1.total) div 100)
-$pop_2.total = $pop_2.total + $pop_2.friend * (($temp_1 * $pop_2.total) div 100)
-$pop_3.total = $pop_3.total + $pop_3.friend * (($temp_1 * $pop_3.total) div 100)
-$pop_4.total = $pop_4.total + $pop_4.friend * (($temp_1 * $pop_4.total) div 100)
-$pop_5.total = $pop_5.total + $pop_5.friend * (($temp_1 * $pop_5.total) div 100)
-$pop_6.total = $pop_6.total + $pop_6.friend * (($temp_1 * $pop_6.total) div 100)
+$pop_1.total = $pop_1.total + $pop_1.friend * ((($temp_1 + $pop_1.capital * 10) * $pop_1.total) div 100)
+$pop_2.total = $pop_2.total + $pop_2.friend * ((($temp_1 + $pop_2.capital * 10) * $pop_2.total) div 100)
+$pop_3.total = $pop_3.total + $pop_3.friend * ((($temp_1 + $pop_3.capital * 10) * $pop_3.total) div 100)
+$pop_4.total = $pop_4.total + $pop_4.friend * ((($temp_1 + $pop_4.capital * 10) * $pop_4.total) div 100)
+$pop_5.total = $pop_5.total + $pop_5.friend * ((($temp_1 + $pop_5.capital * 10) * $pop_5.total) div 100)
+$pop_6.total = $pop_6.total + $pop_6.friend * ((($temp_1 + $pop_6.capital * 10) * $pop_6.total) div 100)
 $temp_1 = 0
 #case:pop_3
 
 #site:pop_3
-$pop_1.total = $pop_1.total + (1 - $pop_1.friend) * (($temp_2 * $pop_1.total) div 100)
-$pop_2.total = $pop_2.total + (1 - $pop_2.friend) * (($temp_2 * $pop_2.total) div 100)
-$pop_3.total = $pop_3.total + (1 - $pop_3.friend) * (($temp_2 * $pop_3.total) div 100)
-$pop_4.total = $pop_4.total + (1 - $pop_4.friend) * (($temp_2 * $pop_4.total) div 100)
-$pop_5.total = $pop_5.total + (1 - $pop_5.friend) * (($temp_2 * $pop_5.total) div 100)
-$pop_6.total = $pop_6.total + (1 - $pop_6.friend) * (($temp_2 * $pop_6.total) div 100)
+$pop_1.total = $pop_1.total + (1 - $pop_1.friend) * ((($temp_2 + $pop_1.capital * 10) * $pop_1.total) div 100)
+$pop_2.total = $pop_2.total + (1 - $pop_2.friend) * ((($temp_2 + $pop_2.capital * 10) * $pop_2.total) div 100)
+$pop_3.total = $pop_3.total + (1 - $pop_3.friend) * ((($temp_2 + $pop_3.capital * 10) * $pop_3.total) div 100)
+$pop_4.total = $pop_4.total + (1 - $pop_4.friend) * ((($temp_2 + $pop_4.capital * 10) * $pop_4.total) div 100)
+$pop_5.total = $pop_5.total + (1 - $pop_5.friend) * ((($temp_2 + $pop_5.capital * 10) * $pop_5.total) div 100)
+$pop_6.total = $pop_6.total + (1 - $pop_6.friend) * ((($temp_2 + $pop_6.capital * 10) * $pop_6.total) div 100)
 $temp_2 = 0
 #case:game
 
