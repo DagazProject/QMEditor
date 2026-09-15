@@ -300,7 +300,6 @@ $ebonus = $ebonus - 1
   #planet
 
 #macro:paim
-#page:1
 ^ Планета: @curr (Год: $year) ^
 ^ -------------------------------------- ^
 ^ Население:  $temp_1 ^
@@ -365,9 +364,11 @@ $temp_4 = $arm_6.arty
 $temp_6 = $pop_6.science
 
 #site:main
+#page:1
 #paim
 #case:select 'Другая планета'                        #order:1
-//#case:train  'Тренировать'                           #order:2
+#case:train  'Тренировать'                           #order:2
+$temp_8 = 0
 #case:transf 'Переместить'                           #order:3
 //#case:attack 'Атаковать'    { $temp_2 + $temp_3 > 0} #order:4
 //#case:scienc 'Исследования' { $temp_6 > 0 }          #order:5
@@ -375,6 +376,7 @@ $temp_6 = $pop_6.science
 #case:wait   'Ждать'                                 #order:7
 
 #site:select
+#page:1
 #paim
 #case:game 'Кабруния' { $pop_1.friend = 1 and $curr <> 1 } #order:1
 $curr = 1
@@ -391,8 +393,93 @@ $curr = 6
 #case:main 'Вернуться' #order:7
 
 #site:train
+#page:1
 #paim
+#case:train_what 'Пехоту' #order:1
+$variant = 1
+#case:train_what 'Авиацию' #order:2
+$variant = 2
+#case:train_what 'Артиллерию' #order:3
+$variant = 3
 #case:main 'Вернуться' #order:7
+
+#site:train_what { $variant }
+#page:1
+#paim
+^ -------------------------------------- ^
+^ Пехота:     $temp_8 ^
+#page:2
+#paim
+^ -------------------------------------- ^
+^ Авиация:    $temp_8 ^
+#page:3
+#paim
+^ -------------------------------------- ^
+^ Артиллерия: $temp_8 ^
+#case:train_what 'Одного' { $temp_1 > 0 } #order:1
+$temp_8 = $temp_8 + 1
+$temp_1 = $temp_1 - 1
+#case:train_what 'Десяток' { $temp_1 > 10 } #order:2
+$temp_8 = $temp_8 + 10
+$temp_1 = $temp_1 - 10
+#case:train_temp 'Обучить' { $temp_8 > 0 } #order:3
+#case:main 'Отменить обучение' #order:7
+
+#site:train_temp
+#case:main { $curr = 1 and $variant = 1 }
+$transfer_1.land = $transfer_1.land + $temp_8
+$temp_8 = 0
+#case:main { $curr = 1 and $variant = 2 }
+$transfer_1.navy = $transfer_1.navy + $temp_8
+$temp_8 = 0
+#case:main { $curr = 1 and $variant = 3 }
+$arm_1.arty = $arm_1.arty + $temp_8
+$temp_8 = 0
+#case:main { $curr = 2 and $variant = 1 }
+$transfer_2.land = $transfer_2.land + $temp_8
+$temp_8 = 0
+#case:main { $curr = 2 and $variant = 2 }
+$transfer_2.navy = $transfer_2.navy + $temp_8
+$temp_8 = 0
+#case:main { $curr = 2 and $variant = 3 }
+$arm_2.arty = $arm_2.arty + $temp_8
+$temp_8 = 0
+#case:main { $curr = 3 and $variant = 1 }
+$transfer_3.land = $transfer_3.land + $temp_8
+$temp_8 = 0
+#case:main { $curr = 3 and $variant = 2 }
+$transfer_3.navy = $transfer_3.navy + $temp_8
+$temp_8 = 0
+#case:main { $curr = 3 and $variant = 3 }
+$arm_3.arty = $arm_3.arty + $temp_8
+$temp_8 = 0
+#case:main { $curr = 4 and $variant = 1 }
+$transfer_4.land = $transfer_4.land + $temp_8
+$temp_8 = 0
+#case:main { $curr = 4 and $variant = 2 }
+$transfer_4.navy = $transfer_4.navy + $temp_8
+$temp_8 = 0
+#case:main { $curr = 4 and $variant = 3 }
+$arm_4.arty = $arm_4.arty + $temp_8
+$temp_8 = 0
+#case:main { $curr = 5 and $variant = 1 }
+$transfer_5.land = $transfer_5.land + $temp_8
+$temp_8 = 0
+#case:main { $curr = 5 and $variant = 2 }
+$transfer_5.navy = $transfer_5.navy + $temp_8
+$temp_8 = 0
+#case:main { $curr = 5 and $variant = 3 }
+$arm_5.arty = $arm_5.arty + $temp_8
+$temp_8 = 0
+#case:main { $curr = 6 and $variant = 1 }
+$transfer_6.land = $transfer_6.land + $temp_8
+$temp_8 = 0
+#case:main { $curr = 6 and $variant = 2 }
+$transfer_6.navy = $transfer_6.navy + $temp_8
+$temp_8 = 0
+#case:main { $curr = 6 and $variant = 3 }
+$arm_6.arty = $arm_6.arty + $temp_8
+$temp_8 = 0
 
 #macro:taim
 ^ Планета: @curr (Год: $year) ^
