@@ -397,10 +397,15 @@ $curr = 6
 #paim
 #case:train_what 'Пехоту' #order:1
 $variant = 1
+$temp_7  = 4 + $fchars.production
 #case:train_what 'Авиацию' #order:2
 $variant = 2
+$temp_7  = 3 + $fchars.production
 #case:train_what 'Артиллерию' #order:3
 $variant = 3
+$temp_7  = 2 + $fchars.production
+#case:train_what 'Учёных' #order:4
+$variant = 4
 #case:main 'Вернуться' #order:7
 
 #site:train_what { $variant }
@@ -416,14 +421,24 @@ $variant = 3
 #paim
 ^ -------------------------------------- ^
 ^ Артиллерия: $temp_8 ^
-#case:train_what 'Одного' { $temp_1 > 0 } #order:1
+#page:4
+#paim
+^ -------------------------------------- ^
+^ Учёные:     $temp_8 ^
+#case:train_what 'Одного' { $temp_1 > 0 and $variant < 4 and ($temp_8 + 1) <= ((($temp_1 - 1) * $temp_7) div 100) } #order:1
 $temp_8 = $temp_8 + 1
 $temp_1 = $temp_1 - 1
-#case:train_what 'Десяток' { $temp_1 > 10 } #order:2
+#case:train_what 'Одного' { $temp_1 > 0 and $variant >= 4 and $temp_8 < 5 } #order:1
+$temp_8 = $temp_8 + 1
+$temp_1 = $temp_1 - 100
+#case:train_what 'Десяток' { $temp_1 > 10 and $variant < 4  and ($temp_8 + 10) <= ((($temp_1 - 10) * $temp_7) div 100) } #order:2
 $temp_8 = $temp_8 + 10
 $temp_1 = $temp_1 - 10
 #case:train_temp 'Обучить' { $temp_8 > 0 } #order:3
-#case:main 'Отменить обучение' #order:7
+#case:main 'Отменить обучение' { $variant < 4 } #order:7
+$temp_1 = $temp_8
+#case:main 'Отменить обучение' { $variant >= 4 } #order:7
+$temp_1 = $temp_8 * 100
 
 #site:train_temp
 #case:main { $curr = 1 and $variant = 1 }
@@ -435,6 +450,9 @@ $temp_8 = 0
 #case:main { $curr = 1 and $variant = 3 }
 $arm_1.arty = $arm_1.arty + $temp_8
 $temp_8 = 0
+#case:main { $curr = 1 and $variant = 3 }
+$pop_1.science = $pop_1.science + $temp_8
+$temp_8 = 0
 #case:main { $curr = 2 and $variant = 1 }
 $transfer_2.land = $transfer_2.land + $temp_8
 $temp_8 = 0
@@ -443,6 +461,9 @@ $transfer_2.navy = $transfer_2.navy + $temp_8
 $temp_8 = 0
 #case:main { $curr = 2 and $variant = 3 }
 $arm_2.arty = $arm_2.arty + $temp_8
+$temp_8 = 0
+#case:main { $curr = 2 and $variant = 3 }
+$pop_2.science = $pop_2.science + $temp_8
 $temp_8 = 0
 #case:main { $curr = 3 and $variant = 1 }
 $transfer_3.land = $transfer_3.land + $temp_8
@@ -453,6 +474,9 @@ $temp_8 = 0
 #case:main { $curr = 3 and $variant = 3 }
 $arm_3.arty = $arm_3.arty + $temp_8
 $temp_8 = 0
+#case:main { $curr = 3 and $variant = 3 }
+$pop_3.science = $pop_3.science + $temp_8
+$temp_8 = 0
 #case:main { $curr = 4 and $variant = 1 }
 $transfer_4.land = $transfer_4.land + $temp_8
 $temp_8 = 0
@@ -461,6 +485,9 @@ $transfer_4.navy = $transfer_4.navy + $temp_8
 $temp_8 = 0
 #case:main { $curr = 4 and $variant = 3 }
 $arm_4.arty = $arm_4.arty + $temp_8
+$temp_8 = 0
+#case:main { $curr = 4 and $variant = 3 }
+$pop_4.science = $pop_4.science + $temp_8
 $temp_8 = 0
 #case:main { $curr = 5 and $variant = 1 }
 $transfer_5.land = $transfer_5.land + $temp_8
@@ -471,6 +498,9 @@ $temp_8 = 0
 #case:main { $curr = 5 and $variant = 3 }
 $arm_5.arty = $arm_5.arty + $temp_8
 $temp_8 = 0
+#case:main { $curr = 5 and $variant = 3 }
+$pop_5.science = $pop_5.science + $temp_8
+$temp_8 = 0
 #case:main { $curr = 6 and $variant = 1 }
 $transfer_6.land = $transfer_6.land + $temp_8
 $temp_8 = 0
@@ -479,6 +509,9 @@ $transfer_6.navy = $transfer_6.navy + $temp_8
 $temp_8 = 0
 #case:main { $curr = 6 and $variant = 3 }
 $arm_6.arty = $arm_6.arty + $temp_8
+$temp_8 = 0
+#case:main { $curr = 6 and $variant = 3 }
+$pop_6.science = $pop_6.science + $temp_8
 $temp_8 = 0
 
 #macro:taim
@@ -789,3 +822,5 @@ $temp_2 = 0
 #position:pop_1:160:357
 #position:pop_2:224:357
 #position:pop_3:288:357
+#position:train_what:288:315
+#position:train_temp:160:231
