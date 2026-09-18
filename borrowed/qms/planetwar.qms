@@ -436,9 +436,9 @@ $temp_8 = $temp_8 + 10
 $temp_1 = $temp_1 - 10
 #case:train_temp 'Обучить' { $temp_8 > 0 } #order:3
 #case:main 'Отменить обучение' { $variant < 4 } #order:7
-$temp_1 = $temp_8
+$temp_1 = $temp_1 + $temp_8
 #case:main 'Отменить обучение' { $variant >= 4 } #order:7
-$temp_1 = $temp_8 * 100
+$temp_1 = $temp_1 + ($temp_8 * 100)
 
 #site:train_temp
 #case:main { $curr = 1 and $variant = 1 }
@@ -450,7 +450,7 @@ $temp_8 = 0
 #case:main { $curr = 1 and $variant = 3 }
 $arm_1.arty = $arm_1.arty + $temp_8
 $temp_8 = 0
-#case:main { $curr = 1 and $variant = 3 }
+#case:main { $curr = 1 and $variant = 4 }
 $pop_1.science = $pop_1.science + $temp_8
 $temp_8 = 0
 #case:main { $curr = 2 and $variant = 1 }
@@ -462,7 +462,7 @@ $temp_8 = 0
 #case:main { $curr = 2 and $variant = 3 }
 $arm_2.arty = $arm_2.arty + $temp_8
 $temp_8 = 0
-#case:main { $curr = 2 and $variant = 3 }
+#case:main { $curr = 2 and $variant = 4 }
 $pop_2.science = $pop_2.science + $temp_8
 $temp_8 = 0
 #case:main { $curr = 3 and $variant = 1 }
@@ -474,7 +474,7 @@ $temp_8 = 0
 #case:main { $curr = 3 and $variant = 3 }
 $arm_3.arty = $arm_3.arty + $temp_8
 $temp_8 = 0
-#case:main { $curr = 3 and $variant = 3 }
+#case:main { $curr = 3 and $variant = 4 }
 $pop_3.science = $pop_3.science + $temp_8
 $temp_8 = 0
 #case:main { $curr = 4 and $variant = 1 }
@@ -486,7 +486,7 @@ $temp_8 = 0
 #case:main { $curr = 4 and $variant = 3 }
 $arm_4.arty = $arm_4.arty + $temp_8
 $temp_8 = 0
-#case:main { $curr = 4 and $variant = 3 }
+#case:main { $curr = 4 and $variant = 4 }
 $pop_4.science = $pop_4.science + $temp_8
 $temp_8 = 0
 #case:main { $curr = 5 and $variant = 1 }
@@ -498,7 +498,7 @@ $temp_8 = 0
 #case:main { $curr = 5 and $variant = 3 }
 $arm_5.arty = $arm_5.arty + $temp_8
 $temp_8 = 0
-#case:main { $curr = 5 and $variant = 3 }
+#case:main { $curr = 5 and $variant = 4 }
 $pop_5.science = $pop_5.science + $temp_8
 $temp_8 = 0
 #case:main { $curr = 6 and $variant = 1 }
@@ -510,7 +510,7 @@ $temp_8 = 0
 #case:main { $curr = 6 and $variant = 3 }
 $arm_6.arty = $arm_6.arty + $temp_8
 $temp_8 = 0
-#case:main { $curr = 6 and $variant = 3 }
+#case:main { $curr = 6 and $variant = 4 }
 $pop_6.science = $pop_6.science + $temp_8
 $temp_8 = 0
 
