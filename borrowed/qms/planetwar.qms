@@ -1,4 +1,4 @@
-﻿#macro:race
+#macro:race
   #text:0..0 ''
   #text:1..1 'Человек'
   #text:2..2 'Пеленг'
@@ -48,7 +48,6 @@
 #var:temp_7 #range:0..1000000 #default:3 #hide
   #bonus
 #var:temp_8 #range:0..1000000 #default:0 #hide
-#var:variant #range:1..10 #default:1 #hide
 
 #var:year #range:3027..4027 #default:3027
 
@@ -61,6 +60,8 @@
 #page:1
 Planet War
 #case:start 'Играть'
+#case:mancala_init 'Манкала'
+$variant = 1
 
 #site:start
 $erace               = <1..5>
@@ -793,6 +794,501 @@ $temp_2 = 0
 #page:1
 ...
 
+#var:manc #range:0..15 #default:0 #mod:2 #hide
+  #text:0..0   '               |'
+  #text:1..1   '*              |'
+  #text:2..2   '    *          |'
+  #text:4..4   '        *      |'
+  #text:8..8   '            *  |'
+  #text:15..15 '*   *   *   *  |'
+  #field:d                        // 8
+  #field:c                        // 4
+  #field:b                        // 2
+  #field:a                        // 1
+
+#var:manc_a #range:0..24 #default:0 #hide
+#var:manc_b #range:0..24 #default:0 #hide
+#var:manc_c #range:0..24 #default:0 #hide
+#var:manc_d #range:0..24 #default:0 #hide
+#var:manc_e #range:0..24 #default:0 #hide
+
+#macro:maim
+#page:1
+^ ---------------------- ^
+^  @manc     ^
+^ [$manc_a] [$manc_b] [$manc_c] [$manc_d] | [$manc_e] ^
+^ ---------------------- ^
+^  A   B   C   D  |      ^
+#end
+
+#site:mancala_init
+#case:mancala { $variant = 1 }
+$manc   = 15
+$manc_a = 2
+$manc_b = 2
+$manc_c = 2
+$manc_d = 2
+$manc_e = 0
+#case:mancala { $variant = 2 }
+$manc   = 15
+$manc_a = 5
+$manc_b = 5
+$manc_c = 5
+$manc_d = 5
+$manc_e = 0
+#case:mancala { $variant = 3 }
+$manc   = 15
+$manc_a = 6
+$manc_b = 6
+$manc_c = 6
+$manc_d = 6
+$manc_e = 0
+
+#site:mancala
+#maim
+#case:mancala_cont 'A' { $manc_a = 1 and $manc.a > 0 } #order:1
+$manc_a = 0
+$manc_b = $manc_b + 1
+$manc = 2
+#case:mancala_cont 'B' { $manc_b = 1 and $manc.b > 0 } #order:2
+$manc_b = 0
+$manc_c = $manc_c + 1
+$manc = 4
+#case:mancala_cont 'C' { $manc_c = 1 and $manc.c > 0 } #order:3
+$manc_c = 0
+$manc_d = $manc_d + 1
+$manc = 8
+#case:mancala_cont 'D' { $manc_d = 1 and $manc.d > 0 } #order:4
+$manc_d = 0
+$manc_e = $manc_e + 1
+$manc = 15
+#case:mancala_cont 'A' { $manc_a = 2 and $manc.a > 0 } #order:1
+$manc_a = 0
+$manc_b = $manc_b + 1
+$manc_c = $manc_c + 1
+$manc = 4
+#case:mancala_cont 'B' { $manc_b = 2 and $manc.b > 0 } #order:2
+$manc_b = 0
+$manc_c = $manc_c + 1
+$manc_d = $manc_d + 1
+$manc = 8
+#case:mancala_cont 'C' { $manc_c = 2 and $manc.c > 0 } #order:3
+$manc_c = 0
+$manc_d = $manc_d + 1
+$manc_e = $manc_e + 1
+$manc = 15
+#case:mancala_cont 'D' { $manc_d = 2 and $manc.d > 0 } #order:4
+$manc_d = 0
+$manc_e = $manc_e + 1
+$manc_a = $manc_a + 1
+$manc = 1
+#case:mancala_cont 'A' { $manc_a = 3 and $manc.a > 0 } #order:1
+$manc_a = 0
+$manc_b = $manc_b + 1
+$manc_c = $manc_c + 1
+$manc_d = $manc_d + 1
+$manc = 8
+#case:mancala_cont 'B' { $manc_b = 3 and $manc.b > 0 } #order:2
+$manc_b = 0
+$manc_c = $manc_c + 1
+$manc_d = $manc_d + 1
+$manc_e = $manc_e + 1
+$manc = 15
+#case:mancala_cont 'C' { $manc_c = 3 and $manc.c > 0 } #order:3
+$manc_c = 0
+$manc_d = $manc_d + 1
+$manc_e = $manc_e + 1
+$manc_a = $manc_a + 1
+$manc = 1
+#case:mancala_cont 'D' { $manc_d = 3 and $manc.d > 0 } #order:4
+$manc_d = 0
+$manc_e = $manc_e + 1
+$manc_a = $manc_a + 1
+$manc_b = $manc_b + 1
+$manc = 2
+#case:mancala_cont 'A' { $manc_a = 4 and $manc.a > 0 } #order:1
+$manc_a = 0
+$manc_b = $manc_b + 1
+$manc_c = $manc_c + 1
+$manc_d = $manc_d + 1
+$manc_e = $manc_e + 1
+$manc = 15
+#case:mancala_cont 'B' { $manc_b = 4 and $manc.b > 0 } #order:2
+$manc_b = 0
+$manc_c = $manc_c + 1
+$manc_d = $manc_d + 1
+$manc_e = $manc_e + 1
+$manc_a = $manc_a + 1
+$manc = 1
+#case:mancala_cont 'C' { $manc_c = 4 and $manc.c > 0 } #order:3
+$manc_c = 0
+$manc_d = $manc_d + 1
+$manc_e = $manc_e + 1
+$manc_a = $manc_a + 1
+$manc_b = $manc_b + 1
+$manc = 2
+#case:mancala_cont 'D' { $manc_d = 4 and $manc.d > 0 } #order:4
+$manc_d = 0
+$manc_e = $manc_e + 1
+$manc_a = $manc_a + 1
+$manc_b = $manc_b + 1
+$manc_c = $manc_c + 1
+$manc = 4
+#case:mancala_cont 'A' { $manc_a = 5 and $manc.a > 0 } #order:1
+$manc_a = 1
+$manc_b = $manc_b + 1
+$manc_c = $manc_c + 1
+$manc_d = $manc_d + 1
+$manc_e = $manc_e + 1
+$manc = 1
+#case:mancala_cont 'B' { $manc_b = 5 and $manc.b > 0 } #order:2
+$manc_b = 1
+$manc_c = $manc_c + 1
+$manc_d = $manc_d + 1
+$manc_e = $manc_e + 1
+$manc_a = $manc_a + 1
+$manc = 2
+#case:mancala_cont 'C' { $manc_c = 5 and $manc.c > 0 } #order:3
+$manc_c = 1
+$manc_d = $manc_d + 1
+$manc_e = $manc_e + 1
+$manc_a = $manc_a + 1
+$manc_b = $manc_b + 1
+$manc = 4
+#case:mancala_cont 'D' { $manc_d = 5 and $manc.d > 0 } #order:4
+$manc_d = 1
+$manc_e = $manc_e + 1
+$manc_a = $manc_a + 1
+$manc_b = $manc_b + 1
+$manc_c = $manc_c + 1
+$manc = 8
+#case:mancala_cont 'A' { $manc_a = 6 and $manc.a > 0 } #order:1
+$manc_a = 1
+$manc_b = $manc_b + 2
+$manc_c = $manc_c + 1
+$manc_d = $manc_d + 1
+$manc_e = $manc_e + 1
+$manc = 2
+#case:mancala_cont 'B' { $manc_b = 6 and $manc.b > 0 } #order:2
+$manc_b = 1
+$manc_c = $manc_c + 2
+$manc_d = $manc_d + 1
+$manc_e = $manc_e + 1
+$manc_a = $manc_a + 1
+$manc = 4
+#case:mancala_cont 'C' { $manc_c = 6 and $manc.c > 0 } #order:3
+$manc_c = 1
+$manc_d = $manc_d + 2
+$manc_e = $manc_e + 1
+$manc_a = $manc_a + 1
+$manc_b = $manc_b + 1
+$manc = 8
+#case:mancala_cont 'D' { $manc_d = 6 and $manc.d > 0 } #order:4
+$manc_d = 1
+$manc_e = $manc_e + 2
+$manc_a = $manc_a + 1
+$manc_b = $manc_b + 1
+$manc_c = $manc_c + 1
+$manc = 15
+#case:mancala_cont 'A' { $manc_a = 7 and $manc.a > 0 } #order:1
+$manc_a = 1
+$manc_b = $manc_b + 2
+$manc_c = $manc_c + 2
+$manc_d = $manc_d + 1
+$manc_e = $manc_e + 1
+$manc = 4
+#case:mancala_cont 'B' { $manc_b = 7 and $manc.b > 0 } #order:2
+$manc_b = 1
+$manc_c = $manc_c + 2
+$manc_d = $manc_d + 2
+$manc_e = $manc_e + 1
+$manc_a = $manc_a + 1
+$manc = 8
+#case:mancala_cont 'C' { $manc_c = 7 and $manc.c > 0 } #order:3
+$manc_c = 1
+$manc_d = $manc_d + 2
+$manc_e = $manc_e + 2
+$manc_a = $manc_a + 1
+$manc_b = $manc_b + 1
+$manc = 15
+#case:mancala_cont 'D' { $manc_d = 7 and $manc.d > 0 } #order:4
+$manc_d = 1
+$manc_e = $manc_e + 2
+$manc_a = $manc_a + 2
+$manc_b = $manc_b + 1
+$manc_c = $manc_c + 1
+$manc = 1
+#case:mancala_cont 'A' { $manc_a = 8 and $manc.a > 0 } #order:1
+$manc_a = 1
+$manc_b = $manc_b + 2
+$manc_c = $manc_c + 2
+$manc_d = $manc_d + 2
+$manc_e = $manc_e + 1
+$manc = 8
+#case:mancala_cont 'B' { $manc_b = 8 and $manc.b > 0 } #order:2
+$manc_b = 1
+$manc_c = $manc_c + 2
+$manc_d = $manc_d + 2
+$manc_e = $manc_e + 2
+$manc_a = $manc_a + 1
+$manc = 15
+#case:mancala_cont 'C' { $manc_c = 8 and $manc.c > 0 } #order:3
+$manc_c = 1
+$manc_d = $manc_d + 2
+$manc_e = $manc_e + 2
+$manc_a = $manc_a + 2
+$manc_b = $manc_b + 1
+$manc = 1
+#case:mancala_cont 'D' { $manc_d = 8 and $manc.d > 0 } #order:4
+$manc_d = 1
+$manc_e = $manc_e + 2
+$manc_a = $manc_a + 2
+$manc_b = $manc_b + 2
+$manc_c = $manc_c + 1
+$manc = 2
+#case:mancala_cont 'A' { $manc_a = 9 and $manc.a > 0 } #order:1
+$manc_a = 1
+$manc_b = $manc_b + 2
+$manc_c = $manc_c + 2
+$manc_d = $manc_d + 2
+$manc_e = $manc_e + 2
+$manc = 15
+#case:mancala_cont 'B' { $manc_b = 9 and $manc.b > 0 } #order:2
+$manc_b = 1
+$manc_c = $manc_c + 2
+$manc_d = $manc_d + 2
+$manc_e = $manc_e + 2
+$manc_a = $manc_a + 2
+$manc = 1
+#case:mancala_cont 'C' { $manc_c = 9 and $manc.c > 0 } #order:3
+$manc_c = 1
+$manc_d = $manc_d + 2
+$manc_e = $manc_e + 2
+$manc_a = $manc_a + 2
+$manc_b = $manc_b + 2
+$manc = 2
+#case:mancala_cont 'D' { $manc_d = 9 and $manc.d > 0 } #order:4
+$manc_d = 1
+$manc_e = $manc_e + 2
+$manc_a = $manc_a + 2
+$manc_b = $manc_b + 2
+$manc_c = $manc_c + 2
+$manc = 4
+#case:mancala_cont 'A' { $manc_a = 10 and $manc.a > 0 } #order:1
+$manc_a = 2
+$manc_b = $manc_b + 2
+$manc_c = $manc_c + 2
+$manc_d = $manc_d + 2
+$manc_e = $manc_e + 2
+$manc = 1
+#case:mancala_cont 'B' { $manc_b = 10 and $manc.b > 0 } #order:2
+$manc_b = 2
+$manc_c = $manc_c + 2
+$manc_d = $manc_d + 2
+$manc_e = $manc_e + 2
+$manc_a = $manc_a + 2
+$manc = 2
+#case:mancala_cont 'C' { $manc_c = 10 and $manc.c > 0 } #order:3
+$manc_c = 2
+$manc_d = $manc_d + 2
+$manc_e = $manc_e + 2
+$manc_a = $manc_a + 2
+$manc_b = $manc_b + 2
+$manc = 4
+#case:mancala_cont 'D' { $manc_d = 10 and $manc.d > 0 } #order:4
+$manc_d = 2
+$manc_e = $manc_e + 2
+$manc_a = $manc_a + 2
+$manc_b = $manc_b + 2
+$manc_c = $manc_c + 2
+$manc = 8
+#case:mancala_cont 'A' { $manc_a = 11 and $manc.a > 0 } #order:1
+$manc_a = 2
+$manc_b = $manc_b + 3
+$manc_c = $manc_c + 2
+$manc_d = $manc_d + 2
+$manc_e = $manc_e + 2
+$manc = 2
+#case:mancala_cont 'B' { $manc_b = 11 and $manc.b > 0 } #order:2
+$manc_b = 2
+$manc_c = $manc_c + 3
+$manc_d = $manc_d + 2
+$manc_e = $manc_e + 2
+$manc_a = $manc_a + 2
+$manc = 4
+#case:mancala_cont 'C' { $manc_c = 11 and $manc.c > 0 } #order:3
+$manc_c = 2
+$manc_d = $manc_d + 3
+$manc_e = $manc_e + 2
+$manc_a = $manc_a + 2
+$manc_b = $manc_b + 2
+$manc = 8
+#case:mancala_cont 'D' { $manc_d = 11 and $manc.d > 0 } #order:4
+$manc_d = 2
+$manc_e = $manc_e + 3
+$manc_a = $manc_a + 2
+$manc_b = $manc_b + 2
+$manc_c = $manc_c + 2
+$manc = 15
+#case:mancala_cont 'A' { $manc_a = 12 and $manc.a > 0 } #order:1
+$manc_a = 2
+$manc_b = $manc_b + 3
+$manc_c = $manc_c + 3
+$manc_d = $manc_d + 2
+$manc_e = $manc_e + 2
+$manc = 4
+#case:mancala_cont 'B' { $manc_b = 12 and $manc.b > 0 } #order:2
+$manc_b = 2
+$manc_c = $manc_c + 3
+$manc_d = $manc_d + 3
+$manc_e = $manc_e + 2
+$manc_a = $manc_a + 2
+$manc = 8
+#case:mancala_cont 'C' { $manc_c = 12 and $manc.c > 0 } #order:3
+$manc_c = 2
+$manc_d = $manc_d + 3
+$manc_e = $manc_e + 3
+$manc_a = $manc_a + 2
+$manc_b = $manc_b + 2
+$manc = 15
+#case:mancala_cont 'D' { $manc_d = 12 and $manc.d > 0 } #order:4
+$manc_d = 2
+$manc_e = $manc_e + 3
+$manc_a = $manc_a + 3
+$manc_b = $manc_b + 2
+$manc_c = $manc_c + 2
+$manc = 1
+#case:mancala_cont 'A' { $manc_a = 13 and $manc.a > 0 } #order:1
+$manc_a = 2
+$manc_b = $manc_b + 3
+$manc_c = $manc_c + 3
+$manc_d = $manc_d + 3
+$manc_e = $manc_e + 2
+$manc = 8
+#case:mancala_cont 'B' { $manc_b = 13 and $manc.b > 0 } #order:2
+$manc_b = 2
+$manc_c = $manc_c + 3
+$manc_d = $manc_d + 3
+$manc_e = $manc_e + 3
+$manc_a = $manc_a + 2
+$manc = 15
+#case:mancala_cont 'C' { $manc_c = 13 and $manc.c > 0 } #order:3
+$manc_c = 2
+$manc_d = $manc_d + 3
+$manc_e = $manc_e + 3
+$manc_a = $manc_a + 3
+$manc_b = $manc_b + 2
+$manc = 1
+#case:mancala_cont 'D' { $manc_d = 13 and $manc.d > 0 } #order:4
+$manc_d = 2
+$manc_e = $manc_e + 3
+$manc_a = $manc_a + 3
+$manc_b = $manc_b + 3
+$manc_c = $manc_c + 2
+$manc = 2
+#case:mancala_cont 'A' { $manc_a = 14 and $manc.a > 0 } #order:1
+$manc_a = 2
+$manc_b = $manc_b + 3
+$manc_c = $manc_c + 3
+$manc_d = $manc_d + 3
+$manc_e = $manc_e + 3
+$manc = 15
+#case:mancala_cont 'B' { $manc_b = 14 and $manc.b > 0 } #order:2
+$manc_b = 2
+$manc_c = $manc_c + 3
+$manc_d = $manc_d + 3
+$manc_e = $manc_e + 3
+$manc_a = $manc_a + 3
+$manc = 1
+#case:mancala_cont 'C' { $manc_c = 14 and $manc.c > 0 } #order:3
+$manc_c = 2
+$manc_d = $manc_d + 3
+$manc_e = $manc_e + 3
+$manc_a = $manc_a + 3
+$manc_b = $manc_b + 3
+$manc = 2
+#case:mancala_cont 'D' { $manc_d = 14 and $manc.d > 0 } #order:4
+$manc_d = 2
+$manc_e = $manc_e + 3
+$manc_a = $manc_a + 3
+$manc_b = $manc_b + 3
+$manc_c = $manc_c + 3
+$manc = 4
+#case:mancala_cont 'A' { $manc_a = 15 and $manc.a > 0 } #order:1
+$manc_a = 3
+$manc_b = $manc_b + 3
+$manc_c = $manc_c + 3
+$manc_d = $manc_d + 3
+$manc_e = $manc_e + 3
+$manc = 1
+#case:mancala_cont 'B' { $manc_b = 15 and $manc.b > 0 } #order:2
+$manc_b = 3
+$manc_c = $manc_c + 3
+$manc_d = $manc_d + 3
+$manc_e = $manc_e + 3
+$manc_a = $manc_a + 3
+$manc = 2
+#case:mancala_cont 'C' { $manc_c = 15 and $manc.c > 0 } #order:3
+$manc_c = 3
+$manc_d = $manc_d + 3
+$manc_e = $manc_e + 3
+$manc_a = $manc_a + 3
+$manc_b = $manc_b + 3
+$manc = 4
+#case:mancala_cont 'D' { $manc_d = 15 and $manc.d > 0 } #order:4
+$manc_d = 3
+$manc_e = $manc_e + 3
+$manc_a = $manc_a + 3
+$manc_b = $manc_b + 3
+$manc_c = $manc_c + 3
+$manc = 8
+#case:mancala_cont 'A' { $manc_a = 16 and $manc.a > 0 } #order:1
+$manc_a = 3
+$manc_b = $manc_b + 4
+$manc_c = $manc_c + 3
+$manc_d = $manc_d + 3
+$manc_e = $manc_e + 3
+$manc = 2
+#case:mancala_cont 'B' { $manc_b = 16 and $manc.b > 0 } #order:2
+$manc_b = 3
+$manc_c = $manc_c + 4
+$manc_d = $manc_d + 3
+$manc_e = $manc_e + 3
+$manc_a = $manc_a + 3
+$manc = 4
+#case:mancala_cont 'C' { $manc_c = 16 and $manc.c > 0 } #order:3
+$manc_c = 3
+$manc_d = $manc_d + 4
+$manc_e = $manc_e + 3
+$manc_a = $manc_a + 3
+$manc_b = $manc_b + 3
+$manc = 8
+#case:mancala_cont 'D' { $manc_d = 16 and $manc.d > 0 } #order:4
+$manc_d = 3
+$manc_e = $manc_e + 4
+$manc_a = $manc_a + 3
+$manc_b = $manc_b + 3
+$manc_c = $manc_c + 3
+$manc = 15
+
+#site:mancala_cont
+#case:mancala_win { $manc_a + $manc_b + $manc_c + $manc_d = 0 }
+#case:mancala { $manc_a + $manc_b + $manc_c + $manc_d > 0 and $manc = 15 }
+#case:mancala { $manc_a > 1 and $manc.a > 0 }
+#case:mancala { $manc_b > 1 and $manc.b > 0 }
+#case:mancala { $manc_c > 1 and $manc.c > 0 }
+#case:mancala { $manc_d > 1 and $manc.d > 0 }
+#case:mancala_lose { $manc = 1 and $manc_a < 2 }
+#case:mancala_lose { $manc = 2 and $manc_b < 2 }
+#case:mancala_lose { $manc = 4 and $manc_c < 2 }
+#case:mancala_lose { $manc = 8 and $manc_d < 2 }
+
+#site:mancala_lose
+#maim
+#case:mancala_init 'Попробовать ещё раз'
+#site:mancala_win #win
+#maim
+
 #position:entry:96:399
 #position:inc:96:441
 #position:dec:160:441
@@ -824,3 +1320,8 @@ $temp_2 = 0
 #position:pop_3:288:357
 #position:train_what:288:315
 #position:train_temp:160:231
+#position:mancala_init:352:483
+#position:mancala:352:357
+#position:mancala_lose:224:525
+#position:mancala_cont:160:525
+#position:mancala_win:96:525
