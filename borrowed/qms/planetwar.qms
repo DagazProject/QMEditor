@@ -61,7 +61,7 @@
 Planet War
 #case:start 'Играть'
 #case:mancala_init { 1 = 0 } 'Манкала'
-$variant = <1..3>
+$variant = <1..2>
 
 #site:start
 $erace               = <1..5>
@@ -795,16 +795,23 @@ $temp_2 = 0
 ...
 
 #var:manc #range:0..15 #default:0 #mod:2 #hide
-  #text:0..0   '               '
-  #text:1..1   '*              '
-  #text:2..2   '    *          '
-  #text:4..4   '        *      '
-  #text:8..8   '            *  '
-  #text:15..15 '*   *   *   *  '
+  #text:0..0   '             '
+  #text:1..1   '*            '
+  #text:2..2   '    *        '
+  #text:4..4   '        *    '
+  #text:8..8   '            *'
+  #text:15..15 '*   *   *   *'
   #field:d                        // 8
   #field:c                        // 4
   #field:b                        // 2
   #field:a                        // 1
+
+#var:ms #range:0..4 #default:0 #hide
+  #text:0..0   ' '
+  #text:1..1   '  '
+  #text:2..2   '   '
+  #text:3..3   '    '
+  #text:4..4   '     '
 
 #var:manc_a #range:0..24 #default:0 #hide
 #var:manc_b #range:0..24 #default:0 #hide
@@ -814,11 +821,12 @@ $temp_2 = 0
 
 #macro:maim
 #page:1
-^ ---------------------- ^
-^  @manc|      ^
+^ ------------------------ ^
+^  @manc @ms|      ^
 ^ ($manc_a) ($manc_b) ($manc_c) ($manc_d) | ($manc_e) ^
-^ ---------------------- ^
-^  A   B   C   D  |      ^
+^ ------------------------ ^
+^  A   B   C   D @ms|      ^
+$ms = ($manc_a > 9) + ($manc_b > 9) + ($manc_c > 9) + ($manc_d > 9)
 #end
 
 #site:mancala_init
@@ -830,13 +838,6 @@ $manc_c = 2
 $manc_d = 2
 $manc_e = 0
 #case:mancala { $variant = 2 }
-$manc   = 15
-$manc_a = 5
-$manc_b = 5
-$manc_c = 5
-$manc_d = 5
-$manc_e = 0
-#case:mancala { $variant = 3 }
 $manc   = 15
 $manc_a = 6
 $manc_b = 6
