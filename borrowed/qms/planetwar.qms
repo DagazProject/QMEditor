@@ -62,6 +62,8 @@ Planet War
 #case:start 'Играть'
 #case:mancala_init { 1 = 0 } 'Манкала'
 $variant = <1..2>
+#case:lightoff_init { 1 = 0 } 'Туши свет'
+$variant = <3..9>
 
 #site:start
 $erace               = <1..5>
@@ -813,476 +815,470 @@ $temp_2 = 0
   #text:3..3   '    '
   #text:4..4   '     '
 
-#var:manc_a #range:0..24 #default:0 #hide
-#var:manc_b #range:0..24 #default:0 #hide
-#var:manc_c #range:0..24 #default:0 #hide
-#var:manc_d #range:0..24 #default:0 #hide
-#var:manc_e #range:0..24 #default:0 #hide
-
 #macro:maim
 #page:1
 ^ ------------------------ ^
 ^  @manc @ms|      ^
-^ ($manc_a) ($manc_b) ($manc_c) ($manc_d) | ($manc_e) ^
+^ ($temp_1) ($temp_2) ($temp_3) ($temp_4) | ($temp_5) ^
 ^ ------------------------ ^
 ^  A   B   C   D @ms|      ^
-$ms = ($manc_a > 9) + ($manc_b > 9) + ($manc_c > 9) + ($manc_d > 9)
+$ms = ($temp_1 > 9) + ($temp_2 > 9) + ($temp_3 > 9) + ($temp_4 > 9)
 #end
 
 #site:mancala_init
 #case:mancala { $variant = 1 }
 $manc   = 15
-$manc_a = 2
-$manc_b = 2
-$manc_c = 2
-$manc_d = 2
-$manc_e = 0
+$temp_1 = 2
+$temp_2 = 2
+$temp_3 = 2
+$temp_4 = 2
+$temp_5 = 0
 #case:mancala { $variant = 2 }
 $manc   = 15
-$manc_a = 6
-$manc_b = 6
-$manc_c = 6
-$manc_d = 6
-$manc_e = 0
+$temp_1 = 6
+$temp_2 = 6
+$temp_3 = 6
+$temp_4 = 6
+$temp_5 = 0
 
 #site:mancala
 #maim
-#case:mancala_cont 'A' { $manc_a = 1 and $manc.a > 0 } #order:1
-$manc_a = 0
-$manc_b = $manc_b + 1
+#case:mancala_cont 'A' { $temp_1 = 1 and $manc.a > 0 } #order:1
+$temp_1 = 0
+$temp_2 = $temp_2 + 1
 $manc = 2
-#case:mancala_cont 'B' { $manc_b = 1 and $manc.b > 0 } #order:2
-$manc_b = 0
-$manc_c = $manc_c + 1
+#case:mancala_cont 'B' { $temp_2 = 1 and $manc.b > 0 } #order:2
+$temp_2 = 0
+$temp_3 = $temp_3 + 1
 $manc = 4
-#case:mancala_cont 'C' { $manc_c = 1 and $manc.c > 0 } #order:3
-$manc_c = 0
-$manc_d = $manc_d + 1
+#case:mancala_cont 'C' { $temp_3 = 1 and $manc.c > 0 } #order:3
+$temp_3 = 0
+$temp_4 = $temp_4 + 1
 $manc = 8
-#case:mancala_cont 'D' { $manc_d = 1 and $manc.d > 0 } #order:4
-$manc_d = 0
-$manc_e = $manc_e + 1
+#case:mancala_cont 'D' { $temp_4 = 1 and $manc.d > 0 } #order:4
+$temp_4 = 0
+$temp_5 = $temp_5 + 1
 $manc = 15
-#case:mancala_cont 'A' { $manc_a = 2 and $manc.a > 0 } #order:1
-$manc_a = 0
-$manc_b = $manc_b + 1
-$manc_c = $manc_c + 1
+#case:mancala_cont 'A' { $temp_1 = 2 and $manc.a > 0 } #order:1
+$temp_1 = 0
+$temp_2 = $temp_2 + 1
+$temp_3 = $temp_3 + 1
 $manc = 4
-#case:mancala_cont 'B' { $manc_b = 2 and $manc.b > 0 } #order:2
-$manc_b = 0
-$manc_c = $manc_c + 1
-$manc_d = $manc_d + 1
+#case:mancala_cont 'B' { $temp_2 = 2 and $manc.b > 0 } #order:2
+$temp_2 = 0
+$temp_3 = $temp_3 + 1
+$temp_4 = $temp_4 + 1
 $manc = 8
-#case:mancala_cont 'C' { $manc_c = 2 and $manc.c > 0 } #order:3
-$manc_c = 0
-$manc_d = $manc_d + 1
-$manc_e = $manc_e + 1
+#case:mancala_cont 'C' { $temp_3 = 2 and $manc.c > 0 } #order:3
+$temp_3 = 0
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
 $manc = 15
-#case:mancala_cont 'D' { $manc_d = 2 and $manc.d > 0 } #order:4
-$manc_d = 0
-$manc_e = $manc_e + 1
-$manc_a = $manc_a + 1
+#case:mancala_cont 'D' { $temp_4 = 2 and $manc.d > 0 } #order:4
+$temp_4 = 0
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
 $manc = 1
-#case:mancala_cont 'A' { $manc_a = 3 and $manc.a > 0 } #order:1
-$manc_a = 0
-$manc_b = $manc_b + 1
-$manc_c = $manc_c + 1
-$manc_d = $manc_d + 1
+#case:mancala_cont 'A' { $temp_1 = 3 and $manc.a > 0 } #order:1
+$temp_1 = 0
+$temp_2 = $temp_2 + 1
+$temp_3 = $temp_3 + 1
+$temp_4 = $temp_4 + 1
 $manc = 8
-#case:mancala_cont 'B' { $manc_b = 3 and $manc.b > 0 } #order:2
-$manc_b = 0
-$manc_c = $manc_c + 1
-$manc_d = $manc_d + 1
-$manc_e = $manc_e + 1
+#case:mancala_cont 'B' { $temp_2 = 3 and $manc.b > 0 } #order:2
+$temp_2 = 0
+$temp_3 = $temp_3 + 1
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
 $manc = 15
-#case:mancala_cont 'C' { $manc_c = 3 and $manc.c > 0 } #order:3
-$manc_c = 0
-$manc_d = $manc_d + 1
-$manc_e = $manc_e + 1
-$manc_a = $manc_a + 1
+#case:mancala_cont 'C' { $temp_3 = 3 and $manc.c > 0 } #order:3
+$temp_3 = 0
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
 $manc = 1
-#case:mancala_cont 'D' { $manc_d = 3 and $manc.d > 0 } #order:4
-$manc_d = 0
-$manc_e = $manc_e + 1
-$manc_a = $manc_a + 1
-$manc_b = $manc_b + 1
+#case:mancala_cont 'D' { $temp_4 = 3 and $manc.d > 0 } #order:4
+$temp_4 = 0
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$temp_2 = $temp_2 + 1
 $manc = 2
-#case:mancala_cont 'A' { $manc_a = 4 and $manc.a > 0 } #order:1
-$manc_a = 0
-$manc_b = $manc_b + 1
-$manc_c = $manc_c + 1
-$manc_d = $manc_d + 1
-$manc_e = $manc_e + 1
+#case:mancala_cont 'A' { $temp_1 = 4 and $manc.a > 0 } #order:1
+$temp_1 = 0
+$temp_2 = $temp_2 + 1
+$temp_3 = $temp_3 + 1
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
 $manc = 15
-#case:mancala_cont 'B' { $manc_b = 4 and $manc.b > 0 } #order:2
-$manc_b = 0
-$manc_c = $manc_c + 1
-$manc_d = $manc_d + 1
-$manc_e = $manc_e + 1
-$manc_a = $manc_a + 1
+#case:mancala_cont 'B' { $temp_2 = 4 and $manc.b > 0 } #order:2
+$temp_2 = 0
+$temp_3 = $temp_3 + 1
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
 $manc = 1
-#case:mancala_cont 'C' { $manc_c = 4 and $manc.c > 0 } #order:3
-$manc_c = 0
-$manc_d = $manc_d + 1
-$manc_e = $manc_e + 1
-$manc_a = $manc_a + 1
-$manc_b = $manc_b + 1
+#case:mancala_cont 'C' { $temp_3 = 4 and $manc.c > 0 } #order:3
+$temp_3 = 0
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$temp_2 = $temp_2 + 1
 $manc = 2
-#case:mancala_cont 'D' { $manc_d = 4 and $manc.d > 0 } #order:4
-$manc_d = 0
-$manc_e = $manc_e + 1
-$manc_a = $manc_a + 1
-$manc_b = $manc_b + 1
-$manc_c = $manc_c + 1
+#case:mancala_cont 'D' { $temp_4 = 4 and $manc.d > 0 } #order:4
+$temp_4 = 0
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$temp_2 = $temp_2 + 1
+$temp_3 = $temp_3 + 1
 $manc = 4
-#case:mancala_cont 'A' { $manc_a = 5 and $manc.a > 0 } #order:1
-$manc_a = 1
-$manc_b = $manc_b + 1
-$manc_c = $manc_c + 1
-$manc_d = $manc_d + 1
-$manc_e = $manc_e + 1
+#case:mancala_cont 'A' { $temp_1 = 5 and $manc.a > 0 } #order:1
+$temp_1 = 1
+$temp_2 = $temp_2 + 1
+$temp_3 = $temp_3 + 1
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
 $manc = 1
-#case:mancala_cont 'B' { $manc_b = 5 and $manc.b > 0 } #order:2
-$manc_b = 1
-$manc_c = $manc_c + 1
-$manc_d = $manc_d + 1
-$manc_e = $manc_e + 1
-$manc_a = $manc_a + 1
+#case:mancala_cont 'B' { $temp_2 = 5 and $manc.b > 0 } #order:2
+$temp_2 = 1
+$temp_3 = $temp_3 + 1
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
 $manc = 2
-#case:mancala_cont 'C' { $manc_c = 5 and $manc.c > 0 } #order:3
-$manc_c = 1
-$manc_d = $manc_d + 1
-$manc_e = $manc_e + 1
-$manc_a = $manc_a + 1
-$manc_b = $manc_b + 1
+#case:mancala_cont 'C' { $temp_3 = 5 and $manc.c > 0 } #order:3
+$temp_3 = 1
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$temp_2 = $temp_2 + 1
 $manc = 4
-#case:mancala_cont 'D' { $manc_d = 5 and $manc.d > 0 } #order:4
-$manc_d = 1
-$manc_e = $manc_e + 1
-$manc_a = $manc_a + 1
-$manc_b = $manc_b + 1
-$manc_c = $manc_c + 1
+#case:mancala_cont 'D' { $temp_4 = 5 and $manc.d > 0 } #order:4
+$temp_4 = 1
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$temp_2 = $temp_2 + 1
+$temp_3 = $temp_3 + 1
 $manc = 8
-#case:mancala_cont 'A' { $manc_a = 6 and $manc.a > 0 } #order:1
-$manc_a = 1
-$manc_b = $manc_b + 2
-$manc_c = $manc_c + 1
-$manc_d = $manc_d + 1
-$manc_e = $manc_e + 1
+#case:mancala_cont 'A' { $temp_1 = 6 and $manc.a > 0 } #order:1
+$temp_1 = 1
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 1
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
 $manc = 2
-#case:mancala_cont 'B' { $manc_b = 6 and $manc.b > 0 } #order:2
-$manc_b = 1
-$manc_c = $manc_c + 2
-$manc_d = $manc_d + 1
-$manc_e = $manc_e + 1
-$manc_a = $manc_a + 1
+#case:mancala_cont 'B' { $temp_2 = 6 and $manc.b > 0 } #order:2
+$temp_2 = 1
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
 $manc = 4
-#case:mancala_cont 'C' { $manc_c = 6 and $manc.c > 0 } #order:3
-$manc_c = 1
-$manc_d = $manc_d + 2
-$manc_e = $manc_e + 1
-$manc_a = $manc_a + 1
-$manc_b = $manc_b + 1
+#case:mancala_cont 'C' { $temp_3 = 6 and $manc.c > 0 } #order:3
+$temp_3 = 1
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$temp_2 = $temp_2 + 1
 $manc = 8
-#case:mancala_cont 'D' { $manc_d = 6 and $manc.d > 0 } #order:4
-$manc_d = 1
-$manc_e = $manc_e + 2
-$manc_a = $manc_a + 1
-$manc_b = $manc_b + 1
-$manc_c = $manc_c + 1
+#case:mancala_cont 'D' { $temp_4 = 6 and $manc.d > 0 } #order:4
+$temp_4 = 1
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 1
+$temp_2 = $temp_2 + 1
+$temp_3 = $temp_3 + 1
 $manc = 15
-#case:mancala_cont 'A' { $manc_a = 7 and $manc.a > 0 } #order:1
-$manc_a = 1
-$manc_b = $manc_b + 2
-$manc_c = $manc_c + 2
-$manc_d = $manc_d + 1
-$manc_e = $manc_e + 1
+#case:mancala_cont 'A' { $temp_1 = 7 and $manc.a > 0 } #order:1
+$temp_1 = 1
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
 $manc = 4
-#case:mancala_cont 'B' { $manc_b = 7 and $manc.b > 0 } #order:2
-$manc_b = 1
-$manc_c = $manc_c + 2
-$manc_d = $manc_d + 2
-$manc_e = $manc_e + 1
-$manc_a = $manc_a + 1
+#case:mancala_cont 'B' { $temp_2 = 7 and $manc.b > 0 } #order:2
+$temp_2 = 1
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
 $manc = 8
-#case:mancala_cont 'C' { $manc_c = 7 and $manc.c > 0 } #order:3
-$manc_c = 1
-$manc_d = $manc_d + 2
-$manc_e = $manc_e + 2
-$manc_a = $manc_a + 1
-$manc_b = $manc_b + 1
+#case:mancala_cont 'C' { $temp_3 = 7 and $manc.c > 0 } #order:3
+$temp_3 = 1
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 1
+$temp_2 = $temp_2 + 1
 $manc = 15
-#case:mancala_cont 'D' { $manc_d = 7 and $manc.d > 0 } #order:4
-$manc_d = 1
-$manc_e = $manc_e + 2
-$manc_a = $manc_a + 2
-$manc_b = $manc_b + 1
-$manc_c = $manc_c + 1
+#case:mancala_cont 'D' { $temp_4 = 7 and $manc.d > 0 } #order:4
+$temp_4 = 1
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 1
+$temp_3 = $temp_3 + 1
 $manc = 1
-#case:mancala_cont 'A' { $manc_a = 8 and $manc.a > 0 } #order:1
-$manc_a = 1
-$manc_b = $manc_b + 2
-$manc_c = $manc_c + 2
-$manc_d = $manc_d + 2
-$manc_e = $manc_e + 1
+#case:mancala_cont 'A' { $temp_1 = 8 and $manc.a > 0 } #order:1
+$temp_1 = 1
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 1
 $manc = 8
-#case:mancala_cont 'B' { $manc_b = 8 and $manc.b > 0 } #order:2
-$manc_b = 1
-$manc_c = $manc_c + 2
-$manc_d = $manc_d + 2
-$manc_e = $manc_e + 2
-$manc_a = $manc_a + 1
+#case:mancala_cont 'B' { $temp_2 = 8 and $manc.b > 0 } #order:2
+$temp_2 = 1
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 1
 $manc = 15
-#case:mancala_cont 'C' { $manc_c = 8 and $manc.c > 0 } #order:3
-$manc_c = 1
-$manc_d = $manc_d + 2
-$manc_e = $manc_e + 2
-$manc_a = $manc_a + 2
-$manc_b = $manc_b + 1
+#case:mancala_cont 'C' { $temp_3 = 8 and $manc.c > 0 } #order:3
+$temp_3 = 1
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 1
 $manc = 1
-#case:mancala_cont 'D' { $manc_d = 8 and $manc.d > 0 } #order:4
-$manc_d = 1
-$manc_e = $manc_e + 2
-$manc_a = $manc_a + 2
-$manc_b = $manc_b + 2
-$manc_c = $manc_c + 1
+#case:mancala_cont 'D' { $temp_4 = 8 and $manc.d > 0 } #order:4
+$temp_4 = 1
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 1
 $manc = 2
-#case:mancala_cont 'A' { $manc_a = 9 and $manc.a > 0 } #order:1
-$manc_a = 1
-$manc_b = $manc_b + 2
-$manc_c = $manc_c + 2
-$manc_d = $manc_d + 2
-$manc_e = $manc_e + 2
+#case:mancala_cont 'A' { $temp_1 = 9 and $manc.a > 0 } #order:1
+$temp_1 = 1
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
 $manc = 15
-#case:mancala_cont 'B' { $manc_b = 9 and $manc.b > 0 } #order:2
-$manc_b = 1
-$manc_c = $manc_c + 2
-$manc_d = $manc_d + 2
-$manc_e = $manc_e + 2
-$manc_a = $manc_a + 2
+#case:mancala_cont 'B' { $temp_2 = 9 and $manc.b > 0 } #order:2
+$temp_2 = 1
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
 $manc = 1
-#case:mancala_cont 'C' { $manc_c = 9 and $manc.c > 0 } #order:3
-$manc_c = 1
-$manc_d = $manc_d + 2
-$manc_e = $manc_e + 2
-$manc_a = $manc_a + 2
-$manc_b = $manc_b + 2
+#case:mancala_cont 'C' { $temp_3 = 9 and $manc.c > 0 } #order:3
+$temp_3 = 1
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 2
 $manc = 2
-#case:mancala_cont 'D' { $manc_d = 9 and $manc.d > 0 } #order:4
-$manc_d = 1
-$manc_e = $manc_e + 2
-$manc_a = $manc_a + 2
-$manc_b = $manc_b + 2
-$manc_c = $manc_c + 2
+#case:mancala_cont 'D' { $temp_4 = 9 and $manc.d > 0 } #order:4
+$temp_4 = 1
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 2
 $manc = 4
-#case:mancala_cont 'A' { $manc_a = 10 and $manc.a > 0 } #order:1
-$manc_a = 2
-$manc_b = $manc_b + 2
-$manc_c = $manc_c + 2
-$manc_d = $manc_d + 2
-$manc_e = $manc_e + 2
+#case:mancala_cont 'A' { $temp_1 = 10 and $manc.a > 0 } #order:1
+$temp_1 = 2
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
 $manc = 1
-#case:mancala_cont 'B' { $manc_b = 10 and $manc.b > 0 } #order:2
-$manc_b = 2
-$manc_c = $manc_c + 2
-$manc_d = $manc_d + 2
-$manc_e = $manc_e + 2
-$manc_a = $manc_a + 2
+#case:mancala_cont 'B' { $temp_2 = 10 and $manc.b > 0 } #order:2
+$temp_2 = 2
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
 $manc = 2
-#case:mancala_cont 'C' { $manc_c = 10 and $manc.c > 0 } #order:3
-$manc_c = 2
-$manc_d = $manc_d + 2
-$manc_e = $manc_e + 2
-$manc_a = $manc_a + 2
-$manc_b = $manc_b + 2
+#case:mancala_cont 'C' { $temp_3 = 10 and $manc.c > 0 } #order:3
+$temp_3 = 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 2
 $manc = 4
-#case:mancala_cont 'D' { $manc_d = 10 and $manc.d > 0 } #order:4
-$manc_d = 2
-$manc_e = $manc_e + 2
-$manc_a = $manc_a + 2
-$manc_b = $manc_b + 2
-$manc_c = $manc_c + 2
+#case:mancala_cont 'D' { $temp_4 = 10 and $manc.d > 0 } #order:4
+$temp_4 = 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 2
 $manc = 8
-#case:mancala_cont 'A' { $manc_a = 11 and $manc.a > 0 } #order:1
-$manc_a = 2
-$manc_b = $manc_b + 3
-$manc_c = $manc_c + 2
-$manc_d = $manc_d + 2
-$manc_e = $manc_e + 2
+#case:mancala_cont 'A' { $temp_1 = 11 and $manc.a > 0 } #order:1
+$temp_1 = 2
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
 $manc = 2
-#case:mancala_cont 'B' { $manc_b = 11 and $manc.b > 0 } #order:2
-$manc_b = 2
-$manc_c = $manc_c + 3
-$manc_d = $manc_d + 2
-$manc_e = $manc_e + 2
-$manc_a = $manc_a + 2
+#case:mancala_cont 'B' { $temp_2 = 11 and $manc.b > 0 } #order:2
+$temp_2 = 2
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
 $manc = 4
-#case:mancala_cont 'C' { $manc_c = 11 and $manc.c > 0 } #order:3
-$manc_c = 2
-$manc_d = $manc_d + 3
-$manc_e = $manc_e + 2
-$manc_a = $manc_a + 2
-$manc_b = $manc_b + 2
+#case:mancala_cont 'C' { $temp_3 = 11 and $manc.c > 0 } #order:3
+$temp_3 = 2
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 2
 $manc = 8
-#case:mancala_cont 'D' { $manc_d = 11 and $manc.d > 0 } #order:4
-$manc_d = 2
-$manc_e = $manc_e + 3
-$manc_a = $manc_a + 2
-$manc_b = $manc_b + 2
-$manc_c = $manc_c + 2
+#case:mancala_cont 'D' { $temp_4 = 11 and $manc.d > 0 } #order:4
+$temp_4 = 2
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 2
 $manc = 15
-#case:mancala_cont 'A' { $manc_a = 12 and $manc.a > 0 } #order:1
-$manc_a = 2
-$manc_b = $manc_b + 3
-$manc_c = $manc_c + 3
-$manc_d = $manc_d + 2
-$manc_e = $manc_e + 2
+#case:mancala_cont 'A' { $temp_1 = 12 and $manc.a > 0 } #order:1
+$temp_1 = 2
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
 $manc = 4
-#case:mancala_cont 'B' { $manc_b = 12 and $manc.b > 0 } #order:2
-$manc_b = 2
-$manc_c = $manc_c + 3
-$manc_d = $manc_d + 3
-$manc_e = $manc_e + 2
-$manc_a = $manc_a + 2
+#case:mancala_cont 'B' { $temp_2 = 12 and $manc.b > 0 } #order:2
+$temp_2 = 2
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
 $manc = 8
-#case:mancala_cont 'C' { $manc_c = 12 and $manc.c > 0 } #order:3
-$manc_c = 2
-$manc_d = $manc_d + 3
-$manc_e = $manc_e + 3
-$manc_a = $manc_a + 2
-$manc_b = $manc_b + 2
+#case:mancala_cont 'C' { $temp_3 = 12 and $manc.c > 0 } #order:3
+$temp_3 = 2
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 2
 $manc = 15
-#case:mancala_cont 'D' { $manc_d = 12 and $manc.d > 0 } #order:4
-$manc_d = 2
-$manc_e = $manc_e + 3
-$manc_a = $manc_a + 3
-$manc_b = $manc_b + 2
-$manc_c = $manc_c + 2
+#case:mancala_cont 'D' { $temp_4 = 12 and $manc.d > 0 } #order:4
+$temp_4 = 2
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 2
 $manc = 1
-#case:mancala_cont 'A' { $manc_a = 13 and $manc.a > 0 } #order:1
-$manc_a = 2
-$manc_b = $manc_b + 3
-$manc_c = $manc_c + 3
-$manc_d = $manc_d + 3
-$manc_e = $manc_e + 2
+#case:mancala_cont 'A' { $temp_1 = 13 and $manc.a > 0 } #order:1
+$temp_1 = 2
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 2
 $manc = 8
-#case:mancala_cont 'B' { $manc_b = 13 and $manc.b > 0 } #order:2
-$manc_b = 2
-$manc_c = $manc_c + 3
-$manc_d = $manc_d + 3
-$manc_e = $manc_e + 3
-$manc_a = $manc_a + 2
+#case:mancala_cont 'B' { $temp_2 = 13 and $manc.b > 0 } #order:2
+$temp_2 = 2
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 2
 $manc = 15
-#case:mancala_cont 'C' { $manc_c = 13 and $manc.c > 0 } #order:3
-$manc_c = 2
-$manc_d = $manc_d + 3
-$manc_e = $manc_e + 3
-$manc_a = $manc_a + 3
-$manc_b = $manc_b + 2
+#case:mancala_cont 'C' { $temp_3 = 13 and $manc.c > 0 } #order:3
+$temp_3 = 2
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 2
 $manc = 1
-#case:mancala_cont 'D' { $manc_d = 13 and $manc.d > 0 } #order:4
-$manc_d = 2
-$manc_e = $manc_e + 3
-$manc_a = $manc_a + 3
-$manc_b = $manc_b + 3
-$manc_c = $manc_c + 2
+#case:mancala_cont 'D' { $temp_4 = 13 and $manc.d > 0 } #order:4
+$temp_4 = 2
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 2
 $manc = 2
-#case:mancala_cont 'A' { $manc_a = 14 and $manc.a > 0 } #order:1
-$manc_a = 2
-$manc_b = $manc_b + 3
-$manc_c = $manc_c + 3
-$manc_d = $manc_d + 3
-$manc_e = $manc_e + 3
+#case:mancala_cont 'A' { $temp_1 = 14 and $manc.a > 0 } #order:1
+$temp_1 = 2
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
 $manc = 15
-#case:mancala_cont 'B' { $manc_b = 14 and $manc.b > 0 } #order:2
-$manc_b = 2
-$manc_c = $manc_c + 3
-$manc_d = $manc_d + 3
-$manc_e = $manc_e + 3
-$manc_a = $manc_a + 3
+#case:mancala_cont 'B' { $temp_2 = 14 and $manc.b > 0 } #order:2
+$temp_2 = 2
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
 $manc = 1
-#case:mancala_cont 'C' { $manc_c = 14 and $manc.c > 0 } #order:3
-$manc_c = 2
-$manc_d = $manc_d + 3
-$manc_e = $manc_e + 3
-$manc_a = $manc_a + 3
-$manc_b = $manc_b + 3
+#case:mancala_cont 'C' { $temp_3 = 14 and $manc.c > 0 } #order:3
+$temp_3 = 2
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 3
 $manc = 2
-#case:mancala_cont 'D' { $manc_d = 14 and $manc.d > 0 } #order:4
-$manc_d = 2
-$manc_e = $manc_e + 3
-$manc_a = $manc_a + 3
-$manc_b = $manc_b + 3
-$manc_c = $manc_c + 3
+#case:mancala_cont 'D' { $temp_4 = 14 and $manc.d > 0 } #order:4
+$temp_4 = 2
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 3
 $manc = 4
-#case:mancala_cont 'A' { $manc_a = 15 and $manc.a > 0 } #order:1
-$manc_a = 3
-$manc_b = $manc_b + 3
-$manc_c = $manc_c + 3
-$manc_d = $manc_d + 3
-$manc_e = $manc_e + 3
+#case:mancala_cont 'A' { $temp_1 = 15 and $manc.a > 0 } #order:1
+$temp_1 = 3
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
 $manc = 1
-#case:mancala_cont 'B' { $manc_b = 15 and $manc.b > 0 } #order:2
-$manc_b = 3
-$manc_c = $manc_c + 3
-$manc_d = $manc_d + 3
-$manc_e = $manc_e + 3
-$manc_a = $manc_a + 3
+#case:mancala_cont 'B' { $temp_2 = 15 and $manc.b > 0 } #order:2
+$temp_2 = 3
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
 $manc = 2
-#case:mancala_cont 'C' { $manc_c = 15 and $manc.c > 0 } #order:3
-$manc_c = 3
-$manc_d = $manc_d + 3
-$manc_e = $manc_e + 3
-$manc_a = $manc_a + 3
-$manc_b = $manc_b + 3
+#case:mancala_cont 'C' { $temp_3 = 15 and $manc.c > 0 } #order:3
+$temp_3 = 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 3
 $manc = 4
-#case:mancala_cont 'D' { $manc_d = 15 and $manc.d > 0 } #order:4
-$manc_d = 3
-$manc_e = $manc_e + 3
-$manc_a = $manc_a + 3
-$manc_b = $manc_b + 3
-$manc_c = $manc_c + 3
+#case:mancala_cont 'D' { $temp_4 = 15 and $manc.d > 0 } #order:4
+$temp_4 = 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 3
 $manc = 8
-#case:mancala_cont 'A' { $manc_a = 16 and $manc.a > 0 } #order:1
-$manc_a = 3
-$manc_b = $manc_b + 4
-$manc_c = $manc_c + 3
-$manc_d = $manc_d + 3
-$manc_e = $manc_e + 3
+#case:mancala_cont 'A' { $temp_1 = 16 and $manc.a > 0 } #order:1
+$temp_1 = 3
+$temp_2 = $temp_2 + 4
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
 $manc = 2
-#case:mancala_cont 'B' { $manc_b = 16 and $manc.b > 0 } #order:2
-$manc_b = 3
-$manc_c = $manc_c + 4
-$manc_d = $manc_d + 3
-$manc_e = $manc_e + 3
-$manc_a = $manc_a + 3
+#case:mancala_cont 'B' { $temp_2 = 16 and $manc.b > 0 } #order:2
+$temp_2 = 3
+$temp_3 = $temp_3 + 4
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
 $manc = 4
-#case:mancala_cont 'C' { $manc_c = 16 and $manc.c > 0 } #order:3
-$manc_c = 3
-$manc_d = $manc_d + 4
-$manc_e = $manc_e + 3
-$manc_a = $manc_a + 3
-$manc_b = $manc_b + 3
+#case:mancala_cont 'C' { $temp_3 = 16 and $manc.c > 0 } #order:3
+$temp_3 = 3
+$temp_4 = $temp_4 + 4
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 3
 $manc = 8
-#case:mancala_cont 'D' { $manc_d = 16 and $manc.d > 0 } #order:4
-$manc_d = 3
-$manc_e = $manc_e + 4
-$manc_a = $manc_a + 3
-$manc_b = $manc_b + 3
-$manc_c = $manc_c + 3
+#case:mancala_cont 'D' { $temp_4 = 16 and $manc.d > 0 } #order:4
+$temp_4 = 3
+$temp_5 = $temp_5 + 4
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 3
 $manc = 15
 
 #site:mancala_cont
-#case:mancala_win { $manc_a + $manc_b + $manc_c + $manc_d = 0 }
-#case:mancala { $manc_a + $manc_b + $manc_c + $manc_d > 0 and $manc = 15 }
-#case:mancala { $manc_a > 1 and $manc.a > 0 }
-#case:mancala { $manc_b > 1 and $manc.b > 0 }
-#case:mancala { $manc_c > 1 and $manc.c > 0 }
-#case:mancala { $manc_d > 1 and $manc.d > 0 }
-#case:mancala_lose { $manc = 1 and $manc_a < 2 }
-#case:mancala_lose { $manc = 2 and $manc_b < 2 }
-#case:mancala_lose { $manc = 4 and $manc_c < 2 }
-#case:mancala_lose { $manc = 8 and $manc_d < 2 }
+#case:mancala_win { $temp_1 + $temp_2 + $temp_3 + $temp_4 = 0 }
+#case:mancala { $temp_1 + $temp_2 + $temp_3 + $temp_4 > 0 and $manc = 15 }
+#case:mancala { $temp_1 > 1 and $manc.a > 0 }
+#case:mancala { $temp_2 > 1 and $manc.b > 0 }
+#case:mancala { $temp_3 > 1 and $manc.c > 0 }
+#case:mancala { $temp_4 > 1 and $manc.d > 0 }
+#case:mancala_lose { $manc = 1 and $temp_1 < 2 }
+#case:mancala_lose { $manc = 2 and $temp_2 < 2 }
+#case:mancala_lose { $manc = 4 and $temp_3 < 2 }
+#case:mancala_lose { $manc = 8 and $temp_4 < 2 }
 
 #site:mancala_lose
 #maim
@@ -1290,6 +1286,843 @@ $manc = 0
 #case:mancala_init 'Попробовать ещё раз'
 #site:mancala_win #win
 #maim
+
+#macro:lcell
+  #text:0..0 '.'
+  #text:1..1 '+'
+  #text:2..2 'x'
+#end
+
+#for:i:1..5
+  #var:A[$i] #range:0..2 #default:0 #hide
+    #lcell
+  #var:B[$i] #range:0..2 #default:0 #hide
+    #lcell
+  #var:C[$i] #range:0..2 #default:0 #hide
+    #lcell
+  #var:D[$i] #range:0..2 #default:0 #hide
+    #lcell
+#end
+
+#var:LC #range:0..4 #hide
+  #text:0..0 ' A B C D'
+  #text:1..1 ' ^ B C D'
+  #text:2..2 ' A ^ C D'
+  #text:3..3 ' A B ^ D'
+  #text:4..4 ' A B C ^'
+
+#macro:laim
+#page:1
+^   +---------+ ^
+^ 4 | @A4 @B4 @C4 @D4 | ^
+^ 3 | @A3 @B3 @C3 @D3 | ^
+^ 2 | @A2 @B2 @C2 @D2 | ^
+^ 1 | @A1 @B1 @C1 @D1 | ^
+^   +---------+ ^
+^    @LC   ^
+#end
+
+#site:lightoff_init
+$A1 = <0..1>
+$B1 = <0..1>
+$C1 = <0..1>
+$D1 = <0..1>
+$A2 = <0..1>
+$B2 = <0..1>
+$C2 = <0..1>
+$D2 = <0..1>
+$A3 = <0..1>
+$B3 = <0..1>
+$C3 = <0..1>
+$D3 = <0..1>
+$A4 = <0..1>
+$B4 = <0..1>
+$C4 = <0..1>
+$D4 = <0..1>
+#case:lightoff
+
+#site:lightoff
+#laim
+$LC = 0
+#case:lightoff_row 'A' #order:1
+$LC = 1
+#case:lightoff_row 'B' #order:2
+$LC = 2
+#case:lightoff_row 'C' #order:3
+$LC = 3
+#case:lightoff_row 'D' #order:4
+$LC = 4
+
+#site:lightoff_row
+#laim
+#case:lightoff_cont '4'
+$temp_1 = 4
+#case:lightoff_cont '3'
+$temp_1 = 3
+#case:lightoff_cont '2'
+$temp_1 = 2
+#case:lightoff_cont '1'
+$temp_1 = 1
+
+#site:lightoff_cont 
+#case:lightoff_check { $variant = 3 and $LC = 1 and $temp_1 = 4 }
+$A4 = 1 - $A4
+$A3 = 1 - $A3
+$B4 = 1 - $B4
+#case:lightoff_check { $variant = 3 and $LC = 1 and $temp_1 = 3 }
+$A3 = 1 - $A3
+$A4 = 1 - $A4
+$A2 = 1 - $A2
+$B3 = 1 - $B3
+#case:lightoff_check { $variant = 3 and $LC = 1 and $temp_1 = 2 }
+$A2 = 1 - $A2
+$A3 = 1 - $A3
+$A1 = 1 - $A1
+$B2 = 1 - $B2
+#case:lightoff_check { $variant = 3 and $LC = 1 and $temp_1 = 1 }
+$A1 = 1 - $A1
+$A2 = 1 - $A2
+$B1 = 1 - $B1
+#case:lightoff_check { $variant = 3 and $LC = 2 and $temp_1 = 4 }
+$B4 = 1 - $B4
+$B3 = 1 - $B3
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+#case:lightoff_check { $variant = 3 and $LC = 2 and $temp_1 = 3 }
+$B3 = 1 - $B3
+$B4 = 1 - $B4
+$B2 = 1 - $B2
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+#case:lightoff_check { $variant = 3 and $LC = 2 and $temp_1 = 2 }
+$B2 = 1 - $B2
+$B3 = 1 - $B3
+$B1 = 1 - $B1
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 3 and $LC = 2 and $temp_1 = 1 }
+$B1 = 1 - $B1
+$B2 = 1 - $B2
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 3 and $LC = 3 and $temp_1 = 4 }
+$C4 = 1 - $C4
+$C3 = 1 - $C3
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 3 and $LC = 3 and $temp_1 = 3 }
+$C3 = 1 - $C3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 3 and $LC = 3 and $temp_1 = 2 }
+$C2 = 1 - $C2
+$C3 = 1 - $C3
+$C1 = 1 - $C1
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 3 and $LC = 3 and $temp_1 = 1 }
+$C1 = 1 - $C1
+$C2 = 1 - $C2
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 3 and $LC = 4 and $temp_1 = 4 }
+$D4 = 1 - $D4
+$D3 = 1 - $D3
+$C4 = 1 - $C4
+#case:lightoff_check { $variant = 3 and $LC = 4 and $temp_1 = 3 }
+$D3 = 1 - $D3
+$D4 = 1 - $D4
+$D2 = 1 - $D2
+$C3 = 1 - $C3
+#case:lightoff_check { $variant = 3 and $LC = 4 and $temp_1 = 2 }
+$D2 = 1 - $D2
+$D3 = 1 - $D3
+$D1 = 1 - $D1
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 3 and $LC = 4 and $temp_1 = 1 }
+$D1 = 1 - $D1
+$D2 = 1 - $D2
+$C1 = 1 - $C1
+
+#case:lightoff_check { $variant = 4 and $LC = 1 and $temp_1 = 4 }
+$A4 = 1 - $A4
+$A3 = 1 - $A3
+$A2 = 1 - $A2
+$A1 = 1 - $A1
+$B4 = 1 - $B4
+$C4 = 1 - $C4
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 4 and $LC = 1 and $temp_1 = 3 }
+$A3 = 1 - $A3
+$A4 = 1 - $A4
+$A2 = 1 - $A2
+$A1 = 1 - $A1
+$B3 = 1 - $B3
+$C3 = 1 - $C3
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 4 and $LC = 1 and $temp_1 = 2 }
+$A2 = 1 - $A2
+$A3 = 1 - $A3
+$A4 = 1 - $A4
+$A1 = 1 - $A1
+$B2 = 1 - $B2
+$C2 = 1 - $C2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 4 and $LC = 1 and $temp_1 = 1 }
+$A1 = 1 - $A1
+$A2 = 1 - $A2
+$A3 = 1 - $A3
+$A4 = 1 - $A4
+$B1 = 1 - $B1
+$C1 = 1 - $C1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 4 and $LC = 2 and $temp_1 = 4 }
+$B4 = 1 - $B4
+$B3 = 1 - $B3
+$B2 = 1 - $B2
+$B1 = 1 - $B1
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 4 and $LC = 2 and $temp_1 = 3 }
+$B3 = 1 - $B3
+$B4 = 1 - $B4
+$B2 = 1 - $B2
+$B1 = 1 - $B1
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 4 and $LC = 2 and $temp_1 = 2 }
+$B2 = 1 - $B2
+$B4 = 1 - $B4
+$B3 = 1 - $B3
+$B1 = 1 - $B1
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 4 and $LC = 2 and $temp_1 = 1 }
+$B1 = 1 - $B1
+$B2 = 1 - $B2
+$B3 = 1 - $B3
+$B4 = 1 - $B4
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 4 and $LC = 3 and $temp_1 = 4 }
+$C4 = 1 - $C4
+$C3 = 1 - $C3
+$C2 = 1 - $C2
+$C1 = 1 - $C1
+$A4 = 1 - $A4
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 4 and $LC = 3 and $temp_1 = 3 }
+$C3 = 1 - $C3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+$C1 = 1 - $C1
+$A3 = 1 - $A3
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 4 and $LC = 3 and $temp_1 = 2 }
+$C2 = 1 - $C2
+$C4 = 1 - $C4
+$C3 = 1 - $C3
+$C1 = 1 - $C1
+$A2 = 1 - $A2
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 4 and $LC = 3 and $temp_1 = 1 }
+$C1 = 1 - $C1
+$C2 = 1 - $C2
+$C3 = 1 - $C3
+$C4 = 1 - $C4
+$A1 = 1 - $A1
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 4 and $LC = 4 and $temp_1 = 4 }
+$D4 = 1 - $D4
+$D3 = 1 - $D3
+$D2 = 1 - $D2
+$D1 = 1 - $D1
+$A4 = 1 - $A4
+$B4 = 1 - $B4
+$C4 = 1 - $C4
+#case:lightoff_check { $variant = 4 and $LC = 4 and $temp_1 = 3 }
+$D3 = 1 - $D3
+$D4 = 1 - $D4
+$D1 = 1 - $D1
+$D2 = 1 - $D2
+$A3 = 1 - $A3
+$B3 = 1 - $B3
+$C3 = 1 - $C3
+#case:lightoff_check { $variant = 4 and $LC = 4 and $temp_1 = 2 }
+$D2 = 1 - $D2
+$D1 = 1 - $D1
+$D3 = 1 - $D3
+$D4 = 1 - $D4
+$A2 = 1 - $A2
+$B2 = 1 - $B2
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 4 and $LC = 4 and $temp_1 = 1 }
+$D1 = 1 - $D1
+$D2 = 1 - $D2
+$D3 = 1 - $D3
+$D4 = 1 - $D4
+$A1 = 1 - $A1
+$B1 = 1 - $B1
+$C1 = 1 - $C1
+
+#case:lightoff_check { $variant = 5 and $LC = 1 and $temp_1 = 4 }
+$A4 = 1 - $A4
+$B3 = 1 - $B3
+#case:lightoff_check { $variant = 5 and $LC = 1 and $temp_1 = 3 }
+$A3 = 1 - $A3
+$B2 = 1 - $B2
+$B4 = 1 - $B4
+#case:lightoff_check { $variant = 5 and $LC = 1 and $temp_1 = 2 }
+$A2 = 1 - $A2
+$B1 = 1 - $B1
+$B3 = 1 - $B3
+#case:lightoff_check { $variant = 5 and $LC = 1 and $temp_1 = 1 }
+$A1 = 1 - $A1
+$B2 = 1 - $B2
+#case:lightoff_check { $variant = 5 and $LC = 2 and $temp_1 = 4 }
+$B4 = 1 - $B4
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+#case:lightoff_check { $variant = 5 and $LC = 2 and $temp_1 = 3 }
+$B3 = 1 - $B3
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 5 and $LC = 2 and $temp_1 = 2 }
+$B2 = 1 - $B2
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 5 and $LC = 2 and $temp_1 = 1 }
+$B1 = 1 - $B1
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 5 and $LC = 3 and $temp_1 = 4 }
+$C4 = 1 - $C4
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 5 and $LC = 3 and $temp_1 = 3 }
+$C3 = 1 - $C3
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 5 and $LC = 3 and $temp_1 = 2 }
+$C2 = 1 - $C2
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 5 and $LC = 3 and $temp_1 = 1 }
+$C1 = 1 - $C1
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 5 and $LC = 4 and $temp_1 = 4 }
+$D4 = 1 - $D4
+$C3 = 1 - $C3
+#case:lightoff_check { $variant = 5 and $LC = 4 and $temp_1 = 3 }
+$D3 = 1 - $D3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 5 and $LC = 4 and $temp_1 = 2 }
+$D2 = 1 - $D2
+$C3 = 1 - $C3
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 5 and $LC = 4 and $temp_1 = 1 }
+$D1 = 1 - $D1
+$C2 = 1 - $C2
+
+#case:lightoff_check { $variant = 6 and $LC = 1 and $temp_1 = 4 }
+$A4 = 1 - $A4
+$B3 = 1 - $B3
+$C2 = 1 - $C2
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 6 and $LC = 1 and $temp_1 = 3 }
+$A3 = 1 - $A3
+$B2 = 1 - $B2
+$C1 = 1 - $C1
+$B4 = 1 - $B4
+#case:lightoff_check { $variant = 6 and $LC = 1 and $temp_1 = 2 }
+$A2 = 1 - $A2
+$B1 = 1 - $B1
+$B3 = 1 - $B3
+$C4 = 1 - $C4
+#case:lightoff_check { $variant = 6 and $LC = 1 and $temp_1 = 1 }
+$A1 = 1 - $A1
+$B2 = 1 - $B2
+$C3 = 1 - $C3
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 6 and $LC = 2 and $temp_1 = 4 }
+$B4 = 1 - $B4
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 6 and $LC = 2 and $temp_1 = 3 }
+$B3 = 1 - $B3
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 6 and $LC = 2 and $temp_1 = 2 }
+$B2 = 1 - $B2
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$D4 = 1 - $D4
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 6 and $LC = 2 and $temp_1 = 1 }
+$B1 = 1 - $B1
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 6 and $LC = 3 and $temp_1 = 4 }
+$C4 = 1 - $C4
+$B3 = 1 - $B3
+$A2 = 1 - $A2
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 6 and $LC = 3 and $temp_1 = 3 }
+$C3 = 1 - $C3
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+$B2 = 1 - $B2
+$A1 = 1 - $A1
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 6 and $LC = 3 and $temp_1 = 2 }
+$C2 = 1 - $C2
+$B3 = 1 - $B3
+$A4 = 1 - $A4
+$D3 = 1 - $D3
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 6 and $LC = 3 and $temp_1 = 1 }
+$C1 = 1 - $C1
+$B2 = 1 - $B2
+$A3 = 1 - $A3
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 6 and $LC = 4 and $temp_1 = 4 }
+$D4 = 1 - $D4
+$C3 = 1 - $C3
+$B2 = 1 - $B2
+$A1 = 1 - $A1
+#case:lightoff_check { $variant = 6 and $LC = 4 and $temp_1 = 3 }
+$D3 = 1 - $D3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+$B1 = 1 - $B1
+#case:lightoff_check { $variant = 6 and $LC = 4 and $temp_1 = 2 }
+$D2 = 1 - $D2
+$C3 = 1 - $C3
+$B4 = 1 - $B4
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 6 and $LC = 4 and $temp_1 = 1 }
+$D1 = 1 - $D1
+$C2 = 1 - $C2
+$B3 = 1 - $B3
+$A4 = 1 - $A4
+
+#case:lightoff_check { $variant = 7 and $LC = 1 and $temp_1 = 4 }
+$A4 = 1 - $A4
+$A3 = 1 - $A3
+$B4 = 1 - $B4
+$B3 = 1 - $B3
+#case:lightoff_check { $variant = 7 and $LC = 1 and $temp_1 = 3 }
+$A3 = 1 - $A3
+$A4 = 1 - $A4
+$A2 = 1 - $A2
+$B3 = 1 - $B3
+$B2 = 1 - $B2
+$B4 = 1 - $B4
+#case:lightoff_check { $variant = 7 and $LC = 1 and $temp_1 = 2 }
+$A2 = 1 - $A2
+$A3 = 1 - $A3
+$A1 = 1 - $A1
+$B2 = 1 - $B2
+$B1 = 1 - $B1
+$B3 = 1 - $B3
+#case:lightoff_check { $variant = 7 and $LC = 1 and $temp_1 = 1 }
+$A1 = 1 - $A1
+$A2 = 1 - $A2
+$B1 = 1 - $B1
+$B2 = 1 - $B2
+#case:lightoff_check { $variant = 7 and $LC = 2 and $temp_1 = 4 }
+$B4 = 1 - $B4
+$B3 = 1 - $B3
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+#case:lightoff_check { $variant = 7 and $LC = 2 and $temp_1 = 3 }
+$B3 = 1 - $B3
+$B4 = 1 - $B4
+$B2 = 1 - $B2
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 7 and $LC = 2 and $temp_1 = 2 }
+$B2 = 1 - $B2
+$B3 = 1 - $B3
+$B1 = 1 - $B1
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 7 and $LC = 2 and $temp_1 = 1 }
+$B1 = 1 - $B1
+$B2 = 1 - $B2
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 7 and $LC = 3 and $temp_1 = 4 }
+$C4 = 1 - $C4
+$C3 = 1 - $C3
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 7 and $LC = 3 and $temp_1 = 3 }
+$C3 = 1 - $C3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 7 and $LC = 3 and $temp_1 = 2 }
+$C2 = 1 - $C2
+$C3 = 1 - $C3
+$C1 = 1 - $C1
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 7 and $LC = 3 and $temp_1 = 1 }
+$C1 = 1 - $C1
+$C2 = 1 - $C2
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 7 and $LC = 4 and $temp_1 = 4 }
+$D4 = 1 - $D4
+$D3 = 1 - $D3
+$C4 = 1 - $C4
+$C3 = 1 - $C3
+#case:lightoff_check { $variant = 7 and $LC = 4 and $temp_1 = 3 }
+$D3 = 1 - $D3
+$D4 = 1 - $D4
+$D2 = 1 - $D2
+$C3 = 1 - $C3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 7 and $LC = 4 and $temp_1 = 2 }
+$D2 = 1 - $D2
+$D3 = 1 - $D3
+$D1 = 1 - $D1
+$C2 = 1 - $C2
+$C3 = 1 - $C1
+$C3 = 1 - $C1
+#case:lightoff_check { $variant = 7 and $LC = 4 and $temp_1 = 1 }
+$D1 = 1 - $D1
+$D2 = 1 - $D2
+$C1 = 1 - $C1
+$C2 = 1 - $C2
+
+#case:lightoff_check { $variant = 8 and $LC = 1 and $temp_1 = 4 }
+$A4 = 1 - $A4
+$A3 = 1 - $A3
+$A2 = 1 - $A2
+$A1 = 1 - $A1
+$B4 = 1 - $B4
+$C4 = 1 - $C4
+$D4 = 1 - $D4
+$B3 = 1 - $B3
+$C2 = 1 - $C2
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 8 and $LC = 1 and $temp_1 = 3 }
+$A3 = 1 - $A3
+$A4 = 1 - $A4
+$A2 = 1 - $A2
+$A1 = 1 - $A1
+$B3 = 1 - $B3
+$C3 = 1 - $C3
+$D3 = 1 - $D3
+$B2 = 1 - $B2
+$C1 = 1 - $C1
+$B4 = 1 - $B4
+#case:lightoff_check { $variant = 8 and $LC = 1 and $temp_1 = 2 }
+$A2 = 1 - $A2
+$A3 = 1 - $A3
+$A4 = 1 - $A4
+$A1 = 1 - $A1
+$B2 = 1 - $B2
+$C2 = 1 - $C2
+$D2 = 1 - $D2
+$B1 = 1 - $B1
+$B3 = 1 - $B3
+$C4 = 1 - $C4
+#case:lightoff_check { $variant = 8 and $LC = 1 and $temp_1 = 1 }
+$A1 = 1 - $A1
+$A2 = 1 - $A2
+$A3 = 1 - $A3
+$A4 = 1 - $A4
+$B1 = 1 - $B1
+$C1 = 1 - $C1
+$D1 = 1 - $D1
+$B2 = 1 - $B2
+$C3 = 1 - $C3
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 8 and $LC = 2 and $temp_1 = 4 }
+$B4 = 1 - $B4
+$B3 = 1 - $B3
+$B2 = 1 - $B2
+$B1 = 1 - $B1
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+$D4 = 1 - $D4
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 8 and $LC = 2 and $temp_1 = 3 }
+$B3 = 1 - $B3
+$B4 = 1 - $B4
+$B2 = 1 - $B2
+$B1 = 1 - $B1
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$D3 = 1 - $D3
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 8 and $LC = 2 and $temp_1 = 2 }
+$B2 = 1 - $B2
+$B4 = 1 - $B4
+$B3 = 1 - $B3
+$B1 = 1 - $B1
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+$D2 = 1 - $D2
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$D4 = 1 - $D4
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 8 and $LC = 2 and $temp_1 = 1 }
+$B1 = 1 - $B1
+$B2 = 1 - $B2
+$B3 = 1 - $B3
+$B4 = 1 - $B4
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+$D1 = 1 - $D1
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 8 and $LC = 3 and $temp_1 = 4 }
+$C4 = 1 - $C4
+$C3 = 1 - $C3
+$C2 = 1 - $C2
+$C1 = 1 - $C1
+$A4 = 1 - $A4
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+$B3 = 1 - $B3
+$A2 = 1 - $A2
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 8 and $LC = 3 and $temp_1 = 3 }
+$C3 = 1 - $C3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+$C1 = 1 - $C1
+$A3 = 1 - $A3
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+$B2 = 1 - $B2
+$A1 = 1 - $A1
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 8 and $LC = 3 and $temp_1 = 2 }
+$C2 = 1 - $C2
+$C4 = 1 - $C4
+$C3 = 1 - $C3
+$C1 = 1 - $C1
+$A2 = 1 - $A2
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+$B3 = 1 - $B3
+$A4 = 1 - $A4
+$D3 = 1 - $D3
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 8 and $LC = 3 and $temp_1 = 1 }
+$C1 = 1 - $C1
+$C2 = 1 - $C2
+$C3 = 1 - $C3
+$C4 = 1 - $C4
+$A1 = 1 - $A1
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+$B2 = 1 - $B2
+$A3 = 1 - $A3
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 8 and $LC = 4 and $temp_1 = 4 }
+$D4 = 1 - $D4
+$D3 = 1 - $D3
+$D2 = 1 - $D2
+$D1 = 1 - $D1
+$A4 = 1 - $A4
+$B4 = 1 - $B4
+$C4 = 1 - $C4
+$C3 = 1 - $C3
+$B2 = 1 - $B2
+$A1 = 1 - $A1
+#case:lightoff_check { $variant = 8 and $LC = 4 and $temp_1 = 3 }
+$D3 = 1 - $D3
+$D4 = 1 - $D4
+$D1 = 1 - $D1
+$D2 = 1 - $D2
+$A3 = 1 - $A3
+$B3 = 1 - $B3
+$C3 = 1 - $C3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+$B1 = 1 - $B1
+#case:lightoff_check { $variant = 8 and $LC = 4 and $temp_1 = 2 }
+$D2 = 1 - $D2
+$D1 = 1 - $D1
+$D3 = 1 - $D3
+$D4 = 1 - $D4
+$A2 = 1 - $A2
+$B2 = 1 - $B2
+$C2 = 1 - $C2
+$C3 = 1 - $C3
+$B4 = 1 - $B4
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 8 and $LC = 4 and $temp_1 = 1 }
+$D1 = 1 - $D1
+$D2 = 1 - $D2
+$D3 = 1 - $D3
+$D4 = 1 - $D4
+$A1 = 1 - $A1
+$B1 = 1 - $B1
+$C1 = 1 - $C1
+$C2 = 1 - $C2
+$B3 = 1 - $B3
+$A4 = 1 - $A4
+
+#case:lightoff_check { $variant = 9 and $LC = 1 and $temp_1 = 4 }
+$A4 = 1 - $A4
+$B2 = 1 - $B2
+$C3 = 1 - $C3
+#case:lightoff_check { $variant = 9 and $LC = 1 and $temp_1 = 3 }
+$A3 = 1 - $A3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+$B1 = 1 - $B1
+#case:lightoff_check { $variant = 9 and $LC = 1 and $temp_1 = 2 }
+$A2 = 1 - $A2
+$B4 = 1 - $B4
+$C3 = 1 - $C3
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 9 and $LC = 1 and $temp_1 = 1 }
+$A1 = 1 - $A1
+$B3 = 1 - $B3
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 9 and $LC = 2 and $temp_1 = 4 }
+$B4 = 1 - $B4
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 9 and $LC = 2 and $temp_1 = 3 }
+$B3 = 1 - $B3
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+$D4 = 1 - $D4
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 9 and $LC = 2 and $temp_1 = 2 }
+$B2 = 1 - $B2
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+$D3 = 1 - $D3
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 9 and $LC = 2 and $temp_1 = 1 }
+$B1 = 1 - $B1
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 9 and $LC = 3 and $temp_1 = 4 }
+$C4 = 1 - $C4
+$A3 = 1 - $A3
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 9 and $LC = 3 and $temp_1 = 3 }
+$C3 = 1 - $C3
+$A4 = 1 - $A4
+$A2 = 1 - $A2
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 9 and $LC = 3 and $temp_1 = 2 }
+$C2 = 1 - $C2
+$A1 = 1 - $A1
+$A3 = 1 - $A3
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 9 and $LC = 3 and $temp_1 = 1 }
+$C1 = 1 - $C1
+$A2 = 1 - $A2
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 9 and $LC = 4 and $temp_1 = 4 }
+$D4 = 1 - $D4
+$B3 = 1 - $B3
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 9 and $LC = 4 and $temp_1 = 3 }
+$D3 = 1 - $D3
+$B4 = 1 - $B4
+$B2 = 1 - $B2
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 9 and $LC = 4 and $temp_1 = 2 }
+$D2 = 1 - $D2
+$B1 = 1 - $B1
+$B3 = 1 - $B3
+$C4 = 1 - $C4
+#case:lightoff_check { $variant = 9 and $LC = 4 and $temp_1 = 1 }
+$D1 = 1 - $D1
+$B2 = 1 - $B2
+$C3 = 1 - $C3
+
+#site:lightoff_check
+#case:lightoff { $A1 + $A2 + $A3 + $A4 + $B1 + $B2 + $B3 + $B4 + $C1 + $C2 + $C3 + $C4 + $D1 + $D2 + $D3 + $D4 > 0 }
+#case:lightoff_win { $A1 + $A2 + $A3 + $A4 + $B1 + $B2 + $B3 + $B4 + $C1 + $C2 + $C3 + $C4 + $D1 + $D2 + $D3 + $D4 = 0 }
+
+#site:lightoff_win #win
+#laim
+$LC = 0
 
 #position:entry:96:399
 #position:inc:96:441
@@ -1327,3 +2160,9 @@ $manc = 0
 #position:mancala_lose:224:525
 #position:mancala_cont:160:525
 #position:mancala_win:96:525
+#position:lightoff_init:288:525
+#position:lightoff:352:525
+#position:lightoff_row:288:567
+#position:lightoff_cont:352:567
+#position:lightoff_win:224:567
+#position:lightoff_check:352:315
