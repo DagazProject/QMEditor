@@ -54,16 +54,18 @@
 #var:ebonus #range:0..3 #default:0 #hide // Нераспределённые бонусы противника
 #var:fbonus #range:0..3 #default:0 #hide // Нераспределённые бонусы игрока
 
-#var:variant #range:0..10 #default:0 #hide // Вариант выбора
+#var:variant #range:0..1000 #default:0 #hide // Вариант выбора
 
 #site:entry #default
 #page:1
 Planet War
 #case:start 'Играть'
-#case:mancala_init { 1 = 0 } 'Манкала'
+#case:mancala_init { 1 = 1 } 'Манкала'
 $variant = <1..2>
-#case:lightoff_init { 1 = 0 } 'Туши свет'
+#case:lightoff_init { 1 = 1 } 'Туши свет'
 $variant = <3..9>
+#case:solit_init { 1 = 1 } 'Солитер'
+$variant = <10..12>
 
 #site:start
 $erace               = <1..5>
@@ -1267,9 +1269,10 @@ $temp_1 = $temp_1 + 3
 $temp_2 = $temp_2 + 3
 $temp_3 = $temp_3 + 3
 $manc = 15
+#case:game_lose 'Отказаться от выполнения' #order:7
 
 #site:mancala_cont
-#case:mancala_win { $temp_1 + $temp_2 + $temp_3 + $temp_4 = 0 }
+#case:game_win { $temp_1 + $temp_2 + $temp_3 + $temp_4 = 0 }
 #case:mancala { $temp_1 + $temp_2 + $temp_3 + $temp_4 > 0 and $manc = 15 }
 #case:mancala { $temp_1 > 1 and $manc.a > 0 }
 #case:mancala { $temp_2 > 1 and $manc.b > 0 }
@@ -1284,8 +1287,10 @@ $manc = 15
 #maim
 $manc = 0
 #case:mancala_init 'Попробовать ещё раз'
-#site:mancala_win #win
-#maim
+#site:game_win #win
+Победа!
+#site:game_lose #lose
+Нет так нет...
 
 #macro:lcell
   #text:0..0 '.'
@@ -1352,17 +1357,19 @@ $LC = 2
 $LC = 3
 #case:lightoff_row 'D' #order:4
 $LC = 4
+#case:game_lose 'Отказаться от выполнения' #order:7
 
 #site:lightoff_row
 #laim
-#case:lightoff_cont '4'
+#case:lightoff_cont '4' #order:1
 $temp_1 = 4
-#case:lightoff_cont '3'
+#case:lightoff_cont '3' #order:2
 $temp_1 = 3
-#case:lightoff_cont '2'
+#case:lightoff_cont '2' #order:3
 $temp_1 = 2
-#case:lightoff_cont '1'
+#case:lightoff_cont '1' #order:4
 $temp_1 = 1
+#case:game_lose 'Отказаться от выполнения' #order:7
 
 #site:lightoff_cont 
 #case:lightoff_check { $variant = 3 and $LC = 1 and $temp_1 = 4 }
@@ -2118,11 +2125,195 @@ $C3 = 1 - $C3
 
 #site:lightoff_check
 #case:lightoff { $A1 + $A2 + $A3 + $A4 + $B1 + $B2 + $B3 + $B4 + $C1 + $C2 + $C3 + $C4 + $D1 + $D2 + $D3 + $D4 > 0 }
-#case:lightoff_win { $A1 + $A2 + $A3 + $A4 + $B1 + $B2 + $B3 + $B4 + $C1 + $C2 + $C3 + $C4 + $D1 + $D2 + $D3 + $D4 = 0 }
+#case:game_win { $A1 + $A2 + $A3 + $A4 + $B1 + $B2 + $B3 + $B4 + $C1 + $C2 + $C3 + $C4 + $D1 + $D2 + $D3 + $D4 = 0 }
 
-#site:lightoff_win #win
-#laim
-$LC = 0
+#macro:scell
+  #text:0..0 ' .'
+  #text:1..1 ' o'
+#end
+
+#for:i:1..5
+  #var:sline[$i] #range:0..31 #default:0 #mod:2 #hide
+    #field:e // 16
+      #scell
+    #field:d // 8
+      #scell
+    #field:c // 4
+      #scell
+    #field:b // 2
+      #scell
+    #field:a // 1
+      #scell
+#end
+
+#var:SC #range:0..5 #hide
+  #text:0..0 ' A B C D E'
+  #text:1..1 ' ^ B C D E'
+  #text:2..2 ' A ^ C D E'
+  #text:3..3 ' A B ^ D E'
+  #text:4..4 ' A B C ^ E'
+  #text:5..5 ' A B C D ^'
+
+#site:solit_init
+#case:solit { $variant = 10 }
+$sline5 = 4   // . . o . .
+$sline4 = 14  // . o o o .
+$sline3 = 4   // . . o . .
+$sline2 = 4   // . . o . .
+$sline1 = 0   // . . . . .
+#case:solit { $variant = 11 }
+$sline5 = 4   // . . o . .
+$sline4 = 14  // . o o o .
+$sline3 = 27  // o o . o o
+$sline2 = 14  // . o o o .
+$sline1 = 4   // . . o . .
+#case:solit { $variant = 12 }
+$sline5 = 0   // . . . . .
+$sline4 = 4   // . . o . .
+$sline3 = 14  // . o o o .
+$sline2 = 31  // o o o o o
+$sline1 = 0   // . . . . .
+
+#site:solit
+#page:1
+^   +-----------+ ^
+^ 5 |@sline5 | ^
+^ 4 |@sline4 | ^
+^ 3 |@sline3 | ^
+^ 2 |@sline2 | ^
+^ 1 |@sline1 | ^
+^   +-----------+ ^
+^    @SC   ^
+$SC = 0
+#case:solit_row 'A' { $sline5.a + $sline4.a + $sline3.a + $sline2.a + $sline1.a > 0 } #order:1
+$SC = 1
+#case:solit_row 'B' { $sline5.b + $sline4.b + $sline3.b + $sline2.b + $sline1.b > 0 } #order:2
+$SC = 2
+#case:solit_row 'C' { $sline5.c + $sline4.c + $sline3.c + $sline2.c + $sline1.c > 0 } #order:3
+$SC = 3
+#case:solit_row 'D' { $sline5.d + $sline4.d + $sline3.d + $sline2.d + $sline1.d > 0 }#order:4
+$SC = 4
+#case:solit_row 'E' { $sline5.e + $sline4.e + $sline3.e + $sline2.e + $sline1.e > 0 }#order:5
+$SC = 5
+#case:game_lose 'Отказаться от выполнения' #order:7
+
+#site:solit_row
+#page:1
+^   +-----------+ ^
+^ 5 |@sline5 | ^
+^ 4 |@sline4 | ^
+^ 3 |@sline3 | ^
+^ 2 |@sline2 | ^
+^ 1 |@sline1 | ^
+^   +-----------+ ^
+^    @SC   ^
+#case:solit_cell '5' { $SC = 1 and $sline5.a > 0 }
+$temp_1 = 5
+#case:solit_cell '5' { $SC = 2 and $sline5.b > 0 }
+$temp_1 = 5
+#case:solit_cell '5' { $SC = 3 and $sline5.c > 0 }
+$temp_1 = 5
+#case:solit_cell '5' { $SC = 4 and $sline5.d > 0 }
+$temp_1 = 5
+#case:solit_cell '5' { $SC = 5 and $sline5.e > 0 }
+$temp_1 = 5
+#case:solit_cell '4' { $SC = 1 and $sline4.a > 0 }
+$temp_1 = 4
+#case:solit_cell '4' { $SC = 2 and $sline4.b > 0 }
+$temp_1 = 4
+#case:solit_cell '4' { $SC = 3 and $sline4.c > 0 }
+$temp_1 = 4
+#case:solit_cell '4' { $SC = 4 and $sline4.d > 0 }
+$temp_1 = 4
+#case:solit_cell '4' { $SC = 5 and $sline4.e > 0 }
+$temp_1 = 4
+#case:solit_cell '3' { $SC = 1 and $sline3.a > 0 }
+$temp_1 = 3
+#case:solit_cell '3' { $SC = 2 and $sline3.b > 0 }
+$temp_1 = 3
+#case:solit_cell '3' { $SC = 3 and $sline3.c > 0 }
+$temp_1 = 3
+#case:solit_cell '3' { $SC = 4 and $sline3.d > 0 }
+$temp_1 = 3
+#case:solit_cell '3' { $SC = 5 and $sline3.e > 0 }
+$temp_1 = 3
+#case:solit_cell '2' { $SC = 1 and $sline2.a > 0 }
+$temp_1 = 2
+#case:solit_cell '2' { $SC = 2 and $sline2.b > 0 }
+$temp_1 = 2
+#case:solit_cell '2' { $SC = 3 and $sline2.c > 0 }
+$temp_1 = 2
+#case:solit_cell '2' { $SC = 4 and $sline2.d > 0 }
+$temp_1 = 2
+#case:solit_cell '2' { $SC = 5 and $sline2.e > 0 }
+$temp_1 = 2
+#case:solit_cell '1' { $SC = 1 and $sline1.a > 0 }
+$temp_1 = 1
+#case:solit_cell '1' { $SC = 2 and $sline1.b > 0 }
+$temp_1 = 1
+#case:solit_cell '1' { $SC = 3 and $sline1.c > 0 }
+$temp_1 = 1
+#case:solit_cell '1' { $SC = 4 and $sline1.d > 0 }
+$temp_1 = 1
+#case:solit_cell '1' { $SC = 5 and $sline1.e > 0 }
+$temp_1 = 1
+#case:solit 'Другой столбец' #order:6
+#case:game_lose 'Отказаться от выполнения' #order:7
+
+#site:solit_cell { $temp_1 }
+#page:1
+^   +-----------+ ^
+^ 5 |@sline5 | ^
+^ 4 |@sline4 | ^
+^ 3 |@sline3 | ^
+^ 2 |@sline2 | ^
+^ > |@sline1 | ^
+^   +-----------+ ^
+^    @SC   ^
+#page:2
+^   +-----------+ ^
+^ 5 |@sline5 | ^
+^ 4 |@sline4 | ^
+^ 3 |@sline3 | ^
+^ > |@sline2 | ^
+^ 1 |@sline1 | ^
+^   +-----------+ ^
+^    @SC   ^
+#page:3
+^   +-----------+ ^
+^ 5 |@sline5 | ^
+^ 4 |@sline4 | ^
+^ > |@sline3 | ^
+^ 2 |@sline2 | ^
+^ 1 |@sline1 | ^
+^   +-----------+ ^
+^    @SC   ^
+#page:4
+^   +-----------+ ^
+^ 5 |@sline5 | ^
+^ > |@sline4 | ^
+^ 3 |@sline3 | ^
+^ 2 |@sline2 | ^
+^ 1 |@sline1 | ^
+^   +-----------+ ^
+^    @SC   ^
+#page:5
+^   +-----------+ ^
+^ > |@sline5 | ^
+^ 4 |@sline4 | ^
+^ 3 |@sline3 | ^
+^ 2 |@sline2 | ^
+^ 1 |@sline1 | ^
+^   +-----------+ ^
+^    @SC   ^
+#case:solit_check 'C5' { $SC = 1 and $temp_1 = 5 and $sline5.b > 0 and $sline5.c = 0 } #order:1
+$sline5 = 4 + $sline5.d * 2 + $sline5.e
+#case:solit 'Другая ячейка' #order:6
+#case:game_lose 'Отказаться от выполнения' #order:7
+
+#site:solit_check
+#case:game_win { $sline1 + $sline2 + $sline3 + $sline4 + $sline5 = [1,2,4,8,16] }
+#case:solit { $sline1 + $sline2 + $sline3 + $sline4 + $sline5 <> [1,2,4,8,16] }
 
 #position:entry:96:399
 #position:inc:96:441
@@ -2159,10 +2350,15 @@ $LC = 0
 #position:mancala:352:357
 #position:mancala_lose:224:525
 #position:mancala_cont:160:525
-#position:mancala_win:96:525
+#position:game_win:96:525
 #position:lightoff_init:288:525
 #position:lightoff:352:525
 #position:lightoff_row:288:567
 #position:lightoff_cont:352:567
-#position:lightoff_win:224:567
 #position:lightoff_check:352:315
+#position:solit_init:96:567
+#position:solit:160:567
+#position:game_lose:352:273
+#position:solit_row:288:273
+#position:solit_cell:224:567
+#position:solit_check:96:609
