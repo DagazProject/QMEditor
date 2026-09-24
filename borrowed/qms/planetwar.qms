@@ -60,11 +60,11 @@
 #page:1
 Planet War
 #case:start 'Играть'
-#case:mancala_init { 1 = 1 } 'Манкала'
+#case:mancala_init { 1 = 0 } 'Манкала'
 $variant = <1..2>
-#case:lightoff_init { 1 = 1 } 'Туши свет'
+#case:lightoff_init { 1 = 0 } 'Туши свет'
 $variant = <3..9>
-#case:solit_init { 1 = 1 } 'Солитер'
+#case:solit_init { 1 = 0 } 'Солитер'
 $variant = <10..12>
 
 #site:start
