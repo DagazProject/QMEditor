@@ -65,7 +65,7 @@ $variant = <1..2>
 #case:lightoff_init { 1 = 1 } 'Туши свет'
 $variant = <3..9>
 #case:solit_init { 1 = 1 } 'Солитер'
-$variant = <10..12>
+$variant = 13 //<10..12>
 
 #site:start
 $erace               = <1..5>
@@ -2173,6 +2173,12 @@ $sline4 = 4   // . . o . .
 $sline3 = 14  // . o o o .
 $sline2 = 31  // o o o o o
 $sline1 = 0   // . . . . .
+#case:solit { $variant = 13 }
+$sline5 = 4   // . . o . .
+$sline4 = 22  // o . o o .
+$sline3 = 0   // . . . . .
+$sline2 = 0   // . . . . .
+$sline1 = 0   // . . . . .
 
 #site:solit
 #page:1
@@ -2186,15 +2192,15 @@ $sline1 = 0   // . . . . .
 ^    @SC   ^
 $SC = 0
 #case:solit_row 'A' { $sline5.a + $sline4.a + $sline3.a + $sline2.a + $sline1.a > 0 } #order:1
-$SC = 1
+$SC = 5
 #case:solit_row 'B' { $sline5.b + $sline4.b + $sline3.b + $sline2.b + $sline1.b > 0 } #order:2
-$SC = 2
+$SC = 4
 #case:solit_row 'C' { $sline5.c + $sline4.c + $sline3.c + $sline2.c + $sline1.c > 0 } #order:3
 $SC = 3
-#case:solit_row 'D' { $sline5.d + $sline4.d + $sline3.d + $sline2.d + $sline1.d > 0 }#order:4
-$SC = 4
-#case:solit_row 'E' { $sline5.e + $sline4.e + $sline3.e + $sline2.e + $sline1.e > 0 }#order:5
-$SC = 5
+#case:solit_row 'D' { $sline5.d + $sline4.d + $sline3.d + $sline2.d + $sline1.d > 0 } #order:4
+$SC = 2
+#case:solit_row 'E' { $sline5.e + $sline4.e + $sline3.e + $sline2.e + $sline1.e > 0 } #order:5
+$SC = 1
 #case:game_lose 'Отказаться от выполнения' #order:7
 
 #site:solit_row
@@ -2307,13 +2313,196 @@ $temp_1 = 1
 ^   +-----------+ ^
 ^    @SC   ^
 #case:solit_check 'C5' { $SC = 1 and $temp_1 = 5 and $sline5.b > 0 and $sline5.c = 0 } #order:1
-$sline5 = 4 + $sline5.d * 2 + $sline5.e
+$sline5 = $sline5 - 16 - 8 + 4
+#case:solit_check 'A3' { $SC = 1 and $temp_1 = 5 and $sline4.a > 0 and $sline3.a = 0 } #order:1
+$sline5 = $sline5 - 16
+$sline4 = $sline4 - 16
+$sline3 = $sline3 + 16
+#case:solit_check 'C4' { $SC = 1 and $temp_1 = 4 and $sline4.b > 0 and $sline4.c = 0 } #order:1
+$sline4 = $sline4 - 16 - 8 + 4
+#case:solit_check 'A2' { $SC = 1 and $temp_1 = 4 and $sline3.a > 0 and $sline2.a = 0 } #order:1
+$sline4 = $sline4 - 16
+$sline3 = $sline3 - 16
+$sline2 = $sline2 + 16
+#case:solit_check 'C3' { $SC = 1 and $temp_1 = 3 and $sline3.b > 0 and $sline3.c = 0 } #order:1
+$sline3 = $sline3 - 16 - 8 + 4
+#case:solit_check 'A5' { $SC = 1 and $temp_1 = 3 and $sline4.a > 0 and $sline5.a = 0 } #order:1
+$sline3 = $sline3 - 16
+$sline4 = $sline4 - 16
+$sline5 = $sline5 + 16
+#case:solit_check 'A1' { $SC = 1 and $temp_1 = 3 and $sline2.a > 0 and $sline1.a = 0 } #order:1
+$sline3 = $sline3 - 16
+$sline2 = $sline2 - 16
+$sline1 = $sline1 + 16
+#case:solit_check 'C2' { $SC = 1 and $temp_1 = 2 and $sline2.b > 0 and $sline2.c = 0 } #order:1
+$sline2 = $sline2 - 16 - 8 + 4
+#case:solit_check 'A4' { $SC = 1 and $temp_1 = 2 and $sline3.a > 0 and $sline4.a = 0 } #order:1
+$sline2 = $sline2 - 16
+$sline3 = $sline3 - 16
+$sline4 = $sline4 + 16
+#case:solit_check 'C1' { $SC = 1 and $temp_1 = 1 and $sline1.b > 0 and $sline1.c = 0 } #order:1
+$sline1 = $sline1 - 16 - 8 + 4
+#case:solit_check 'A3' { $SC = 1 and $temp_1 = 1 and $sline2.a > 0 and $sline3.a = 0 } #order:1
+$sline1 = $sline1 - 16
+$sline2 = $sline2 - 16
+$sline3 = $sline3 + 16
+
+#case:solit_check 'D5' { $SC = 2 and $temp_1 = 5 and $sline5.c > 0 and $sline5.d = 0 } #order:1
+$sline5 = $sline5 - 8 - 4 + 2
+#case:solit_check 'B3' { $SC = 2 and $temp_1 = 5 and $sline4.b > 0 and $sline3.b = 0 } #order:1
+$sline5 = $sline5 - 8
+$sline4 = $sline4 - 8
+$sline3 = $sline3 + 8
+#case:solit_check 'D4' { $SC = 2 and $temp_1 = 4 and $sline4.c > 0 and $sline4.d = 0 } #order:1
+$sline4 = $sline4 - 8 - 4 + 2
+#case:solit_check 'B2' { $SC = 2 and $temp_1 = 4 and $sline3.b > 0 and $sline2.b = 0 } #order:1
+$sline4 = $sline4 - 8
+$sline3 = $sline3 - 8
+$sline2 = $sline2 + 8
+#case:solit_check 'D3' { $SC = 2 and $temp_1 = 3 and $sline3.c > 0 and $sline3.d = 0 } #order:1
+$sline3 = $sline3 - 8 - 4 + 2
+#case:solit_check 'B5' { $SC = 2 and $temp_1 = 3 and $sline4.b > 0 and $sline5.b = 0 } #order:1
+$sline3 = $sline3 - 8
+$sline4 = $sline4 - 8
+$sline5 = $sline5 + 8
+#case:solit_check 'B1' { $SC = 2 and $temp_1 = 3 and $sline2.b > 0 and $sline1.b = 0 } #order:1
+$sline3 = $sline3 - 8
+$sline2 = $sline2 - 8
+$sline1 = $sline1 + 8
+#case:solit_check 'D2' { $SC = 2 and $temp_1 = 2 and $sline2.c > 0 and $sline2.d = 0 } #order:1
+$sline2 = $sline2 - 8 - 4 + 2
+#case:solit_check 'B4' { $SC = 2 and $temp_1 = 2 and $sline3.b > 0 and $sline4.b = 0 } #order:1
+$sline2 = $sline2 - 8
+$sline3 = $sline3 - 8
+$sline4 = $sline4 + 8
+#case:solit_check 'D1' { $SC = 2 and $temp_1 = 1 and $sline1.c > 0 and $sline1.d = 0 } #order:1
+$sline1 = $sline1 - 8 - 4 + 2
+#case:solit_check 'B3' { $SC = 2 and $temp_1 = 1 and $sline2.b > 0 and $sline3.b = 0 } #order:1
+$sline1 = $sline1 - 8
+$sline2 = $sline2 - 8
+$sline3 = $sline3 + 8
+
+#case:solit_check 'E5' { $SC = 3 and $temp_1 = 5 and $sline5.d > 0 and $sline5.e = 0 } #order:1
+$sline5 = $sline5 - 4 - 2 + 1
+#case:solit_check 'A5' { $SC = 3 and $temp_1 = 5 and $sline5.b > 0 and $sline5.a = 0 } #order:1
+$sline5 = $sline5 - 4 - 8 + 16
+#case:solit_check 'C3' { $SC = 3 and $temp_1 = 5 and $sline4.c > 0 and $sline3.c = 0 } #order:1
+$sline5 = $sline5 - 4
+$sline4 = $sline4 - 4
+$sline3 = $sline3 + 4
+#case:solit_check 'E4' { $SC = 3 and $temp_1 = 4 and $sline4.d > 0 and $sline4.e = 0 } #order:1
+$sline4 = $sline4 - 4 - 2 + 1
+#case:solit_check 'A4' { $SC = 3 and $temp_1 = 4 and $sline4.b > 0 and $sline4.a = 0 } #order:1
+$sline4 = $sline4 - 4 - 8 + 16
+#case:solit_check 'C2' { $SC = 3 and $temp_1 = 4 and $sline3.c > 0 and $sline2.c = 0 } #order:1
+$sline4 = $sline4 - 4
+$sline3 = $sline3 - 4
+$sline2 = $sline2 + 4
+#case:solit_check 'E3' { $SC = 3 and $temp_1 = 3 and $sline3.d > 0 and $sline3.e = 0 } #order:1
+$sline3 = $sline3 - 4 - 2 + 1
+#case:solit_check 'A3' { $SC = 3 and $temp_1 = 3 and $sline3.b > 0 and $sline3.a = 0 } #order:1
+$sline3 = $sline3 - 4 - 8 + 16
+#case:solit_check 'C5' { $SC = 3 and $temp_1 = 3 and $sline4.c > 0 and $sline5.c = 0 } #order:1
+$sline3 = $sline3 - 4
+$sline4 = $sline4 - 4
+$sline5 = $sline5 + 4
+#case:solit_check 'C1' { $SC = 3 and $temp_1 = 3 and $sline2.c > 0 and $sline1.c = 0 } #order:1
+$sline3 = $sline3 - 4
+$sline2 = $sline2 - 4
+$sline1 = $sline1 + 4
+#case:solit_check 'E2' { $SC = 3 and $temp_1 = 2 and $sline2.d > 0 and $sline2.e = 0 } #order:1
+$sline2 = $sline2 - 4 - 2 + 1
+#case:solit_check 'A2' { $SC = 3 and $temp_1 = 2 and $sline2.b > 0 and $sline2.a = 0 } #order:1
+$sline2 = $sline2 - 4 - 8 + 16
+#case:solit_check 'C4' { $SC = 3 and $temp_1 = 2 and $sline3.c > 0 and $sline4.c = 0 } #order:1
+$sline2 = $sline2 - 4
+$sline3 = $sline3 - 4
+$sline4 = $sline4 + 4
+#case:solit_check 'E1' { $SC = 3 and $temp_1 = 1 and $sline1.d > 0 and $sline1.e = 0 } #order:1
+$sline1 = $sline1 - 4 - 2 + 1
+#case:solit_check 'A1' { $SC = 3 and $temp_1 = 1 and $sline1.b > 0 and $sline1.a = 0 } #order:1
+$sline1 = $sline1 - 4 - 8 + 16
+#case:solit_check 'C3' { $SC = 3 and $temp_1 = 1 and $sline2.c > 0 and $sline3.c = 0 } #order:1
+$sline1 = $sline1 - 4
+$sline2 = $sline2 - 4
+$sline3 = $sline3 + 4
+
+#case:solit_check 'B5' { $SC = 4 and $temp_1 = 5 and $sline5.c > 0 and $sline5.b = 0 } #order:1
+$sline5 = $sline5 - 2 - 4 + 8
+#case:solit_check 'D3' { $SC = 4 and $temp_1 = 5 and $sline4.d > 0 and $sline3.d = 0 } #order:1
+$sline5 = $sline5 - 2
+$sline4 = $sline4 - 2
+$sline3 = $sline3 + 2
+#case:solit_check 'B4' { $SC = 4 and $temp_1 = 4 and $sline4.c > 0 and $sline4.b = 0 } #order:1
+$sline4 = $sline4 - 2 - 4 + 8
+#case:solit_check 'D2' { $SC = 4 and $temp_1 = 4 and $sline3.d > 0 and $sline2.d = 0 } #order:1
+$sline4 = $sline4 - 2
+$sline3 = $sline3 - 2
+$sline2 = $sline2 + 2
+#case:solit_check 'B3' { $SC = 4 and $temp_1 = 3 and $sline3.c > 0 and $sline3.b = 0 } #order:1
+$sline3 = $sline3 - 2 - 4 + 8
+#case:solit_check 'D5' { $SC = 4 and $temp_1 = 3 and $sline4.d > 0 and $sline5.d = 0 } #order:1
+$sline3 = $sline3 - 2
+$sline4 = $sline4 - 2
+$sline5 = $sline5 + 2
+#case:solit_check 'D1' { $SC = 4 and $temp_1 = 3 and $sline2.d > 0 and $sline1.d = 0 } #order:1
+$sline3 = $sline3 - 2
+$sline2 = $sline2 - 2
+$sline1 = $sline1 + 2
+#case:solit_check 'B2' { $SC = 4 and $temp_1 = 2 and $sline2.c > 0 and $sline2.b = 0 } #order:1
+$sline2 = $sline2 - 2 - 4 + 8
+#case:solit_check 'D4' { $SC = 4 and $temp_1 = 2 and $sline3.d > 0 and $sline4.d = 0 } #order:1
+$sline2 = $sline2 - 2
+$sline3 = $sline3 - 2
+$sline4 = $sline4 + 2
+#case:solit_check 'B1' { $SC = 4 and $temp_1 = 1 and $sline1.c > 0 and $sline1.b = 0 } #order:1
+$sline1 = $sline1 - 2 - 4 + 8
+#case:solit_check 'D3' { $SC = 4 and $temp_1 = 1 and $sline2.d > 0 and $sline3.d = 0 } #order:1
+$sline1 = $sline1 - 2
+$sline2 = $sline2 - 2
+$sline3 = $sline3 + 2
+
+#case:solit_check 'C5' { $SC = 5 and $temp_1 = 5 and $sline5.d > 0 and $sline5.c = 0 } #order:1
+$sline5 = $sline5 - 1 - 2 + 4
+#case:solit_check 'E3' { $SC = 5 and $temp_1 = 5 and $sline4.e > 0 and $sline3.e = 0 } #order:1
+$sline5 = $sline5 - 1
+$sline4 = $sline4 - 1
+$sline3 = $sline3 + 1
+#case:solit_check 'C4' { $SC = 5 and $temp_1 = 4 and $sline4.d > 0 and $sline4.c = 0 } #order:1
+$sline4 = $sline4 - 1 - 2 + 4
+#case:solit_check 'E2' { $SC = 5 and $temp_1 = 4 and $sline3.e > 0 and $sline2.e = 0 } #order:1
+$sline4 = $sline4 - 1
+$sline3 = $sline3 - 1
+$sline2 = $sline2 + 1
+#case:solit_check 'C3' { $SC = 5 and $temp_1 = 3 and $sline3.d > 0 and $sline3.c = 0 } #order:1
+$sline3 = $sline3 - 1 - 2 + 4
+#case:solit_check 'E5' { $SC = 5 and $temp_1 = 3 and $sline4.e > 0 and $sline5.e = 0 } #order:1
+$sline3 = $sline3 - 1
+$sline4 = $sline4 - 1
+$sline5 = $sline5 + 1
+#case:solit_check 'E1' { $SC = 5 and $temp_1 = 3 and $sline2.e > 0 and $sline1.e = 0 } #order:1
+$sline3 = $sline3 - 1
+$sline2 = $sline2 - 1
+$sline1 = $sline1 + 1
+#case:solit_check 'C2' { $SC = 5 and $temp_1 = 2 and $sline2.d > 0 and $sline2.c = 0 } #order:1
+$sline2 = $sline2 - 1 - 2 + 4
+#case:solit_check 'E4' { $SC = 5 and $temp_1 = 2 and $sline3.e > 0 and $sline4.e = 0 } #order:1
+$sline2 = $sline2 - 1
+$sline3 = $sline3 - 1
+$sline4 = $sline4 + 1
+#case:solit_check 'C1' { $SC = 5 and $temp_1 = 1 and $sline1.d > 0 and $sline1.c = 0 } #order:1
+$sline1 = $sline1 - 1 - 2 + 4
+#case:solit_check 'E3' { $SC = 5 and $temp_1 = 1 and $sline2.e > 0 and $sline3.e = 0 } #order:1
+$sline1 = $sline1 - 1
+$sline2 = $sline2 - 1
+$sline3 = $sline3 + 1
+
 #case:solit 'Другая ячейка' #order:6
 #case:game_lose 'Отказаться от выполнения' #order:7
 
 #site:solit_check
-#case:game_win { $sline1 + $sline2 + $sline3 + $sline4 + $sline5 = [1,2,4,8,16] }
-#case:solit { $sline1 + $sline2 + $sline3 + $sline4 + $sline5 <> [1,2,4,8,16] }
+#case:game_win { $sline1 + $sline2 + $sline3 + $sline4 + $sline5 = 1 or $sline1 + $sline2 + $sline3 + $sline4 + $sline5 = 2 or $sline1 + $sline2 + $sline3 + $sline4 + $sline5 = 4 or $sline1 + $sline2 + $sline3 + $sline4 + $sline5 = 8 or $sline1 + $sline2 + $sline3 + $sline4 + $sline5 = 16 }
+#case:solit { $sline1 + $sline2 + $sline3 + $sline4 + $sline5 <> 1 and $sline1 + $sline2 + $sline3 + $sline4 + $sline5 <> 2 and $sline1 + $sline2 + $sline3 + $sline4 + $sline5 <> 4 and $sline1 + $sline2 + $sline3 + $sline4 + $sline5 <> 8 and $sline1 + $sline2 + $sline3 + $sline4 + $sline5 <> 16 }
 
 #position:entry:96:399
 #position:inc:96:441
@@ -2359,6 +2548,6 @@ $sline5 = 4 + $sline5.d * 2 + $sline5.e
 #position:solit_init:96:567
 #position:solit:160:567
 #position:game_lose:352:273
-#position:solit_row:288:273
+//#position:solit_row:288:273
 #position:solit_cell:224:567
 #position:solit_check:96:609
