@@ -65,7 +65,7 @@ $variant = <1..2>
 #case:lightoff_init { 1 = 1 } 'Туши свет'
 $variant = <3..9>
 #case:solit_init { 1 = 1 } 'Солитер'
-$variant = 13 //<10..12>
+$variant = <10..12>
 
 #site:start
 $erace               = <1..5>
@@ -1288,6 +1288,7 @@ $manc = 15
 $manc = 0
 #case:mancala_init 'Попробовать ещё раз'
 #site:game_win #win
+#page:1
 Победа!
 #site:game_lose #lose
 Нет так нет...
@@ -2134,15 +2135,15 @@ $C3 = 1 - $C3
 
 #for:i:1..5
   #var:sline[$i] #range:0..31 #default:0 #mod:2 #hide
-    #field:e // 16
+    #field:a // 16
       #scell
-    #field:d // 8
+    #field:b // 8
       #scell
     #field:c // 4
       #scell
-    #field:b // 2
+    #field:d // 2
       #scell
-    #field:a // 1
+    #field:e // 1
       #scell
 #end
 
@@ -2161,24 +2162,21 @@ $sline4 = 14  // . o o o .
 $sline3 = 4   // . . o . .
 $sline2 = 4   // . . o . .
 $sline1 = 0   // . . . . .
+$temp_2 = 5
 #case:solit { $variant = 11 }
 $sline5 = 4   // . . o . .
 $sline4 = 14  // . o o o .
 $sline3 = 27  // o o . o o
 $sline2 = 14  // . o o o .
 $sline1 = 4   // . . o . .
+$temp_2 = 11
 #case:solit { $variant = 12 }
 $sline5 = 0   // . . . . .
 $sline4 = 4   // . . o . .
 $sline3 = 14  // . o o o .
 $sline2 = 31  // o o o o o
 $sline1 = 0   // . . . . .
-#case:solit { $variant = 13 }
-$sline5 = 4   // . . o . .
-$sline4 = 22  // o . o o .
-$sline3 = 0   // . . . . .
-$sline2 = 0   // . . . . .
-$sline1 = 0   // . . . . .
+$temp_2 = 8
 
 #site:solit
 #page:1
@@ -2192,15 +2190,15 @@ $sline1 = 0   // . . . . .
 ^    @SC   ^
 $SC = 0
 #case:solit_row 'A' { $sline5.a + $sline4.a + $sline3.a + $sline2.a + $sline1.a > 0 } #order:1
-$SC = 5
+$SC = 1
 #case:solit_row 'B' { $sline5.b + $sline4.b + $sline3.b + $sline2.b + $sline1.b > 0 } #order:2
-$SC = 4
+$SC = 2
 #case:solit_row 'C' { $sline5.c + $sline4.c + $sline3.c + $sline2.c + $sline1.c > 0 } #order:3
 $SC = 3
 #case:solit_row 'D' { $sline5.d + $sline4.d + $sline3.d + $sline2.d + $sline1.d > 0 } #order:4
-$SC = 2
+$SC = 4
 #case:solit_row 'E' { $sline5.e + $sline4.e + $sline3.e + $sline2.e + $sline1.e > 0 } #order:5
-$SC = 1
+$SC = 5
 #case:game_lose 'Отказаться от выполнения' #order:7
 
 #site:solit_row
@@ -2501,8 +2499,9 @@ $sline3 = $sline3 + 1
 #case:game_lose 'Отказаться от выполнения' #order:7
 
 #site:solit_check
-#case:game_win { $sline1 + $sline2 + $sline3 + $sline4 + $sline5 = 1 or $sline1 + $sline2 + $sline3 + $sline4 + $sline5 = 2 or $sline1 + $sline2 + $sline3 + $sline4 + $sline5 = 4 or $sline1 + $sline2 + $sline3 + $sline4 + $sline5 = 8 or $sline1 + $sline2 + $sline3 + $sline4 + $sline5 = 16 }
-#case:solit { $sline1 + $sline2 + $sline3 + $sline4 + $sline5 <> 1 and $sline1 + $sline2 + $sline3 + $sline4 + $sline5 <> 2 and $sline1 + $sline2 + $sline3 + $sline4 + $sline5 <> 4 and $sline1 + $sline2 + $sline3 + $sline4 + $sline5 <> 8 and $sline1 + $sline2 + $sline3 + $sline4 + $sline5 <> 16 }
+#case:game_win { $temp_2 = 1 }
+#case:solit { $temp_2 > 1 }
+$temp_2 = $temp_2 - 1
 
 #position:entry:96:399
 #position:inc:96:441
@@ -2548,6 +2547,6 @@ $sline3 = $sline3 + 1
 #position:solit_init:96:567
 #position:solit:160:567
 #position:game_lose:352:273
-//#position:solit_row:288:273
+#position:solit_row:288:273
 #position:solit_cell:224:567
 #position:solit_check:96:609
