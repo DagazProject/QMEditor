@@ -33,21 +33,21 @@
 #chars:echars // Характеристики противника
 #chars:fchars // Характеристики игрока
 
-#var:temp_1 #range:0..1000000 #default:3 #hide
+#var:temp_1 #range:0..100000000 #default:3 #hide
   #bonus
-#var:temp_2 #range:0..1000000 #default:3 #hide
+#var:temp_2 #range:0..100000000 #default:3 #hide
   #bonus
-#var:temp_3 #range:0..1000000 #default:3 #hide
+#var:temp_3 #range:0..100000000 #default:3 #hide
   #bonus
-#var:temp_4 #range:0..1000000 #default:3 #hide
+#var:temp_4 #range:0..100000000 #default:3 #hide
   #bonus
-#var:temp_5 #range:0..1000000 #default:3 #hide
+#var:temp_5 #range:0..100000000 #default:3 #hide
   #bonus
-#var:temp_6 #range:0..1000000 #default:3 #hide
+#var:temp_6 #range:0..100000000 #default:3 #hide
   #bonus
-#var:temp_7 #range:0..1000000 #default:3 #hide
+#var:temp_7 #range:0..100000000 #default:3 #hide
   #bonus
-#var:temp_8 #range:0..1000000 #default:0 #hide
+#var:temp_8 #range:0..100000000 #default:0 #hide
 
 #var:year #range:3027..4027 #default:3027
 
@@ -66,6 +66,8 @@ $variant = <1..2>
 $variant = <3..9>
 #case:solit_init { 1 = 0 } 'Солитер'
 $variant = <10..12>
+#case:swap_init { 1 = 1 } 'Перестановка'
+$variant = 13 // <13..14>
 
 #site:start
 $erace               = <1..5>
@@ -823,7 +825,7 @@ $temp_2 = 0
 ^  @manc @ms|      ^
 ^ ($temp_1) ($temp_2) ($temp_3) ($temp_4) | ($temp_5) ^
 ^ ------------------------ ^
-^  A   B   C   D @ms|      ^
+^  %A%   %B%   %C%   %D% @ms|      ^
 $ms = ($temp_1 > 9) + ($temp_2 > 9) + ($temp_3 > 9) + ($temp_4 > 9)
 #end
 
@@ -1312,18 +1314,18 @@ $manc = 0
 
 #var:LC #range:0..4 #hide
   #text:0..0 ' A B C D'
-  #text:1..1 ' ^ B C D'
-  #text:2..2 ' A ^ C D'
-  #text:3..3 ' A B ^ D'
-  #text:4..4 ' A B C ^'
+  #text:1..1 ' * B C D'
+  #text:2..2 ' A * C D'
+  #text:3..3 ' A B * D'
+  #text:4..4 ' A B C *'
 
 #macro:laim
 #page:1
 ^   +---------+ ^
-^ 4 | @A4 @B4 @C4 @D4 | ^
-^ 3 | @A3 @B3 @C3 @D3 | ^
-^ 2 | @A2 @B2 @C2 @D2 | ^
-^ 1 | @A1 @B1 @C1 @D1 | ^
+^ %4% | @A4 @B4 @C4 @D4 | ^
+^ %3% | @A3 @B3 @C3 @D3 | ^
+^ %2% | @A2 @B2 @C2 @D2 | ^
+^ %1% | @A1 @B1 @C1 @D1 | ^
 ^   +---------+ ^
 ^    @LC   ^
 #end
@@ -1370,6 +1372,7 @@ $temp_1 = 3
 $temp_1 = 2
 #case:lightoff_cont '1' #order:4
 $temp_1 = 1
+#case:lightoff 'Другой столбец' #order:5
 #case:game_lose 'Отказаться от выполнения' #order:7
 
 #site:lightoff_cont 
@@ -2149,11 +2152,11 @@ $C3 = 1 - $C3
 
 #var:SC #range:0..5 #hide
   #text:0..0 ' A B C D E'
-  #text:1..1 ' ^ B C D E'
-  #text:2..2 ' A ^ C D E'
-  #text:3..3 ' A B ^ D E'
-  #text:4..4 ' A B C ^ E'
-  #text:5..5 ' A B C D ^'
+  #text:1..1 ' * B C D E'
+  #text:2..2 ' A * C D E'
+  #text:3..3 ' A B * D E'
+  #text:4..4 ' A B C * E'
+  #text:5..5 ' A B C D *'
 
 #site:solit_init
 #case:solit { $variant = 10 }
@@ -2181,11 +2184,11 @@ $temp_2 = 8
 #site:solit
 #page:1
 ^   +-----------+ ^
-^ 5 |@sline5 | ^
-^ 4 |@sline4 | ^
-^ 3 |@sline3 | ^
-^ 2 |@sline2 | ^
-^ 1 |@sline1 | ^
+^ %5% |@sline5 | ^
+^ %4% |@sline4 | ^
+^ %3% |@sline3 | ^
+^ %2% |@sline2 | ^
+^ %1% |@sline1 | ^
 ^   +-----------+ ^
 ^    @SC   ^
 $SC = 0
@@ -2204,11 +2207,11 @@ $SC = 5
 #site:solit_row
 #page:1
 ^   +-----------+ ^
-^ 5 |@sline5 | ^
-^ 4 |@sline4 | ^
-^ 3 |@sline3 | ^
-^ 2 |@sline2 | ^
-^ 1 |@sline1 | ^
+^ %5% |@sline5 | ^
+^ %4% |@sline4 | ^
+^ %3% |@sline3 | ^
+^ %2% |@sline2 | ^
+^ %1% |@sline1 | ^
 ^   +-----------+ ^
 ^    @SC   ^
 #case:solit_cell '5' { $SC = 1 and $sline5.a > 0 }
@@ -2267,47 +2270,47 @@ $temp_1 = 1
 #site:solit_cell { $temp_1 }
 #page:1
 ^   +-----------+ ^
-^ 5 |@sline5 | ^
-^ 4 |@sline4 | ^
-^ 3 |@sline3 | ^
-^ 2 |@sline2 | ^
-^ > |@sline1 | ^
+^ %5% |@sline5 | ^
+^ %4% |@sline4 | ^
+^ %3% |@sline3 | ^
+^ %2% |@sline2 | ^
+^ %*% |@sline1 | ^
 ^   +-----------+ ^
 ^    @SC   ^
 #page:2
 ^   +-----------+ ^
-^ 5 |@sline5 | ^
-^ 4 |@sline4 | ^
-^ 3 |@sline3 | ^
-^ > |@sline2 | ^
-^ 1 |@sline1 | ^
+^ %5% |@sline5 | ^
+^ %4% |@sline4 | ^
+^ %3% |@sline3 | ^
+^ %*% |@sline2 | ^
+^ %1% |@sline1 | ^
 ^   +-----------+ ^
 ^    @SC   ^
 #page:3
 ^   +-----------+ ^
-^ 5 |@sline5 | ^
-^ 4 |@sline4 | ^
-^ > |@sline3 | ^
-^ 2 |@sline2 | ^
-^ 1 |@sline1 | ^
+^ %5% |@sline5 | ^
+^ %4% |@sline4 | ^
+^ %*% |@sline3 | ^
+^ %2% |@sline2 | ^
+^ %1% |@sline1 | ^
 ^   +-----------+ ^
 ^    @SC   ^
 #page:4
 ^   +-----------+ ^
-^ 5 |@sline5 | ^
-^ > |@sline4 | ^
-^ 3 |@sline3 | ^
-^ 2 |@sline2 | ^
-^ 1 |@sline1 | ^
+^ %5% |@sline5 | ^
+^ %*% |@sline4 | ^
+^ %3% |@sline3 | ^
+^ %2% |@sline2 | ^
+^ %1% |@sline1 | ^
 ^   +-----------+ ^
 ^    @SC   ^
 #page:5
 ^   +-----------+ ^
-^ > |@sline5 | ^
-^ 4 |@sline4 | ^
-^ 3 |@sline3 | ^
-^ 2 |@sline2 | ^
-^ 1 |@sline1 | ^
+^ %*% |@sline5 | ^
+^ %4% |@sline4 | ^
+^ %3% |@sline3 | ^
+^ %2% |@sline2 | ^
+^ %1% |@sline1 | ^
 ^   +-----------+ ^
 ^    @SC   ^
 #case:solit_check 'C5' { $SC = 1 and $temp_1 = 5 and $sline5.b > 0 and $sline5.c = 0 } #order:1
@@ -2502,6 +2505,358 @@ $sline3 = $sline3 + 1
 #case:game_win { $temp_2 = 1 }
 #case:solit { $temp_2 > 1 }
 $temp_2 = $temp_2 - 1
+
+#macro:saim
+^   +---------+ ^
+^ %5% | @A5 @B5 @C5 @D5 | ^
+^ %4% | @A4 @B4 @C4 @D4 | ^
+^ %3% | @A3 @B3 @C3 @D3 | ^
+^ %2% | @A2 @B2 @C2 @D2 | ^
+^ %1% | @A1 @B1 @C1 @D1 | ^
+^   +---------+ ^
+^    @LC   ^
+#end
+
+#macro:wl:P:N
+  #var:wline[$P][$N] #range:0..15 #default #mod:2 #hide
+    #field:d // 8
+    #field:c // 4
+    #field:b // 2
+    #field:a // 1
+#end
+
+#for:i:1..5
+  #wl:1:[$i]
+  #wl:2:[$i]
+#end
+
+#site:swap_init
+#case:swap { $variant = 13 }
+$temp_1 = 2 // Очерёдность хода (слоны)
+$A1 = 2
+$B1 = 2
+$C1 = 2
+$D1 = 2
+$A2 = 0
+$B2 = 0
+$C2 = 0
+$D2 = 0
+$A3 = 0
+$B3 = 0
+$C3 = 0
+$D3 = 0
+$A4 = 0
+$B4 = 0
+$C4 = 0
+$D4 = 0
+$A5 = 1
+$B5 = 1
+$C5 = 1
+$D5 = 1
+#case:swap { $variant = 14 }
+$temp_1 = 3 // Ходит любая сторона (кони)
+$A1 = 2
+$B1 = 2
+$C1 = 2
+$D1 = 2
+$A2 = 0
+$B2 = 0
+$C2 = 0
+$D2 = 0
+$A3 = 0
+$B3 = 0
+$C3 = 0
+$D3 = 0
+$A4 = 0
+$B4 = 0
+$C4 = 0
+$D4 = 0
+$A5 = 1
+$B5 = 1
+$C5 = 1
+$D5 = 1
+
+#site:swap
+#page:1
+#saim
+$LC = 0
+$temp_2 = 0
+#case:swap_calc 'A1' { $A1 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 1
+$temp_2 = 1
+#case:swap_calc 'A1' { $A1 = 2 and ($temp_1 div 2) > 0 }
+$LC = 1
+$temp_2 = 1
+#case:swap_calc 'B1' { $B1 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 2
+$temp_2 = 1
+#case:swap_calc 'B1' { $B1 = 2 and ($temp_1 div 2) > 0 }
+$LC = 2
+$temp_2 = 1
+#case:swap_calc 'C1' { $C1 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 3
+$temp_2 = 1
+#case:swap_calc 'C1' { $C1 = 2 and ($temp_1 div 2) > 0 }
+$LC = 3
+$temp_2 = 1
+#case:swap_calc 'D1' { $D1 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 4
+$temp_2 = 1
+#case:swap_calc 'D1' { $D1 = 2 and ($temp_1 div 2) > 0 }
+$LC = 4
+$temp_2 = 1
+#case:swap_calc 'A2' { $A2 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 1
+$temp_2 = 2
+#case:swap_calc 'A2' { $A2 = 2 and ($temp_1 div 2) > 0 }
+$LC = 1
+$temp_2 = 2
+#case:swap_calc 'B2' { $B2 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 2
+$temp_2 = 2
+#case:swap_calc 'B2' { $B2 = 2 and ($temp_1 div 2) > 0 }
+$LC = 2
+$temp_2 = 2
+#case:swap_calc 'C2' { $C2 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 3
+$temp_2 = 2
+#case:swap_calc 'C2' { $C2 = 2 and ($temp_1 div 2) > 0 }
+$LC = 3
+$temp_2 = 2
+#case:swap_calc 'D2' { $D2 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 4
+$temp_2 = 2
+#case:swap_calc 'D2' { $D2 = 2 and ($temp_1 div 2) > 0 }
+$LC = 4
+$temp_2 = 2
+#case:swap_calc 'A3' { $A3 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 1
+$temp_2 = 3
+#case:swap_calc 'A3' { $A3 = 2 and ($temp_1 div 2) > 0 }
+$LC = 1
+$temp_2 = 3
+#case:swap_calc 'B3' { $B3 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 2
+$temp_2 = 3
+#case:swap_calc 'B3' { $B3 = 2 and ($temp_1 div 2) > 0 }
+$LC = 2
+$temp_2 = 3
+#case:swap_calc 'C3' { $C3 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 3
+$temp_2 = 3
+#case:swap_calc 'C3' { $C3 = 2 and ($temp_1 div 2) > 0 }
+$LC = 3
+$temp_2 = 3
+#case:swap_calc 'D3' { $D3 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 4
+$temp_2 = 3
+#case:swap_calc 'D3' { $D3 = 2 and ($temp_1 div 2) > 0 }
+$LC = 4
+$temp_2 = 3
+#case:swap_calc 'A4' { $A4 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 1
+$temp_2 = 4
+#case:swap_calc 'A4' { $A4 = 2 and ($temp_1 div 2) > 0 }
+$LC = 1
+$temp_2 = 4
+#case:swap_calc 'B4' { $B4 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 2
+$temp_2 = 4
+#case:swap_calc 'B4' { $B4 = 2 and ($temp_1 div 2) > 0 }
+$LC = 2
+$temp_2 = 4
+#case:swap_calc 'C4' { $C4 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 3
+$temp_2 = 4
+#case:swap_calc 'C4' { $C4 = 2 and ($temp_1 div 2) > 0 }
+$LC = 3
+$temp_2 = 4
+#case:swap_calc 'D4' { $D4 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 4
+$temp_2 = 4
+#case:swap_calc 'D4' { $D4 = 2 and ($temp_1 div 2) > 0 }
+$LC = 4
+$temp_2 = 4
+#case:swap_calc 'A5' { $A5 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 1
+$temp_2 = 5
+#case:swap_calc 'A5' { $A5 = 2 and ($temp_1 div 2) > 0 }
+$LC = 1
+$temp_2 = 5
+#case:swap_calc 'B5' { $B5 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 2
+$temp_2 = 5
+#case:swap_calc 'B5' { $B5 = 2 and ($temp_1 div 2) > 0 }
+$LC = 2
+$temp_2 = 5
+#case:swap_calc 'C5' { $C5 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 3
+$temp_2 = 5
+#case:swap_calc 'C5' { $C5 = 2 and ($temp_1 div 2) > 0 }
+$LC = 3
+$temp_2 = 5
+#case:swap_calc 'D5' { $D5 = 1 and ($temp_1 mod 2) > 0 }
+$LC = 4
+$temp_2 = 5
+#case:swap_calc 'D5' { $D5 = 2 and ($temp_1 div 2) > 0 }
+$LC = 4
+$temp_2 = 5
+#case:game_lose 'Отказаться от выполнения' #order:7
+
+#site:swap_calc_sub
+#for:Y:1..5
+  #case:swap_calc_ret { $temp_7 = 1 and $temp_8 = [$Y] and $A[$Y] > 0 }
+  #case:swap_calc_sub_1 { $temp_7 = 1 and $temp_8 = [$Y] and $A[$Y] = 0 }
+  #case:swap_calc_ret { $temp_7 = 2 and $temp_8 = [$Y] and $B[$Y] > 0 }
+  #case:swap_calc_sub_1 { $temp_7 = 2 and $temp_8 = [$Y] and $B[$Y] = 0 }
+  #case:swap_calc_ret { $temp_7 = 3 and $temp_8 = [$Y] and $C[$Y] > 0 }
+  #case:swap_calc_sub_1 { $temp_7 = 3 and $temp_8 = [$Y] and $C[$Y] = 0 }
+  #case:swap_calc_ret { $temp_7 = 4 and $temp_8 = [$Y] and $D[$Y] > 0 }
+  #case:swap_calc_sub_1 { $temp_7 = 4 and $temp_8 = [$Y] and $D[$Y] = 0 }
+#end
+
+#site:swap_calc_sub_1
+#for:P:1..2
+  #for:Y:1..5
+    #case:swap_calc_ret { $temp_7 = 1 and $temp_8 = [$Y] and $temp_5 = [$P] }
+      $wline[$P][$Y].a = 1
+    #case:swap_calc_ret { $temp_7 = 2 and $temp_8 = [$Y] and $temp_5 = [$P] }
+      $wline[$P][$Y].b = 1
+    #case:swap_calc_ret { $temp_7 = 3 and $temp_8 = [$Y] and $temp_5 = [$P] }
+      $wline[$P][$Y].c = 1
+    #case:swap_calc_ret { $temp_7 = 4 and $temp_8 = [$Y] and $temp_5 = [$P] }
+      $wline[$P][$Y].d = 1
+  #end
+#end
+
+
+#site:swap_calc_ret
+#return
+
+#site:swap_calc
+$wline1 = 0
+$wline2 = 0
+$wline3 = 0
+$wline4 = 0
+$wline5 = 0
+$temp_3 = 1 // X
+$temp_4 = 1 // Y
+$temp_6 = 1
+#case:swap_calc_1
+
+#site:swap_calc_1
+$temp_5 = 0
+#for:Y:1..5
+  #case:swap_calc_3 { $temp_3 = 1 and $temp_4 = [$Y] and $A[$Y] = 0 }
+  #case:swap_calc_3 { $temp_3 = 2 and $temp_4 = [$Y] and $B[$Y] = 0 }
+  #case:swap_calc_3 { $temp_3 = 3 and $temp_4 = [$Y] and $C[$Y] = 0 }
+  #case:swap_calc_3 { $temp_3 = 4 and $temp_4 = [$Y] and $D[$Y] = 0 }
+  #case:swap_calc_2 { $temp_3 = 1 and $temp_4 = [$Y] and $A[$Y] > 0 }
+  $temp_5 = $A[$Y]
+  $temp_7 = $temp_3
+  $temp_8 = $temp_4
+  #case:swap_calc_2 { $temp_3 = 2 and $temp_4 = [$Y] and $B[$Y] > 0 }
+  $temp_5 = $B[$Y]
+  $temp_7 = $temp_3
+  $temp_8 = $temp_4
+  #case:swap_calc_2 { $temp_3 = 3 and $temp_4 = [$Y] and $C[$Y] > 0 }
+  $temp_5 = $C[$Y]
+  $temp_7 = $temp_3
+  $temp_8 = $temp_4
+  #case:swap_calc_2 { $temp_3 = 4 and $temp_4 = [$Y] and $D[$Y] > 0 }
+  $temp_5 = $D[$Y]
+  $temp_7 = $temp_3
+  $temp_8 = $temp_4
+#end
+
+#site:swap_calc_2
+#case:swap_calc_5 { $temp_7 <= 1 or $temp_8 >= 5 }
+$temp_7 = $temp_3
+$temp_8 = $temp_4
+#case:swap_calc_sub { $temp_7 > 1 and $temp_8 < 5 } #return:swap_calc_2
+$temp_7 = $temp_7 - 1
+$temp_8 = $temp_8 + 1
+
+#site:swap_calc_5
+#case:swap_calc_6 { $temp_7 >= 4 or $temp_8 >= 5 }
+$temp_7 = $temp_3
+$temp_8 = $temp_4
+#case:swap_calc_sub { $temp_7 < 4 and $temp_8 < 5 } #return:swap_calc_5
+$temp_7 = $temp_7 + 1
+$temp_8 = $temp_8 + 1
+
+#site:swap_calc_6
+#case:swap_calc_7 { $temp_7 <= 1 or $temp_8 <= 1 }
+$temp_7 = $temp_3
+$temp_8 = $temp_4
+#case:swap_calc_sub { $temp_7 > 1 and $temp_8 > 1 } #return:swap_calc_6
+$temp_7 = $temp_7 - 1
+$temp_8 = $temp_8 - 1
+
+#site:swap_calc_7
+#case:swap_calc_3 { $temp_7 >= 4 or $temp_8 <= 1 }
+#case:swap_calc_sub { $temp_7 < 4 and $temp_8 > 1 } #return:swap_calc_7
+$temp_7 = $temp_7 + 1
+$temp_8 = $temp_8 - 1
+
+#site:swap_calc_3
+#case:swap_cell { $temp_3 = 4 and $temp_4 = 5 }
+#case:swap_calc_1 { $temp_3 = 4 and $temp_4 < 5 }
+$temp_3 = 1
+$temp_4 = $temp_4 + 1
+$temp_6 = 1
+#case:swap_calc_1 { $temp_3 < 4 }
+$temp_3 = $temp_3 + 1
+$temp_6 = $temp_6 * 2
+
+#site:swap_cell { $temp_2 }
+#page:1
+^   +---------+ ^
+^ %5% | @A5 @B5 @C5 @D5 | ^
+^ %4% | @A4 @B4 @C4 @D4 | ^
+^ %3% | @A3 @B3 @C3 @D3 | ^
+^ %2% | @A2 @B2 @C2 @D2 | ^
+^ %*% | @A1 @B1 @C1 @D1 | ^
+^   +---------+ ^
+^    @LC   ^
+#page:2
+^   +---------+ ^
+^ %5% | @A5 @B5 @C5 @D5 | ^
+^ %4% | @A4 @B4 @C4 @D4 | ^
+^ %3% | @A3 @B3 @C3 @D3 | ^
+^ %*% | @A2 @B2 @C2 @D2 | ^
+^ %1% | @A1 @B1 @C1 @D1 | ^
+^   +---------+ ^
+^    @LC   ^
+#page:3
+^   +---------+ ^
+^ %5% | @A5 @B5 @C5 @D5 | ^
+^ %4% | @A4 @B4 @C4 @D4 | ^
+^ %*% | @A3 @B3 @C3 @D3 | ^
+^ %2% | @A2 @B2 @C2 @D2 | ^
+^ %1% | @A1 @B1 @C1 @D1 | ^
+^   +---------+ ^
+^    @LC   ^
+#page:4
+^   +---------+ ^
+^ %5% | @A5 @B5 @C5 @D5 | ^
+^ %*% | @A4 @B4 @C4 @D4 | ^
+^ %3% | @A3 @B3 @C3 @D3 | ^
+^ %2% | @A2 @B2 @C2 @D2 | ^
+^ %1% | @A1 @B1 @C1 @D1 | ^
+^   +---------+ ^
+^    @LC   ^
+#page:5
+^   +---------+ ^
+^ %*% | @A5 @B5 @C5 @D5 | ^
+^ %4% | @A4 @B4 @C4 @D4 | ^
+^ %3% | @A3 @B3 @C3 @D3 | ^
+^ %2% | @A2 @B2 @C2 @D2 | ^
+^ %1% | @A1 @B1 @C1 @D1 | ^
+^   +---------+ ^
+^    @LC   ^
+#case:swap 'Другая фигура' #order:5
+#case:game_lose 'Отказаться от выполнения' #order:7
 
 #position:entry:96:399
 #position:inc:96:441
