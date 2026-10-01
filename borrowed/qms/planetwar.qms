@@ -2601,35 +2601,35 @@ $D5 = 7
 $LC = 0
 $temp_2 = 0
 #for:Y:1..5
-  #case:swap_calc 'A[$Y]' { ($A[$Y] mod 2) = 1 and ($temp_1 mod 2) > 0 }
+  #case:swap_calc 'A[$Y]' { $A[$Y] > 0 and ($A[$Y] mod 2) = 1 and ($temp_1 mod 2) > 0 }
   $LC = 1
   $temp_2 = [$Y]
   $temp_9 = $A[$Y]
-  #case:swap_calc 'A[$Y]' { ($A[$Y] mod 2) = 0 and ($temp_1 div 2) > 0 }
+  #case:swap_calc 'A[$Y]' { $A[$Y] > 0 and ($A[$Y] mod 2) = 0 and ($temp_1 div 2) > 0 }
   $LC = 1
   $temp_2 = [$Y]
   $temp_9 = $A[$Y]
-  #case:swap_calc 'B[$Y]' { ($B[$Y] mod 2) = 1 and ($temp_1 mod 2) > 0 }
+  #case:swap_calc 'B[$Y]' { $B[$Y] > 0 and ($B[$Y] mod 2) = 1 and ($temp_1 mod 2) > 0 }
   $LC = 2
   $temp_2 = [$Y]
   $temp_9 = $B[$Y]
-  #case:swap_calc 'B[$Y]' { ($B[$Y] mod 2) = 0 and ($temp_1 div 2) > 0 }
+  #case:swap_calc 'B[$Y]' { $B[$Y] > 0 and ($B[$Y] mod 2) = 0 and ($temp_1 div 2) > 0 }
   $LC = 2
   $temp_2 = [$Y]
   $temp_9 = $B[$Y]
-  #case:swap_calc 'C[$Y]' { ($C[$Y] mod 2) = 1 and ($temp_1 mod 2) > 0 }
+  #case:swap_calc 'C[$Y]' { $C[$Y] > 0 and ($C[$Y] mod 2) = 1 and ($temp_1 mod 2) > 0 }
   $LC = 3
   $temp_2 = [$Y]
   $temp_9 = $C[$Y]
-  #case:swap_calc 'C[$Y]' { ($C[$Y] mod 2) = 0 and ($temp_1 div 2) > 0 }
+  #case:swap_calc 'C[$Y]' { $C[$Y] > 0 and ($C[$Y] mod 2) = 0 and ($temp_1 div 2) > 0 }
   $LC = 3
   $temp_2 = [$Y]
   $temp_9 = $C[$Y]
-  #case:swap_calc 'D[$Y]' { ($D[$Y] mod 2) = 1 and ($temp_1 mod 2) > 0 }
+  #case:swap_calc 'D[$Y]' { $D[$Y] > 0 and ($D[$Y] mod 2) = 1 and ($temp_1 mod 2) > 0 }
   $LC = 4
   $temp_2 = [$Y]
   $temp_9 = $D[$Y]
-  #case:swap_calc 'D[$Y]' { ($D[$Y] mod 2) = 0 and ($temp_1 div 2) > 0 }
+  #case:swap_calc 'D[$Y]' { $D[$Y] > 0 and ($D[$Y] mod 2) = 0 and ($temp_1 div 2) > 0 }
   $LC = 4
   $temp_2 = [$Y]
   $temp_9 = $D[$Y]
@@ -2912,15 +2912,22 @@ $temp_6 = $temp_6 * 2
 
 #site:swap_clear
 #for:Y:1..5
-  #case:swap_check { $LC = 1 and $temp_2 = [$Y] }
+  #case:swap_turn { $LC = 1 and $temp_2 = [$Y] }
   $A[$Y] = 0
-  #case:swap_check { $LC = 2 and $temp_2 = [$Y] }
+  #case:swap_turn { $LC = 2 and $temp_2 = [$Y] }
   $B[$Y] = 0
-  #case:swap_check { $LC = 3 and $temp_2 = [$Y] }
+  #case:swap_turn { $LC = 3 and $temp_2 = [$Y] }
   $C[$Y] = 0
-  #case:swap_check { $LC = 4 and $temp_2 = [$Y] }
+  #case:swap_turn { $LC = 4 and $temp_2 = [$Y] }
   $D[$Y] = 0
 #end
+
+#site:swap_turn
+#case:swap_check { $temp_1 = 1 }
+$temp_1 = 2
+#case:swap_check { $temp_1 = 2 }
+$temp_1 = 1
+#case:swap_check { $temp_1 = 3 }
 
 #site:swap_check
 #case:game_win { $A1 in [1;3;5;7] and $B1 in [1;3;5;7] and $C1 in [1;3;5;7] and $C1 in [1;3;5;7] and $A5 in [2;4;6;8] and $B5 in [2;4;6;8] and $C5 in [2;4;6;8] and $D5 in [2;4;6;8] }
@@ -2973,3 +2980,20 @@ $temp_6 = $temp_6 * 2
 #position:solit_row:288:273
 #position:solit_cell:224:567
 #position:solit_check:96:609
+
+#position:swap_calc:1184:273
+#position:swap_calc_1:1184:315
+#position:swap_calc_2:1184:525
+#position:swap_calc_5:1184:567
+#position:swap_calc_6:1184:609
+#position:swap_calc_7:1184:651
+#position:swap_cell:1440:105
+#position:swap_clear:1440:231
+#position:swap_check:1440:357
+#position:swap_calc_3:864:315
+#position:swap_init:1184:63
+#position:swap:1184:105
+#position:swap_calc_sub_1:1888:567
+#position:swap_calc_ret:2016:357
+#position:swap_calc_sub:1632:273
+#position:swap_turn:1440:315
