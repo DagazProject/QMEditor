@@ -61,11 +61,11 @@
 #page:1
 Planet War
 #case:start 'Играть'
-#case:mancala_init { 1 = 0 } 'Манкала'
+#case:mancala_init { 1 = 1 } 'Манкала'
 $variant = <1..2>
-#case:lightoff_init { 1 = 0 } 'Туши свет'
+#case:lightoff_init { 1 = 1 } 'Туши свет'
 $variant = <3..9>
-#case:solit_init { 1 = 0 } 'Солитер'
+#case:solit_init { 1 = 1 } 'Солитер'
 $variant = <10..12>
 #case:swap_init { 1 = 1 } 'Перестановка'
 $variant = 13 // <13..14>
@@ -2573,7 +2573,7 @@ $B5 = 3
 $C5 = 5
 $D5 = 7
 #case:swap { $variant = 14 }
-$temp_1 = 3 // TODO: Ходит любая сторона (кони)
+$temp_1 = 3
 $A1 = 2
 $B1 = 4
 $C1 = 6
@@ -2594,29 +2594,6 @@ $A5 = 1
 $B5 = 3
 $C5 = 5
 $D5 = 7
-#case:swap { $variant = 15 }
-$variant = 14
-$temp_1 = 3
-$A1 = 0 // 2
-$B1 = 0 // 8 // <--
-$C1 = 6
-$D1 = 0 // 5
-$A2 = 0
-$B2 = 0
-$C2 = 0
-$D2 = 0
-$A3 = 0 // 4
-$B3 = 0
-$C3 = 0
-$D3 = 0
-$A4 = 0
-$B4 = 0 // 7 // <--
-$C4 = 0
-$D4 = 0 // 3
-$A5 = 0 // 1
-$B5 = 0
-$C5 = 0
-$D5 = 0
 
 #site:swap
 #page:1
@@ -2743,19 +2720,14 @@ $temp_2 = 0
 #return
 
 #site:swap_calc
-$wline11 = 0
-$wline12 = 0
-$wline13 = 0
-$wline14 = 0
-$wline15 = 0
-$wline21 = 0
-$wline22 = 0
-$wline23 = 0
-$wline24 = 0
-$wline25 = 0
-$temp_3  = 1 // X
-$temp_4  = 1 // Y
-$temp_6  = 1
+$wline1 = 0
+$wline2 = 0
+$wline3 = 0
+$wline4 = 0
+$wline5 = 0
+$temp_3 = 1 // X
+$temp_4 = 1 // Y
+$temp_6 = 1
 #case:swap_calc_1
 
 #site:swap_calc_1
@@ -2784,88 +2756,34 @@ $temp_5 = 0
 #end
 
 #site:swap_calc_2
-#case:swap_calc_5 { $temp_7 <= 1 or $temp_8 >= 5 and $variant = 13 }
+#case:swap_calc_5 { $temp_7 <= 1 or $temp_8 >= 5 }
 $temp_7 = $temp_3
 $temp_8 = $temp_4
-#case:swap_calc_sub { $temp_7 > 1 and $temp_8 < 5 and $variant = 13 } #return:swap_calc_2
+#case:swap_calc_sub { $temp_7 > 1 and $temp_8 < 5 } #return:swap_calc_2
 $temp_7 = $temp_7 - 1
-$temp_8 = $temp_8 + 1
-#case:swap_calc_5 { $temp_7 <= 2 or $temp_8 >= 5 and $variant = 14 }
-$temp_7 = $temp_3
-$temp_8 = $temp_4
-#case:swap_calc_sub { $temp_7 > 2 and $temp_8 < 5 and $variant = 14 } #return:swap_calc_2
-$temp_7 = $temp_7 - 2
 $temp_8 = $temp_8 + 1
 
 #site:swap_calc_5
-#case:swap_calc_6 { $temp_7 >= 4 or $temp_8 >= 5 and $variant = 13 }
+#case:swap_calc_6 { $temp_7 >= 4 or $temp_8 >= 5 }
 $temp_7 = $temp_3
 $temp_8 = $temp_4
-#case:swap_calc_sub { $temp_7 < 4 and $temp_8 < 5 and $variant = 13 } #return:swap_calc_5
+#case:swap_calc_sub { $temp_7 < 4 and $temp_8 < 5 } #return:swap_calc_5
 $temp_7 = $temp_7 + 1
-$temp_8 = $temp_8 + 1
-#case:swap_calc_6 { $temp_7 >= 3 or $temp_8 >= 5 and $variant = 14 }
-$temp_7 = $temp_3
-$temp_8 = $temp_4
-#case:swap_calc_sub { $temp_7 < 3 and $temp_8 < 5 and $variant = 14 } #return:swap_calc_5
-$temp_7 = $temp_7 + 2
 $temp_8 = $temp_8 + 1
 
 #site:swap_calc_6
-#case:swap_calc_7 { $temp_7 <= 1 or $temp_8 <= 1 and $variant = 13 }
+#case:swap_calc_7 { $temp_7 <= 1 or $temp_8 <= 1 }
 $temp_7 = $temp_3
 $temp_8 = $temp_4
-#case:swap_calc_sub { $temp_7 > 1 and $temp_8 > 1 and $variant = 13 } #return:swap_calc_6
+#case:swap_calc_sub { $temp_7 > 1 and $temp_8 > 1 } #return:swap_calc_6
 $temp_7 = $temp_7 - 1
-$temp_8 = $temp_8 - 1
-#case:swap_calc_7 { $temp_7 <= 2 or $temp_8 <= 1 and $variant = 14 }
-$temp_7 = $temp_3
-$temp_8 = $temp_4
-#case:swap_calc_sub { $temp_7 > 2 and $temp_8 > 1 and $variant = 14 } #return:swap_calc_6
-$temp_7 = $temp_7 - 2
 $temp_8 = $temp_8 - 1
 
 #site:swap_calc_7
-#case:swap_calc_3 { $temp_7 >= 4 or $temp_8 <= 1 and $variant = 13 }
-#case:swap_calc_sub { $temp_7 < 4 and $temp_8 > 1 and $variant = 13 } #return:swap_calc_7
+#case:swap_calc_3 { $temp_7 >= 4 or $temp_8 <= 1 }
+#case:swap_calc_sub { $temp_7 < 4 and $temp_8 > 1 } #return:swap_calc_7
 $temp_7 = $temp_7 + 1
 $temp_8 = $temp_8 - 1
-#case:swap_calc_8 { $temp_7 >= 3 or $temp_8 <= 1 and $variant = 14 }
-$temp_7 = $temp_3
-$temp_8 = $temp_4
-#case:swap_calc_sub { $temp_7 < 3 and $temp_8 > 1 and $variant = 14 } #return:swap_calc_7
-$temp_7 = $temp_7 + 2
-$temp_8 = $temp_8 - 1
-
-#site:swap_calc_8
-#case:swap_calc_9 { $temp_7 <= 1 or $temp_8 >= 4 and $variant = 14 }
-$temp_7 = $temp_3
-$temp_8 = $temp_4
-#case:swap_calc_sub { $temp_7 > 1 and $temp_8 < 4 and $variant = 14 } #return:swap_calc_8
-$temp_7 = $temp_7 - 1
-$temp_8 = $temp_8 + 2
-
-#site:swap_calc_9
-#case:swap_calc_10 { $temp_7 >= 4 or $temp_8 >= 4 and $variant = 14 }
-$temp_7 = $temp_3
-$temp_8 = $temp_4
-#case:swap_calc_sub { $temp_7 < 4 and $temp_8 < 4 and $variant = 14 } #return:swap_calc_9
-$temp_7 = $temp_7 + 1
-$temp_8 = $temp_8 + 2
-
-#site:swap_calc_10
-#case:swap_calc_11 { $temp_7 <= 1 or $temp_8 <= 2 and $variant = 14 }
-$temp_7 = $temp_3
-$temp_8 = $temp_4
-#case:swap_calc_sub { $temp_7 > 1 and $temp_8 > 2 and $variant = 14 } #return:swap_calc_10
-$temp_7 = $temp_7 - 1
-$temp_8 = $temp_8 - 2
-
-#site:swap_calc_11
-#case:swap_calc_3 { $temp_7 >= 4 or $temp_8 <= 2 and $variant = 14 }
-#case:swap_calc_sub { $temp_7 < 4 and $temp_8 > 2 and $variant = 14 } #return:swap_calc_11
-$temp_7 = $temp_7 + 1
-$temp_8 = $temp_8 - 2
 
 #site:swap_calc_3
 #case:swap_cell { $temp_3 = 4 and $temp_4 = 5 }
@@ -2924,69 +2842,69 @@ $temp_6 = $temp_6 * 2
 ^   +---------+ ^
 ^    @LC   ^
 #for:Y:1..5
-  #case:swap_clear 'A[$Y]' { $A[$Y] = 0 and $temp_9 = 1 and $wline1[$Y].aa > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1
+  #case:swap_clear 'A[$Y]' { $temp_9 = 1 and $wline1[$Y].aa > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1
   $A[$Y] = $temp_9
-  #case:swap_clear 'A[$Y]' { $A[$Y] = 0 and $temp_9 = 2 and $wline2[$Y].aa > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1
+  #case:swap_clear 'A[$Y]' { $temp_9 = 2 and $wline2[$Y].aa > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1
   $A[$Y] = $temp_9
-  #case:swap_clear 'A[$Y]' { $A[$Y] = 0 and $temp_9 = 3 and $wline1[$Y].ba > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1
+  #case:swap_clear 'A[$Y]' { $temp_9 = 3 and $wline1[$Y].ba > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1
   $A[$Y] = $temp_9
-  #case:swap_clear 'A[$Y]' { $A[$Y] = 0 and $temp_9 = 4 and $wline2[$Y].ba > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1
+  #case:swap_clear 'A[$Y]' { $temp_9 = 4 and $wline2[$Y].ba > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1
   $A[$Y] = $temp_9
-  #case:swap_clear 'A[$Y]' { $A[$Y] = 0 and $temp_9 = 5 and $wline1[$Y].ca > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1
+  #case:swap_clear 'A[$Y]' { $temp_9 = 5 and $wline1[$Y].ca > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1
   $A[$Y] = $temp_9
-  #case:swap_clear 'A[$Y]' { $A[$Y] = 0 and $temp_9 = 6 and $wline2[$Y].ca > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1
+  #case:swap_clear 'A[$Y]' { $temp_9 = 6 and $wline2[$Y].ca > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1
   $A[$Y] = $temp_9
-  #case:swap_clear 'A[$Y]' { $A[$Y] = 0 and $temp_9 = 7 and $wline1[$Y].da > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1
+  #case:swap_clear 'A[$Y]' { $temp_9 = 7 and $wline1[$Y].da > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1
   $A[$Y] = $temp_9
-  #case:swap_clear 'A[$Y]' { $A[$Y] = 0 and $temp_9 = 8 and $wline2[$Y].da > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1
+  #case:swap_clear 'A[$Y]' { $temp_9 = 8 and $wline2[$Y].da > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1
   $A[$Y] = $temp_9
-  #case:swap_clear 'B[$Y]' { $B[$Y] = 0 and $temp_9 = 1 and $wline1[$Y].ab > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1
+  #case:swap_clear 'B[$Y]' { $temp_9 = 1 and $wline1[$Y].ab > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1
   $B[$Y] = $temp_9
-  #case:swap_clear 'B[$Y]' { $B[$Y] = 0 and $temp_9 = 2 and $wline2[$Y].ab > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1
+  #case:swap_clear 'B[$Y]' { $temp_9 = 2 and $wline2[$Y].ab > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1
   $B[$Y] = $temp_9
-  #case:swap_clear 'B[$Y]' { $B[$Y] = 0 and $temp_9 = 3 and $wline1[$Y].bb > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1
+  #case:swap_clear 'B[$Y]' { $temp_9 = 3 and $wline1[$Y].bb > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1
   $B[$Y] = $temp_9
-  #case:swap_clear 'B[$Y]' { $B[$Y] = 0 and $temp_9 = 4 and $wline2[$Y].bb > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1
+  #case:swap_clear 'B[$Y]' { $temp_9 = 4 and $wline2[$Y].bb > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1
   $B[$Y] = $temp_9
-  #case:swap_clear 'B[$Y]' { $B[$Y] = 0 and $temp_9 = 5 and $wline1[$Y].cb > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1
+  #case:swap_clear 'B[$Y]' { $temp_9 = 5 and $wline1[$Y].cb > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1
   $B[$Y] = $temp_9
-  #case:swap_clear 'B[$Y]' { $B[$Y] = 0 and $temp_9 = 6 and $wline2[$Y].cb > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1
+  #case:swap_clear 'B[$Y]' { $temp_9 = 6 and $wline2[$Y].cb > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1
   $B[$Y] = $temp_9
-  #case:swap_clear 'B[$Y]' { $B[$Y] = 0 and $temp_9 = 7 and $wline1[$Y].db > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1
+  #case:swap_clear 'B[$Y]' { $temp_9 = 7 and $wline1[$Y].db > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1
   $B[$Y] = $temp_9
-  #case:swap_clear 'B[$Y]' { $B[$Y] = 0 and $temp_9 = 8 and $wline2[$Y].db > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1
+  #case:swap_clear 'B[$Y]' { $temp_9 = 8 and $wline2[$Y].db > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1
   $B[$Y] = $temp_9
-  #case:swap_clear 'C[$Y]' { $C[$Y] = 0 and $temp_9 = 1 and $wline1[$Y].ac > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1
+  #case:swap_clear 'C[$Y]' { $temp_9 = 1 and $wline1[$Y].ac > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1
   $C[$Y] = $temp_9
-  #case:swap_clear 'C[$Y]' { $C[$Y] = 0 and $temp_9 = 2 and $wline2[$Y].ac > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1
+  #case:swap_clear 'C[$Y]' { $temp_9 = 2 and $wline2[$Y].ac > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1
   $C[$Y] = $temp_9
-  #case:swap_clear 'C[$Y]' { $C[$Y] = 0 and $temp_9 = 3 and $wline1[$Y].bc > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1
+  #case:swap_clear 'C[$Y]' { $temp_9 = 3 and $wline1[$Y].bc > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1
   $C[$Y] = $temp_9
-  #case:swap_clear 'C[$Y]' { $C[$Y] = 0 and $temp_9 = 4 and $wline2[$Y].bc > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1
+  #case:swap_clear 'C[$Y]' { $temp_9 = 4 and $wline2[$Y].bc > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1
   $C[$Y] = $temp_9
-  #case:swap_clear 'C[$Y]' { $C[$Y] = 0 and $temp_9 = 5 and $wline1[$Y].cc > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1
+  #case:swap_clear 'C[$Y]' { $temp_9 = 5 and $wline1[$Y].cc > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1
   $C[$Y] = $temp_9
-  #case:swap_clear 'C[$Y]' { $C[$Y] = 0 and $temp_9 = 6 and $wline2[$Y].cc > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1
+  #case:swap_clear 'C[$Y]' { $temp_9 = 6 and $wline2[$Y].cc > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1
   $C[$Y] = $temp_9
-  #case:swap_clear 'C[$Y]' { $C[$Y] = 0 and $temp_9 = 7 and $wline1[$Y].dc > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1
+  #case:swap_clear 'C[$Y]' { $temp_9 = 7 and $wline1[$Y].dc > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1
   $C[$Y] = $temp_9
-  #case:swap_clear 'C[$Y]' { $C[$Y] = 0 and $temp_9 = 8 and $wline2[$Y].dc > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1
+  #case:swap_clear 'C[$Y]' { $temp_9 = 8 and $wline2[$Y].dc > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1
   $C[$Y] = $temp_9
-  #case:swap_clear 'D[$Y]' { $D[$Y] = 0 and $temp_9 = 1 and $wline1[$Y].ad > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1
+  #case:swap_clear 'D[$Y]' { $temp_9 = 1 and $wline1[$Y].ad > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1
   $D[$Y] = $temp_9
-  #case:swap_clear 'D[$Y]' { $D[$Y] = 0 and $temp_9 = 2 and $wline2[$Y].ad > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1
+  #case:swap_clear 'D[$Y]' { $temp_9 = 2 and $wline2[$Y].ad > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1
   $D[$Y] = $temp_9
-  #case:swap_clear 'D[$Y]' { $D[$Y] = 0 and $temp_9 = 3 and $wline1[$Y].bd > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1
+  #case:swap_clear 'D[$Y]' { $temp_9 = 3 and $wline1[$Y].bd > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1
   $D[$Y] = $temp_9
-  #case:swap_clear 'D[$Y]' { $D[$Y] = 0 and $temp_9 = 4 and $wline2[$Y].bd > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1
+  #case:swap_clear 'D[$Y]' { $temp_9 = 4 and $wline2[$Y].bd > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1
   $D[$Y] = $temp_9
-  #case:swap_clear 'D[$Y]' { $D[$Y] = 0 and $temp_9 = 5 and $wline1[$Y].cd > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1
+  #case:swap_clear 'D[$Y]' { $temp_9 = 5 and $wline1[$Y].cd > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1
   $D[$Y] = $temp_9
-  #case:swap_clear 'D[$Y]' { $D[$Y] = 0 and $temp_9 = 6 and $wline2[$Y].cd > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1
+  #case:swap_clear 'D[$Y]' { $temp_9 = 6 and $wline2[$Y].cd > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1
   $D[$Y] = $temp_9
-  #case:swap_clear 'D[$Y]' { $D[$Y] = 0 and $temp_9 = 7 and $wline1[$Y].dd > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1
+  #case:swap_clear 'D[$Y]' { $temp_9 = 7 and $wline1[$Y].dd > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1
   $D[$Y] = $temp_9
-  #case:swap_clear 'D[$Y]' { $D[$Y] = 0 and $temp_9 = 8 and $wline2[$Y].dd > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1
+  #case:swap_clear 'D[$Y]' { $temp_9 = 8 and $wline2[$Y].dd > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1
   $D[$Y] = $temp_9
 #end
 #case:swap 'Другая фигура' #order:5
@@ -3062,20 +2980,19 @@ $temp_1 = 1
 #position:solit_row:288:273
 #position:solit_cell:224:567
 #position:solit_check:96:609
-
-#position:swap_calc:1184:273
-#position:swap_calc_1:1184:315
-#position:swap_calc_2:1184:525
-#position:swap_calc_5:1184:567
-#position:swap_calc_6:1184:609
-#position:swap_calc_7:1184:651
-#position:swap_cell:1440:105
-#position:swap_clear:1440:231
-#position:swap_check:1440:357
-#position:swap_calc_3:864:315
-#position:swap_init:1184:63
-#position:swap:1184:105
-#position:swap_calc_sub_1:1888:567
-#position:swap_calc_ret:2016:357
-#position:swap_calc_sub:1632:273
-#position:swap_turn:1440:315
+#position:swap_init:224:651
+#position:swap:288:651
+#position:swap_calc:416:651
+#position:swap_calc_1:416:693
+#position:swap_calc_2:352:693
+#position:swap_calc_3:416:273
+#position:swap_calc_5:288:693
+#position:swap_calc_6:224:693
+#position:swap_calc_7:160:693
+#position:swap_calc_sub:480:399
+#position:swap_calc_sub_1:160:777
+#position:swap_calc_ret:480:441
+#position:swap_cell:352:651
+#position:swap_clear:160:315
+#position:swap_turn:224:315
+#position:swap_check:416:735
