@@ -50,7 +50,8 @@
 #var:temp_8 #range:0..100000000 #default:0 #hide
 #var:temp_9 #range:0..100000000 #default:0 #hide
 
-#var:year #range:3027..4027 #default:3027
+#var:year #range:3027..4027 #default:3027 #hide #order:1
+  #text:3027..4027 'Год: $'
 
 #var:ebonus #range:0..3 #default:0 #hide // Нераспределённые бонусы противника
 #var:fbonus #range:0..3 #default:0 #hide // Нераспределённые бонусы игрока
@@ -308,7 +309,7 @@ $ebonus = $ebonus - 1
   #planet
 
 #macro:paim
-^ Планета: @curr (Год: $year) ^
+^ Планета: @curr ^
 ^ -------------------------------------- ^
 ^ Население:  $temp_1 ^
 ^ Пехота:     $temp_2 ^
@@ -327,7 +328,7 @@ $pop_5 = ((($fchars.chaotic - 1) * <1..10>) +  100) * 32
 $pop_6 = ((($fchars.chaotic - 1) * <1..10>) +  100) * 32
 #case:game
 
-#site:game
+#site:game #show:year
 #case:main { $curr = 1 }
 $temp_1 = $pop_1.total
 $temp_2 = $arm_1.land
@@ -523,7 +524,7 @@ $pop_6.science = $pop_6.science + $temp_8
 $temp_8 = 0
 
 #macro:taim
-^ Планета: @curr (Год: $year) ^
+^ Планета: @curr ^
 ^ -------------------------------------- ^
 ^ Население:  $temp_1 ^
 ^ Пехота:     $temp_2 ^
@@ -1298,14 +1299,14 @@ $manc = 0
 
 #macro:lcell
   #text:0..0 '.'
-  #text:1..1 '+'
-  #text:2..2 'x'
-  #text:3..3 '+'
-  #text:4..4 'x'
-  #text:5..5 '+'
-  #text:6..6 'x'
-  #text:7..7 '+'
-  #text:8..8 'x'
+  #text:1..1 'x'
+  #text:2..2 'X'
+  #text:3..3 'x'
+  #text:4..4 'X'
+  #text:5..5 'x'
+  #text:6..6 'X'
+  #text:7..7 'x'
+  #text:8..8 'X'
 #end
 
 #for:i:1..5
@@ -2720,14 +2721,19 @@ $temp_2 = 0
 #return
 
 #site:swap_calc
-$wline1 = 0
-$wline2 = 0
-$wline3 = 0
-$wline4 = 0
-$wline5 = 0
-$temp_3 = 1 // X
-$temp_4 = 1 // Y
-$temp_6 = 1
+$wline11 = 0
+$wline12 = 0
+$wline13 = 0
+$wline14 = 0
+$wline15 = 0
+$wline21 = 0
+$wline22 = 0
+$wline23 = 0
+$wline24 = 0
+$wline25 = 0
+$temp_3  = 1 // X
+$temp_4  = 1 // Y
+$temp_6  = 1
 #case:swap_calc_1
 
 #site:swap_calc_1
@@ -2932,6 +2938,42 @@ $temp_1 = 1
 #site:swap_check
 #case:game_win { $A1 in [1;3;5;7] and $B1 in [1;3;5;7] and $C1 in [1;3;5;7] and $C1 in [1;3;5;7] and $A5 in [2;4;6;8] and $B5 in [2;4;6;8] and $C5 in [2;4;6;8] and $D5 in [2;4;6;8] }
 #case:swap { 1 - ($A1 in [1;3;5;7] and $B1 in [1;3;5;7] and $C1 in [1;3;5;7] and $C1 in [1;3;5;7] and $A5 in [2;4;6;8] and $B5 in [2;4;6;8] and $C5 in [2;4;6;8] and $D5 in [2;4;6;8]) }
+
+#macro:caim
+#page:1
+^ ???? |      ^
+^ ----------- ^
+#page:2
+^ ???? |      ^
+^ ----------- ^
+^ $sline1 | @A1@B1@C1@D1 ^
+#page:3
+^ ???? |      ^
+^ ----------- ^
+^ $sline1 | @A1@B1@C1@D1 ^
+^ $sline2 | @A2@B2@C2@D2 ^
+#page:4
+^ ???? |      ^
+^ ----------- ^
+^ $sline1 | @A1@B1@C1@D1 ^
+^ $sline2 | @A2@B2@C2@D2 ^
+^ $sline3 | @A3@B3@C3@D3 ^
+#page:5
+^ ???? |      ^
+^ ----------- ^
+^ $sline1 | @A1@B1@C1@D1 ^
+^ $sline2 | @A2@B2@C2@D2 ^
+^ $sline3 | @A3@B3@C3@D3 ^
+^ $sline4 | @A4@B4@C4@D4 ^
+#page:6
+^ ???? |      ^
+^ ----------- ^
+^ $sline1 | @A1@B1@C1@D1 ^
+^ $sline2 | @A2@B2@C2@D2 ^
+^ $sline3 | @A3@B3@C3@D3 ^
+^ $sline4 | @A4@B4@C4@D4 ^
+^ $sline5 | @A5@B5@C5@D5 ^
+#end
 
 #position:entry:96:399
 #position:inc:96:441
