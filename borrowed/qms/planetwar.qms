@@ -2986,29 +2986,29 @@ $temp_1 = 1
 
 #macro:caim
 #page:1
-^ %?% %?% %?% %?% |      ^
+^ $temp_1 $temp_2 $temp_3 $temp_4 |      ^
 ^ ----------------- ^
 ^ @temp_8|      ^
 #page:2
-^ %?% %?% %?% %?% |      ^
+^ $temp_1 $temp_2 $temp_3 $temp_4 |      ^
 ^ ----------------- ^
 ^ @cline1| @A1 @B1 @C1 @D1 ^
 ^ @temp_8|      ^
 #page:3
-^ %?% %?% %?% %?% |      ^
+^ $temp_1 $temp_2 $temp_3 $temp_4 |      ^
 ^ ----------------- ^
 ^ @cline1| @A1 @B1 @C1 @D1 ^
 ^ @cline2| @A2 @B2 @C2 @D2 ^
 ^ @temp_8|      ^
 #page:4
-^ %?% %?% %?% %?% |      ^
+^ $temp_1 $temp_2 $temp_3 $temp_4 |      ^
 ^ ----------------- ^
 ^ @cline1| @A1 @B1 @C1 @D1 ^
 ^ @cline2| @A2 @B2 @C2 @D2 ^
 ^ @cline3| @A3 @B3 @C3 @D3 ^
 ^ @temp_8|      ^
 #page:5
-^ %?% %?% %?% %?% |      ^
+^ $temp_1 $temp_2 $temp_3 $temp_4 |      ^
 ^ ----------------- ^
 ^ @cline1| @A1 @B1 @C1 @D1 ^
 ^ @cline2| @A2 @B2 @C2 @D2 ^
@@ -3016,7 +3016,7 @@ $temp_1 = 1
 ^ @cline4| @A4 @B4 @C4 @D4 ^
 ^ @temp_8|      ^
 #page:6
-^ %?% %?% %?% %?% |      ^
+^ $temp_1 $temp_2 $temp_3 $temp_4 |      ^
 ^ ----------------- ^
 ^ @cline1| @A1 @B1 @C1 @D1 ^
 ^ @cline2| @A2 @B2 @C2 @D2 ^
@@ -3054,7 +3054,7 @@ $temp_8 = 0
 #end
 #case:game_lose 'Отказаться от выполнения' #order:7
 
-#site:cow_1
+#site:cow_1 { $temp_9 + 1 }
 #caim
 #for:i:1..5
   #case:cow_2 '[$i]' #order:[$i]
@@ -3063,7 +3063,7 @@ $temp_8 = 0
 #case:cow 'Начать заново' #order:6
 #case:game_lose 'Отказаться от выполнения' #order:7
 
-#site:cow_2
+#site:cow_2 { $temp_9 + 1 }
 #caim
 #for:i:1..5
   #case:cow_3 '[$i]' #order:[$i]
@@ -3072,11 +3072,11 @@ $temp_8 = 0
 #case:cow 'Начать заново' #order:6
 #case:game_lose 'Отказаться от выполнения' #order:7
 
-#site:cow_3
+#site:cow_3 { $temp_9 + 1 }
 #caim
 #for:i:1..5
   #case:cow_4 '[$i]' #order:[$i]
-    $temp_8 = $temp_8 + [$i] * 1
+    $temp_8 = $temp_8 + [$i]
 #end
 #case:cow 'Начать заново' #order:6
 #case:game_lose 'Отказаться от выполнения' #order:7
@@ -3098,10 +3098,15 @@ $temp_9 = 4
 $temp_5 = ($temp_8 div 1000)
 $temp_6 = ($temp_8 div 100) mod 10
 $temp_7 = ($temp_8 div 10) mod 10
-//$temp_8 = ($temp_8 mod 10)
 #case:cow_calc_1
-$temp_5 = ($temp_5 = $temp_1)+($temp_6 = $temp_2)+($temp_7 = $temp_3)+(($temp_8 mod 10) = $temp_1)
-$temp_6 = (($temp_5<>$temp_1)and($temp_5=$temp_2 or $temp_5=$temp_3 or $temp_5=$temp_4)+(($temp_6<>$temp_2)and($temp_6=$temp_1 or $temp_6=$temp_3 or $temp_6=$temp_4)+(($temp_7<>$temp_3)and($temp_7=$temp_1 or $temp_7=$temp_2 or $temp_7=$temp_4)+((($temp_8 mod 10)<>$temp_4)and(($temp_8 mod 10)=$temp_1 or ($temp_8 mod 10)=$temp_2 or ($temp_8 mod 10)=$temp_3)
+$temp_5 = ($temp_5 = $temp_1) + ($temp_6 = $temp_2) + ($temp_7 = $temp_3) + (($temp_8 mod 10) = $temp_4)
+$sline1 = ($temp_5 <> $temp_1) and ($temp_5 = $temp_2 or $temp_5 = $temp_3 or $temp_5 = $temp_4)
+$sline2 = ($temp_6 <> $temp_2) and ($temp_6 = $temp_1 or $temp_6 = $temp_3 or $temp_6 = $temp_4)
+$sline3 = ($temp_7 <> $temp_3) and ($temp_7 = $temp_1 or $temp_7 = $temp_2 or $temp_7 = $temp_4)
+$sline4 = (($temp_8 mod 10) <> $temp_4) and (($temp_8 mod 10) = $temp_1 or ($temp_8 mod 10) = $temp_2 or ($temp_8 mod 10) = $temp_3)
+
+#site:cow_calc_1
+$temp_6 = $sline1 + $sline2 + $sline3 + $sline4
 #for:i:1..5
   #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 0 and $temp_6 = 0 }
     $A[$i] = 0
