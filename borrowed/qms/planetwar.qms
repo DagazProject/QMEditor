@@ -47,7 +47,35 @@
   #bonus
 #var:temp_7 #range:0..100000000 #default:3 #hide
   #bonus
-#var:temp_8 #range:0..100000000 #default:0 #hide
+
+#macro:ct
+  #text:0..0 '  '
+  #text:1..1 '1 '
+  #text:2..2 '2 '
+  #text:3..3 '3 '
+  #text:4..4 '4 '
+  #text:5..5 '5 '
+  #text:6..6 '6 '
+  #text:7..7 '7 '
+  #text:8..8 '8 '
+  #text:9..9 '9 '
+#end
+
+#macro:cv
+  #field:e #mod:10 // 10000
+    #text:0..9 ''
+  #field:d #mod:10 // 1000
+    #ct
+  #field:c #mod:10 // 100
+    #ct
+  #field:b #mod:10 // 10
+    #ct
+  #field:a #mod:10 // 1
+    #ct
+#end
+
+#var:temp_8 #range:0..99999 #default:0 #hide
+  #cv
 #var:temp_9 #range:0..100000000 #default:0 #hide
 
 #var:year #range:3027..4027 #default:3027 #hide #order:1
@@ -62,14 +90,15 @@
 #page:1
 Planet War
 #case:start 'Играть'
-#case:mancala_init { 1 = 1 } 'Манкала'
+#case:mancala_init { 1 = 0 } 'Манкала'
 $variant = <1..2>
-#case:lightoff_init { 1 = 1 } 'Туши свет'
+#case:lightoff_init { 1 = 0 } 'Туши свет'
 $variant = <3..9>
-#case:solit_init { 1 = 1 } 'Солитер'
+#case:solit_init { 1 = 0 } 'Солитер'
 $variant = <10..12>
-#case:swap_init { 1 = 1 } 'Перестановка'
+#case:swap_init { 1 = 0 } 'Перестановка'
 $variant = 13 // <13..14>
+#case:cow_init { 1 = 1 } 'Быки и коровы'
 
 #site:start
 $erace               = <1..5>
@@ -2526,7 +2555,7 @@ $temp_2 = $temp_2 - 1
 #end
 
 #macro:wl:P:N
-  #var:wline[$P][$N] #range:0..65535 #default #mod:2 #hide
+  #var:wline[$P][$N] #range:0..65535 #default:0 #mod:2 #hide
     #field:dd // 32768
     #field:dc // 16384
     #field:db // 8192
@@ -2939,40 +2968,223 @@ $temp_1 = 1
 #case:game_win { $A1 in [1;3;5;7] and $B1 in [1;3;5;7] and $C1 in [1;3;5;7] and $C1 in [1;3;5;7] and $A5 in [2;4;6;8] and $B5 in [2;4;6;8] and $C5 in [2;4;6;8] and $D5 in [2;4;6;8] }
 #case:swap { 1 - ($A1 in [1;3;5;7] and $B1 in [1;3;5;7] and $C1 in [1;3;5;7] and $C1 in [1;3;5;7] and $A5 in [2;4;6;8] and $B5 in [2;4;6;8] and $C5 in [2;4;6;8] and $D5 in [2;4;6;8]) }
 
+#macro:cf
+  #field:d // 1000
+    #ct
+  #field:c // 100
+    #ct
+  #field:b // 10
+    #ct
+  #field:a // 1
+    #ct
+#end
+
+#for:i:1..5
+  #var:cline[$i] #range:0..9999 #default:0 #mod:10 #hide
+    #cf
+#end
+
 #macro:caim
 #page:1
-^ ???? |      ^
-^ ----------- ^
+^ %?% %?% %?% %?% |      ^
+^ ----------------- ^
+^ @temp_8|      ^
 #page:2
-^ ???? |      ^
-^ ----------- ^
-^ $sline1 | @A1@B1@C1@D1 ^
+^ %?% %?% %?% %?% |      ^
+^ ----------------- ^
+^ @cline1| @A1 @B1 @C1 @D1 ^
+^ @temp_8|      ^
 #page:3
-^ ???? |      ^
-^ ----------- ^
-^ $sline1 | @A1@B1@C1@D1 ^
-^ $sline2 | @A2@B2@C2@D2 ^
+^ %?% %?% %?% %?% |      ^
+^ ----------------- ^
+^ @cline1| @A1 @B1 @C1 @D1 ^
+^ @cline2| @A2 @B2 @C2 @D2 ^
+^ @temp_8|      ^
 #page:4
-^ ???? |      ^
-^ ----------- ^
-^ $sline1 | @A1@B1@C1@D1 ^
-^ $sline2 | @A2@B2@C2@D2 ^
-^ $sline3 | @A3@B3@C3@D3 ^
+^ %?% %?% %?% %?% |      ^
+^ ----------------- ^
+^ @cline1| @A1 @B1 @C1 @D1 ^
+^ @cline2| @A2 @B2 @C2 @D2 ^
+^ @cline3| @A3 @B3 @C3 @D3 ^
+^ @temp_8|      ^
 #page:5
-^ ???? |      ^
-^ ----------- ^
-^ $sline1 | @A1@B1@C1@D1 ^
-^ $sline2 | @A2@B2@C2@D2 ^
-^ $sline3 | @A3@B3@C3@D3 ^
-^ $sline4 | @A4@B4@C4@D4 ^
+^ %?% %?% %?% %?% |      ^
+^ ----------------- ^
+^ @cline1| @A1 @B1 @C1 @D1 ^
+^ @cline2| @A2 @B2 @C2 @D2 ^
+^ @cline3| @A3 @B3 @C3 @D3 ^
+^ @cline4| @A4 @B4 @C4 @D4 ^
+^ @temp_8|      ^
 #page:6
-^ ???? |      ^
-^ ----------- ^
-^ $sline1 | @A1@B1@C1@D1 ^
-^ $sline2 | @A2@B2@C2@D2 ^
-^ $sline3 | @A3@B3@C3@D3 ^
-^ $sline4 | @A4@B4@C4@D4 ^
-^ $sline5 | @A5@B5@C5@D5 ^
+^ %?% %?% %?% %?% |      ^
+^ ----------------- ^
+^ @cline1| @A1 @B1 @C1 @D1 ^
+^ @cline2| @A2 @B2 @C2 @D2 ^
+^ @cline3| @A3 @B3 @C3 @D3 ^
+^ @cline4| @A4 @B4 @C4 @D4 ^
+^ @cline5| @A5 @B5 @C5 @D5 ^
+^ @temp_8|      ^
+#end
+
+#site:cow_init
+$temp_1 = <1..5>
+$temp_2 = <1..5>
+$temp_3 = <1..5>
+$temp_4 = <1..5>
+$temp_9 = 0
+$cline1 = 0
+$cline2 = 0
+$cline3 = 0
+$cline4 = 0
+$cline5 = 0
+#for:i:1..5
+  $A[$i] = 0
+  $B[$i] = 0
+  $C[$i] = 0
+  $D[$i] = 0
+#end
+#case:cow
+
+#site:cow { $temp_9 + 1 }
+#caim
+$temp_8 = 0
+#for:i:1..5
+  #case:cow_1 '[$i]' #order:[$i]
+    $temp_8 = [$i] * 1000
+#end
+#case:game_lose 'Отказаться от выполнения' #order:7
+
+#site:cow_1
+#caim
+#for:i:1..5
+  #case:cow_2 '[$i]' #order:[$i]
+    $temp_8 = $temp_8 + [$i] * 100
+#end
+#case:cow 'Начать заново' #order:6
+#case:game_lose 'Отказаться от выполнения' #order:7
+
+#site:cow_2
+#caim
+#for:i:1..5
+  #case:cow_3 '[$i]' #order:[$i]
+    $temp_8 = $temp_8 + [$i] * 10
+#end
+#case:cow 'Начать заново' #order:6
+#case:game_lose 'Отказаться от выполнения' #order:7
+
+#site:cow_3
+#caim
+#for:i:1..5
+  #case:cow_4 '[$i]' #order:[$i]
+    $temp_8 = $temp_8 + [$i] * 1
+#end
+#case:cow 'Начать заново' #order:6
+#case:game_lose 'Отказаться от выполнения' #order:7
+
+#site:cow_4
+#case:game_win { $temp_1 * 1000 + $temp_2 * 100 + $temp_3 * 10 + $temp_4 = $temp_8 }
+#case:cow_calc { $temp_1 * 1000 + $temp_2 * 100 + $temp_3 * 10 + $temp_4 <> $temp_8 and $temp_9 < 5 }
+#case:cow_calc { $temp_1 * 1000 + $temp_2 * 100 + $temp_3 * 10 + $temp_4 <> $temp_8 and $temp_9 >= 5 }
+$temp_9 = 4
+#for:i:1..4
+   $cline[$i] = $cline[$i + 1]
+   $A[$i] = $A[$i + 1]
+   $B[$i] = $B[$i + 1]
+   $C[$i] = $C[$i + 1]
+   $D[$i] = $D[$i + 1]
+#end
+
+#site:cow_calc
+$temp_5 = ($temp_8 div 1000)
+$temp_6 = ($temp_8 div 100) mod 10
+$temp_7 = ($temp_8 div 10) mod 10
+//$temp_8 = ($temp_8 mod 10)
+#case:cow_calc_1
+$temp_5 = ($temp_5 = $temp_1)+($temp_6 = $temp_2)+($temp_7 = $temp_3)+(($temp_8 mod 10) = $temp_1)
+$temp_6 = (($temp_5<>$temp_1)and($temp_5=$temp_2 or $temp_5=$temp_3 or $temp_5=$temp_4)+(($temp_6<>$temp_2)and($temp_6=$temp_1 or $temp_6=$temp_3 or $temp_6=$temp_4)+(($temp_7<>$temp_3)and($temp_7=$temp_1 or $temp_7=$temp_2 or $temp_7=$temp_4)+((($temp_8 mod 10)<>$temp_4)and(($temp_8 mod 10)=$temp_1 or ($temp_8 mod 10)=$temp_2 or ($temp_8 mod 10)=$temp_3)
+#for:i:1..5
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 0 and $temp_6 = 0 }
+    $A[$i] = 0
+    $B[$i] = 0
+    $C[$i] = 0
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 0 and $temp_6 = 1 }
+    $A[$i] = 1
+    $B[$i] = 0
+    $C[$i] = 0
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 0 and $temp_6 = 2 }
+    $A[$i] = 1
+    $B[$i] = 1
+    $C[$i] = 0
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 0 and $temp_6 = 3 }
+    $A[$i] = 1
+    $B[$i] = 1
+    $C[$i] = 1
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 0 and $temp_6 = 4 }
+    $A[$i] = 1
+    $B[$i] = 1
+    $C[$i] = 1
+    $D[$i] = 1
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 1 and $temp_6 = 0 }
+    $A[$i] = 2
+    $B[$i] = 0
+    $C[$i] = 0
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 1 and $temp_6 = 1 }
+    $A[$i] = 2
+    $B[$i] = 1
+    $C[$i] = 0
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 1 and $temp_6 = 2 }
+    $A[$i] = 2
+    $B[$i] = 1
+    $C[$i] = 1
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 1 and $temp_6 = 3 }
+    $A[$i] = 2
+    $B[$i] = 1
+    $C[$i] = 1
+    $D[$i] = 1
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 2 and $temp_6 = 0 }
+    $A[$i] = 2
+    $B[$i] = 2
+    $C[$i] = 0
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 2 and $temp_6 = 1 }
+    $A[$i] = 2
+    $B[$i] = 2
+    $C[$i] = 1
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 2 and $temp_6 = 2 }
+    $A[$i] = 2
+    $B[$i] = 2
+    $C[$i] = 1
+    $D[$i] = 1
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 3 and $temp_6 = 0 }
+    $A[$i] = 2
+    $B[$i] = 2
+    $C[$i] = 2
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 3 and $temp_6 = 1 }
+    $A[$i] = 2
+    $B[$i] = 2
+    $C[$i] = 2
+    $D[$i] = 1
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 4 and $temp_6 = 0 }
+    $A[$i] = 2
+    $B[$i] = 2
+    $C[$i] = 2
+    $D[$i] = 2
+#end
+
+#site:cow_end
+#for:i:1..5
+  #case:cow { $temp_9 = [$i - 1] }
+    $cline[$i] = $temp_8
+    $temp_9 = [$i]
 #end
 
 #position:entry:96:399
