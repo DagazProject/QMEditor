@@ -85,6 +85,7 @@ $variant = <10..12>
 #case:swap_init { 1 = 0 } 'Перестановка'
 $variant = 13 // <13..14>
 #case:cow_init { 1 = 0 } 'Быки и коровы'
+#case:mine_init { 1 = 1 } 'Сапёр'
 
 #site:start
 $erace               = <1..5>
@@ -3182,6 +3183,96 @@ $temp_6 = $sline1 + $sline2 + $sline3 + $sline4
     $cline[$i] = $temp_8
     $temp_9 = [$i]
 #end
+
+#var:col #range:-1..7 #default:-1 #hide
+  #text:-1..-1 '^  A B C D E F G H ^'
+  #text:0..0   '^  * B C D E F G H ^'
+  #text:1..1   '^  A * C D E F G H ^'
+  #text:2..2   '^  A B * D E F G H ^'
+  #text:3..3   '^  A B C * E F G H ^'
+  #text:4..4   '^  A B C D * F G H ^'
+  #text:5..5   '^  A B C D E * G H ^'
+  #text:6..6   '^  A B C D E F * H ^'
+  #text:7..7   '^  A B C D E F G * ^'
+#var:row #range:-1..5 #default:-1 #hide
+
+#macro:mine_cell:A:B
+  #var:cl[$A][$B] #range:0..99 #default:99 #mod:10 #hide
+    #field:H
+      #text:0..0 ' '
+      #text:1..1 '1'
+      #text:2..2 '2'
+      #text:3..3 '3'
+      #text:4..4 '4'
+      #text:5..5 '5'
+      #text:6..6 '6'
+      #text:7..7 '7'
+      #text:8..8 '8'
+      #text:9..9 '.'
+    #field:L
+      #text:0..0 '  '
+      #text:1..1 ' 1'
+      #text:2..2 ' 2'
+      #text:3..3 ' 3'
+      #text:4..4 ' 4'
+      #text:5..5 ' 5'
+      #text:6..6 ' 6'
+      #text:7..7 ' 7'
+      #text:8..8 ' 8'
+      #text:9..9 ' .'
+#end
+
+#for:y:0..6
+  #for:x:0..3
+    #mine_cell:[$y]:[$x]
+  #end
+#end
+
+#macro:aim
+#page:1
+^+-----------------+^
+^| @cl00 @cl01 @cl02 @cl03 |^ %7%
+^| @cl10 @cl11 @cl12 @cl13 |^ %6%
+^| @cl20 @cl21 @cl22 @cl23 |^ %5%
+^| @cl30 @cl31 @cl32 @cl33 |^ %4%
+^| @cl40 @cl41 @cl42 @cl43 |^ %3%
+^| @cl50 @cl51 @cl52 @cl53 |^ %2%
+^| @cl60 @cl61 @cl62 @cl63 |^ %1%
+^+-----------------+^
+@col
+#end
+
+#site:mine_init
+#case:mine
+$cl60 = 0
+$cl61 = 0
+$cl62 = 0
+$cl63 = 0
+
+#site:mine
+$col = -1
+#aim
+#case:mine_col 'A' #order:1
+$col = 0
+#case:mine_col 'B' #order:2
+$col = 1
+#case:mine_col 'C' #order:3
+$col = 2
+#case:mine_col 'D' #order:4
+$col = 3
+#case:mine_col 'E' #order:5
+$col = 4
+#case:mine_col 'F' #order:6
+$col = 5
+#case:mine_col 'G' #order:7
+$col = 6
+#case:mine_col 'H' #order:8
+$col = 7
+#case:game_lose 'Отказаться от выполнения' #order:9
+
+#site:mine_col
+#aim
+#case:mine 'Другой стобец' #order:9
 
 #position:entry:96:399
 #position:inc:96:441
