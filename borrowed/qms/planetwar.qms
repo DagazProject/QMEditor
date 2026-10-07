@@ -75,7 +75,7 @@
 #site:entry #default
 #page:1
 Planet War
-#case:start 'Играть'
+#case:start { 1 = 0 } 'Играть'
 #case:mancala_init { 1 = 0 } 'Манкала'
 $variant = <1..2>
 #case:lightoff_init { 1 = 0 } 'Туши свет'
@@ -3242,12 +3242,32 @@ $temp_6 = $sline1 + $sline2 + $sline3 + $sline4
 @col
 #end
 
+#for:ix:1..4
+  #var:mn[$ix] #range:0..99999999 #hide
+#end
+
 #site:mine_init
-#case:mine
 $cl60 = 0
 $cl61 = 0
 $cl62 = 0
 $cl63 = 0
+$temp_1 = 0
+#case:mine_init_1
+
+#site:mine_init_1
+$temp_1 = $temp_1 + 1
+$temp_2 = 0
+#case:mine { $temp_1 > 4 }
+#case:mine_init_2 { $temp_1 <= 4 }
+
+#site:mine_init_2
+$temp_2 = $temp_2 + 1
+#case:mine_init_1 { $temp_2 > 4 }
+#case:mine_init_3 { $temp_2 <= 4 }
+
+#site:mine_init_3
+// TODO:
+#case:mine_init_2
 
 #site:mine
 $col = -1
@@ -3272,7 +3292,7 @@ $col = 7
 
 #site:mine_col
 #aim
-#case:mine 'Другой стобец' #order:9
+#case:mine 'Другой столбец' #order:9
 
 #position:entry:96:399
 #position:inc:96:441
