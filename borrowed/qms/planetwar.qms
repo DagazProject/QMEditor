@@ -3246,12 +3246,25 @@ $temp_6 = $sline1 + $sline2 + $sline3 + $sline4
   #var:mn[$ix] #range:0..99999999 #hide
 #end
 
+#site:mine_check
+// TODO:
+#return
+
+#site:mine_show
+// TODO:
+#return
+
 #site:mine_init
-$cl60 = 0
-$cl61 = 0
-$cl62 = 0
-$cl63 = 0
+$cl60   = 0
+$cl61   = 0
+$cl62   = 0
+$cl63   = 0
+$mn1    = 0
+$mn2    = 0
+$mn3    = 0
+$mn4    = 0
 $temp_1 = 0
+$temp_4 = 8
 #case:mine_init_1
 
 #site:mine_init_1
@@ -3266,8 +3279,18 @@ $temp_2 = $temp_2 + 1
 #case:mine_init_3 { $temp_2 <= 4 }
 
 #site:mine_init_3
-// TODO:
-#case:mine_init_2
+$temp_3 = <1..6>*10 + <1..8>
+#case:mine_init_4 #return:mine_init_4
+
+#site:mine_init_4
+#case:mine_init_3 { $temp_3 = 0 }
+#case:mine_show { $temp_3 > 0 } #return:mine_init_5
+
+#site:mine_init_5
+#for:ix:1..4
+  #case:mine_init_2 { $temp_1 = [$ix] }
+    $mn[$ix] = $mn[$ix] * 100 + $temp_3
+#end
 
 #site:mine
 $col = -1
@@ -3293,6 +3316,7 @@ $col = 7
 #site:mine_col
 #aim
 #case:mine 'Другой столбец' #order:9
+// TODO:
 
 #position:entry:96:399
 #position:inc:96:441
