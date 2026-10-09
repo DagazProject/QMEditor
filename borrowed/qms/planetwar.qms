@@ -3247,11 +3247,48 @@ $temp_6 = $sline1 + $sline2 + $sline3 + $sline4
 #end
 
 #site:mine_check
-// TODO:
+$temp_5 = 1
+#case:mine_check_1 { $temp_5 = 1 }
+$temp_5 = $temp_5 + 1
+$temp_6 = $mn1
+#case:mine_check_1 { $temp_5 = 2 }
+$temp_5 = $temp_5 + 1
+$temp_6 = $mn2
+#case:mine_check_1 { $temp_5 = 3 }
+$temp_5 = $temp_5 + 1
+$temp_6 = $mn3
+#case:mine_check_1 { $temp_5 = 4 }
+$temp_5 = $temp_5 + 1
+$temp_6 = $mn4
+#case:mine_check_ret { $temp_5 > 4 }
+
+#site:mine_check_1
+$temp_7 = $temp_6 mod 100
+$temp_6 = $temp_6 div 100
+#case:mine_check_ret { $temp_7 = $temp_3 }
+$temp_3 = 0
+#case:mine_check { $temp_7 <> $temp_3 and $temp_6 = 0 }
+#case:mine_check_2 { $temp_7 <> $temp_3 and $temp_6 > 0 }
+
+#site:mine_check_2
+#case:mine_check_1
+
+#site:mine_check_ret
 #return
 
 #site:mine_show
-// TODO:
+$temp_5 = $temp_3 mod 10
+$temp_6 = $temp_3 div 10
+#for:y:1..6
+  #for:x:1..8
+    #case:mine_show_ret { $temp_6 = [$y] and $temp_5 = [$x] and ($temp_3 mod 2) = 0 }
+      $cl[$y][($x - 1) div 2].H = $temp_4
+    #case:mine_show_ret { $temp_6 = [$y] and $temp_5 = [$x] and ($temp_3 mod 2) = 1 }
+      $cl[$y][($x - 1) div 2].L = $temp_4
+  #end
+#end
+
+#site:mine_show_ret
 #return
 
 #site:mine_init
@@ -3280,7 +3317,7 @@ $temp_2 = $temp_2 + 1
 
 #site:mine_init_3
 $temp_3 = <1..6>*10 + <1..8>
-#case:mine_init_4 #return:mine_init_4
+#case:mine_check #return:mine_init_4
 
 #site:mine_init_4
 #case:mine_init_3 { $temp_3 = 0 }
@@ -3390,3 +3427,18 @@ $col = 7
 #position:cow_calc:416:357
 #position:cow_calc_1:416:315
 #position:cow_end:160:651
+
+#position:mine_init:1568:63
+#position:mine_init_1:1568:105
+#position:mine_init_3:1504:189
+#position:mine:1696:105
+#position:mine_col:1696:189
+#position:mine_check:1312:273
+#position:mine_check_1:1312:357
+#position:mine_check_ret:1376:357
+#position:mine_check_2:1312:399
+#position:mine_init_4:1504:273
+#position:mine_init_5:1568:315
+#position:mine_init_2:1568:147
+#position:mine_show:1312:483
+#position:mine_show_ret:928:819
