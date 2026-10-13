@@ -3450,13 +3450,13 @@ $col = 3
 #site:mine_eh
 $col = -1
 #aim
-#case:mine_col 'E' #order:5
+#case:mine_col 'E' #order:1
 $col = 4
-#case:mine_col 'F' #order:6
+#case:mine_col 'F' #order:2
 $col = 5
-#case:mine_col 'G' #order:7
+#case:mine_col 'G' #order:3
 $col = 6
-#case:mine_col 'H' #order:8
+#case:mine_col 'H' #order:4
 $col = 7
 #case:mine 'Другой столбец' #order:8
 #case:game_lose 'Отказаться от выполнения' #order:9
@@ -3607,7 +3607,7 @@ $cl43.L = 0
 #case:mine_step '2' { $col = 7 and ($cl53.L = 9) } #order:2
 $temp_1 = 2
 $cl53.L = 0
-#case:mine_step 'Другая ячейка' #order:8
+#case:mine 'Другая ячейка' #order:8
 #case:game_lose 'Отказаться от выполнения' #order:9
 
 // col    = X
@@ -3617,7 +3617,7 @@ $cl53.L = 0
 // temp_5 = ix
 // temp_6 = mn
 #site:mine_calc
-$temp_3 = $temp_1 * 10 + $col
+$temp_3 = (7 - $temp_1 + 1) * 10 + ($col + 1)
 $temp_4 = 0
 $temp_5 = 0
 #case:mine_calc_1
@@ -3625,13 +3625,13 @@ $temp_5 = 0
 #site:mine_calc_1
 $temp_5 = $temp_5 + 1
 #case:mine_calc_ret { $temp_5 > 4 }
-#case:mine_calc_2 { $temp_5 == 1 }
+#case:mine_calc_2 { $temp_5 = 1 }
 $temp_6 = $mn1
-#case:mine_calc_2 { $temp_5 == 2 }
+#case:mine_calc_2 { $temp_5 = 2 }
 $temp_6 = $mn2
-#case:mine_calc_2 { $temp_5 == 3 }
+#case:mine_calc_2 { $temp_5 = 3 }
 $temp_6 = $mn3
-#case:mine_calc_2 { $temp_5 == 4 }
+#case:mine_calc_2 { $temp_5 = 4 }
 $temp_6 = $mn4
 
 #site:mine_calc_2
@@ -3670,14 +3670,14 @@ $temp_4 = $temp_4 + 1
 #case:mine_calc_8 { $temp_7 <> ($temp_3 + 9) }
 
 #site:mine_calc_8
-#case:mine_calc_9 { $temp_9 = ($temp_3 - 11) }
+#case:mine_calc_9 { $temp_7 = ($temp_3 - 11) }
 $temp_4 = $temp_4 + 1
-#case:mine_calc_9 { $temp_9 <> ($temp_3 - 11) }
+#case:mine_calc_9 { $temp_7 <> ($temp_3 - 11) }
 
 #site:mine_calc_9
-#case:mine_calc_2 { $temp_9 = ($temp_3 + 11) }
+#case:mine_calc_2 { $temp_7 = ($temp_3 + 11) }
 $temp_4 = $temp_4 + 1
-#case:mine_calc_2 { $temp_9 <> ($temp_3 + 11) }
+#case:mine_calc_2 { $temp_7 <> ($temp_3 + 11) }
 
 #site:mine_calc_ret
 #return
@@ -3687,7 +3687,8 @@ $temp_4 = $temp_4 + 1
 
 #site:mine_step_1
 #case:game_lose { $temp_4 >= 9 }
-#case:mine_show { $temp_4 < 9 } #return:mine
+#case:game_win { $temp_4 < 9 and $temp_1 >= 7 }
+#case:mine_show { $temp_4 < 9 and $temp_1 < 7 } #return:mine
 
 #position:entry:96:399
 #position:inc:96:441
