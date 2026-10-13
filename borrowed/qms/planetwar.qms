@@ -3463,152 +3463,231 @@ $col = 7
 
 #site:mine_col
 #aim
-#case:mine '7' { $col = 0 and ($cl00.H = 9) and (($cl10.H < 9) or ($cl00.L < 9))} #order:7
+#case:mine_step '7' { $col = 0 and ($cl00.H = 9) and (($cl10.H < 9) or ($cl00.L < 9))} #order:7
 $temp_1 = 7
 $cl00.H = 0
-#case:mine '6' { $col = 0 and ($cl10.H = 9) and (($cl00.H < 9) or ($cl20.H < 9) or ($cl10.L < 9))} #order:6
+#case:mine_step '6' { $col = 0 and ($cl10.H = 9) and (($cl00.H < 9) or ($cl20.H < 9) or ($cl10.L < 9))} #order:6
 $temp_1 = 6
 $cl10.H = 0
-#case:mine '5' { $col = 0 and ($cl20.H = 9) and (($cl10.H < 9) or ($cl30.H < 9) or ($cl20.L < 9))} #order:5
+#case:mine_step '5' { $col = 0 and ($cl20.H = 9) and (($cl10.H < 9) or ($cl30.H < 9) or ($cl20.L < 9))} #order:5
 $temp_1 = 5
 $cl20.H = 0
-#case:mine '4' { $col = 0 and ($cl30.H = 9) and (($cl20.H < 9) or ($cl40.H < 9) or ($cl30.L < 9))} #order:4
+#case:mine_step '4' { $col = 0 and ($cl30.H = 9) and (($cl20.H < 9) or ($cl40.H < 9) or ($cl30.L < 9))} #order:4
 $temp_1 = 4
 $cl30.H = 0
-#case:mine '3' { $col = 0 and ($cl40.H = 9) and (($cl30.H < 9) or ($cl50.H < 9) or ($cl40.L < 9))} #order:3
+#case:mine_step '3' { $col = 0 and ($cl40.H = 9) and (($cl30.H < 9) or ($cl50.H < 9) or ($cl40.L < 9))} #order:3
 $temp_1 = 3
 $cl40.H = 0
-#case:mine '2' { $col = 0 and ($cl50.H = 9) } #order:2
+#case:mine_step '2' { $col = 0 and ($cl50.H = 9) } #order:2
 $temp_1 = 2
 $cl50.H = 0
-#case:mine '7' { $col = 1 and ($cl00.L = 9) and (($cl10.L < 9) or ($cl00.H < 9) or ($cl01.H < 9))} #order:7
+#case:mine_step '7' { $col = 1 and ($cl00.L = 9) and (($cl10.L < 9) or ($cl00.H < 9) or ($cl01.H < 9))} #order:7
 $temp_1 = 7
 $cl00.L = 0
-#case:mine '6' { $col = 1 and ($cl10.L = 9) and (($cl00.L < 9) or ($cl20.L < 9) or ($cl10.H < 9) or ($cl11.H < 9))} #order:6
+#case:mine_step '6' { $col = 1 and ($cl10.L = 9) and (($cl00.L < 9) or ($cl20.L < 9) or ($cl10.H < 9) or ($cl11.H < 9))} #order:6
 $temp_1 = 6
 $cl10.L = 0
-#case:mine '5' { $col = 1 and ($cl20.L = 9) and (($cl10.L < 9) or ($cl30.L < 9) or ($cl20.H < 9) or ($cl21.H < 9))} #order:5
+#case:mine_step '5' { $col = 1 and ($cl20.L = 9) and (($cl10.L < 9) or ($cl30.L < 9) or ($cl20.H < 9) or ($cl21.H < 9))} #order:5
 $temp_1 = 5
 $cl20.L = 0
-#case:mine '4' { $col = 1 and ($cl30.L = 9) and (($cl20.L < 9) or ($cl40.L < 9) or ($cl30.H < 9) or ($cl31.H < 9))} #order:4
+#case:mine_step '4' { $col = 1 and ($cl30.L = 9) and (($cl20.L < 9) or ($cl40.L < 9) or ($cl30.H < 9) or ($cl31.H < 9))} #order:4
 $temp_1 = 4
 $cl30.L = 0
-#case:mine '3' { $col = 1 and ($cl40.L = 9) and (($cl30.L < 9) or ($cl50.L < 9) or ($cl40.H < 9) or ($cl41.H < 9))} #order:3
+#case:mine_step '3' { $col = 1 and ($cl40.L = 9) and (($cl30.L < 9) or ($cl50.L < 9) or ($cl40.H < 9) or ($cl41.H < 9))} #order:3
 $temp_1 = 3
 $cl40.L = 0
-#case:mine '2' { $col = 1 and ($cl50.L = 9) } #order:2
+#case:mine_step '2' { $col = 1 and ($cl50.L = 9) } #order:2
 $temp_1 = 2
 $cl50.L = 0
-#case:mine '7' { $col = 2 and ($cl01.H = 9) and (($cl11.H < 9) or ($cl00.L < 9) or ($cl01.L < 9))} #order:7
+#case:mine_step '7' { $col = 2 and ($cl01.H = 9) and (($cl11.H < 9) or ($cl00.L < 9) or ($cl01.L < 9))} #order:7
 $temp_1 = 7
 $cl01.H = 0
-#case:mine '6' { $col = 2 and ($cl11.H = 9) and (($cl01.H < 9) or ($cl21.H < 9) or ($cl10.L < 9) or ($cl11.L < 9))} #order:6
+#case:mine_step '6' { $col = 2 and ($cl11.H = 9) and (($cl01.H < 9) or ($cl21.H < 9) or ($cl10.L < 9) or ($cl11.L < 9))} #order:6
 $temp_1 = 6
 $cl11.H = 0
-#case:mine '5' { $col = 2 and ($cl21.H = 9) and (($cl11.H < 9) or ($cl31.H < 9) or ($cl20.L < 9) or ($cl21.L < 9))} #order:5
+#case:mine_step '5' { $col = 2 and ($cl21.H = 9) and (($cl11.H < 9) or ($cl31.H < 9) or ($cl20.L < 9) or ($cl21.L < 9))} #order:5
 $temp_1 = 5
 $cl21.H = 0
-#case:mine '4' { $col = 2 and ($cl31.H = 9) and (($cl21.H < 9) or ($cl41.H < 9) or ($cl30.L < 9) or ($cl31.L < 9))} #order:4
+#case:mine_step '4' { $col = 2 and ($cl31.H = 9) and (($cl21.H < 9) or ($cl41.H < 9) or ($cl30.L < 9) or ($cl31.L < 9))} #order:4
 $temp_1 = 4
 $cl31.H = 0
-#case:mine '3' { $col = 2 and ($cl41.H = 9) and (($cl31.H < 9) or ($cl51.H < 9) or ($cl40.L < 9) or ($cl41.L < 9))} #order:3
+#case:mine_step '3' { $col = 2 and ($cl41.H = 9) and (($cl31.H < 9) or ($cl51.H < 9) or ($cl40.L < 9) or ($cl41.L < 9))} #order:3
 $temp_1 = 3
 $cl41.H = 0
-#case:mine '2' { $col = 2 and ($cl51.H = 9) } #order:2
+#case:mine_step '2' { $col = 2 and ($cl51.H = 9) } #order:2
 $temp_1 = 2
 $cl51.H = 0
-#case:mine '7' { $col = 3 and ($cl01.L = 9) and (($cl11.L < 9) or ($cl01.H < 9) or ($cl02.H < 9))} #order:7
+#case:mine_step '7' { $col = 3 and ($cl01.L = 9) and (($cl11.L < 9) or ($cl01.H < 9) or ($cl02.H < 9))} #order:7
 $temp_1 = 7
 $cl01.L = 0
-#case:mine '6' { $col = 3 and ($cl11.L = 9) and (($cl01.L < 9) or ($cl21.L < 9) or ($cl11.H < 9) or ($cl12.H < 9))} #order:6
+#case:mine_step '6' { $col = 3 and ($cl11.L = 9) and (($cl01.L < 9) or ($cl21.L < 9) or ($cl11.H < 9) or ($cl12.H < 9))} #order:6
 $temp_1 = 6
 $cl11.L = 0
-#case:mine '5' { $col = 3 and ($cl21.L = 9) and (($cl11.L < 9) or ($cl31.L < 9) or ($cl21.H < 9) or ($cl22.H < 9))} #order:5
+#case:mine_step '5' { $col = 3 and ($cl21.L = 9) and (($cl11.L < 9) or ($cl31.L < 9) or ($cl21.H < 9) or ($cl22.H < 9))} #order:5
 $temp_1 = 5
 $cl21.L = 0
-#case:mine '4' { $col = 3 and ($cl31.L = 9) and (($cl21.L < 9) or ($cl41.L < 9) or ($cl31.H < 9) or ($cl32.H < 9))} #order:4
+#case:mine_step '4' { $col = 3 and ($cl31.L = 9) and (($cl21.L < 9) or ($cl41.L < 9) or ($cl31.H < 9) or ($cl32.H < 9))} #order:4
 $temp_1 = 4
 $cl31.L = 0
-#case:mine '3' { $col = 3 and ($cl41.L = 9) and (($cl31.L < 9) or ($cl51.L < 9) or ($cl41.H < 9) or ($cl42.H < 9))} #order:3
+#case:mine_step '3' { $col = 3 and ($cl41.L = 9) and (($cl31.L < 9) or ($cl51.L < 9) or ($cl41.H < 9) or ($cl42.H < 9))} #order:3
 $temp_1 = 3
 $cl41.L = 0
-#case:mine '2' { $col = 3 and ($cl51.L = 9) } #order:2
+#case:mine_step '2' { $col = 3 and ($cl51.L = 9) } #order:2
 $temp_1 = 2
 $cl51.L = 0
-#case:mine '7' { $col = 4 and ($cl02.H = 9) and (($cl12.H < 9) or ($cl01.L < 9) or ($cl02.L < 9))} #order:7
+#case:mine_step '7' { $col = 4 and ($cl02.H = 9) and (($cl12.H < 9) or ($cl01.L < 9) or ($cl02.L < 9))} #order:7
 $temp_1 = 7
 $cl02.H = 0
-#case:mine '6' { $col = 4 and ($cl12.H = 9) and (($cl02.H < 9) or ($cl22.H < 9) or ($cl11.L < 9) or ($cl12.L < 9))} #order:6
+#case:mine_step '6' { $col = 4 and ($cl12.H = 9) and (($cl02.H < 9) or ($cl22.H < 9) or ($cl11.L < 9) or ($cl12.L < 9))} #order:6
 $temp_1 = 6
 $cl12.H = 0
-#case:mine '5' { $col = 4 and ($cl22.H = 9) and (($cl12.H < 9) or ($cl32.H < 9) or ($cl21.L < 9) or ($cl22.L < 9))} #order:5
+#case:mine_step '5' { $col = 4 and ($cl22.H = 9) and (($cl12.H < 9) or ($cl32.H < 9) or ($cl21.L < 9) or ($cl22.L < 9))} #order:5
 $temp_1 = 5
 $cl22.H = 0
-#case:mine '4' { $col = 4 and ($cl32.H = 9) and (($cl22.H < 9) or ($cl42.H < 9) or ($cl31.L < 9) or ($cl32.L < 9))} #order:4
+#case:mine_step '4' { $col = 4 and ($cl32.H = 9) and (($cl22.H < 9) or ($cl42.H < 9) or ($cl31.L < 9) or ($cl32.L < 9))} #order:4
 $temp_1 = 4
 $cl32.H = 0
-#case:mine '3' { $col = 4 and ($cl42.H = 9) and (($cl32.H < 9) or ($cl52.H < 9) or ($cl41.L < 9) or ($cl42.L < 9))} #order:3
+#case:mine_step '3' { $col = 4 and ($cl42.H = 9) and (($cl32.H < 9) or ($cl52.H < 9) or ($cl41.L < 9) or ($cl42.L < 9))} #order:3
 $temp_1 = 3
 $cl42.H = 0
-#case:mine '2' { $col = 4 and ($cl52.H = 9) } #order:2
+#case:mine_step '2' { $col = 4 and ($cl52.H = 9) } #order:2
 $temp_1 = 2
 $cl52.H = 0
-#case:mine '7' { $col = 5 and ($cl02.L = 9) and (($cl12.L < 9) or ($cl02.H < 9) or ($cl03.H < 9))} #order:7
+#case:mine_step '7' { $col = 5 and ($cl02.L = 9) and (($cl12.L < 9) or ($cl02.H < 9) or ($cl03.H < 9))} #order:7
 $temp_1 = 7
 $cl02.L = 0
-#case:mine '6' { $col = 5 and ($cl12.L = 9) and (($cl02.L < 9) or ($cl22.L < 9) or ($cl12.H < 9) or ($cl13.H < 9))} #order:6
+#case:mine_step '6' { $col = 5 and ($cl12.L = 9) and (($cl02.L < 9) or ($cl22.L < 9) or ($cl12.H < 9) or ($cl13.H < 9))} #order:6
 $temp_1 = 6
 $cl12.L = 0
-#case:mine '5' { $col = 5 and ($cl22.L = 9) and (($cl12.L < 9) or ($cl32.L < 9) or ($cl22.H < 9) or ($cl23.H < 9))} #order:5
+#case:mine_step '5' { $col = 5 and ($cl22.L = 9) and (($cl12.L < 9) or ($cl32.L < 9) or ($cl22.H < 9) or ($cl23.H < 9))} #order:5
 $temp_1 = 5
 $cl22.L = 0
-#case:mine '4' { $col = 5 and ($cl32.L = 9) and (($cl22.L < 9) or ($cl42.L < 9) or ($cl32.H < 9) or ($cl33.H < 9))} #order:4
+#case:mine_step '4' { $col = 5 and ($cl32.L = 9) and (($cl22.L < 9) or ($cl42.L < 9) or ($cl32.H < 9) or ($cl33.H < 9))} #order:4
 $temp_1 = 4
 $cl32.L = 0
-#case:mine '3' { $col = 5 and ($cl42.L = 9) and (($cl32.L < 9) or ($cl52.L < 9) or ($cl42.H < 9) or ($cl43.H < 9))} #order:3
+#case:mine_step '3' { $col = 5 and ($cl42.L = 9) and (($cl32.L < 9) or ($cl52.L < 9) or ($cl42.H < 9) or ($cl43.H < 9))} #order:3
 $temp_1 = 3
 $cl42.L = 0
-#case:mine '2' { $col = 5 and ($cl52.L = 9) } #order:2
+#case:mine_step '2' { $col = 5 and ($cl52.L = 9) } #order:2
 $temp_1 = 2
 $cl52.L = 0
-#case:mine '7' { $col = 6 and ($cl03.H = 9) and (($cl13.H < 9) or ($cl02.L < 9) or ($cl03.L < 9))} #order:7
+#case:mine_step '7' { $col = 6 and ($cl03.H = 9) and (($cl13.H < 9) or ($cl02.L < 9) or ($cl03.L < 9))} #order:7
 $temp_1 = 7
 $cl03.H = 0
-#case:mine '6' { $col = 6 and ($cl13.H = 9) and (($cl03.H < 9) or ($cl23.H < 9) or ($cl12.L < 9) or ($cl13.L < 9))} #order:6
+#case:mine_step '6' { $col = 6 and ($cl13.H = 9) and (($cl03.H < 9) or ($cl23.H < 9) or ($cl12.L < 9) or ($cl13.L < 9))} #order:6
 $temp_1 = 6
 $cl13.H = 0
-#case:mine '5' { $col = 6 and ($cl23.H = 9) and (($cl13.H < 9) or ($cl33.H < 9) or ($cl22.L < 9) or ($cl23.L < 9))} #order:5
+#case:mine_step '5' { $col = 6 and ($cl23.H = 9) and (($cl13.H < 9) or ($cl33.H < 9) or ($cl22.L < 9) or ($cl23.L < 9))} #order:5
 $temp_1 = 5
 $cl23.H = 0
-#case:mine '4' { $col = 6 and ($cl33.H = 9) and (($cl23.H < 9) or ($cl43.H < 9) or ($cl32.L < 9) or ($cl33.L < 9))} #order:4
+#case:mine_step '4' { $col = 6 and ($cl33.H = 9) and (($cl23.H < 9) or ($cl43.H < 9) or ($cl32.L < 9) or ($cl33.L < 9))} #order:4
 $temp_1 = 4
 $cl33.H = 0
-#case:mine '3' { $col = 6 and ($cl43.H = 9) and (($cl33.H < 9) or ($cl53.H < 9) or ($cl42.L < 9) or ($cl43.L < 9))} #order:3
+#case:mine_step '3' { $col = 6 and ($cl43.H = 9) and (($cl33.H < 9) or ($cl53.H < 9) or ($cl42.L < 9) or ($cl43.L < 9))} #order:3
 $temp_1 = 3
 $cl43.H = 0
-#case:mine '2' { $col = 6 and ($cl53.H = 9) } #order:2
+#case:mine_step '2' { $col = 6 and ($cl53.H = 9) } #order:2
 $temp_1 = 2
 $cl53.H = 0
-#case:mine '7' { $col = 7 and ($cl03.L = 9) and (($cl13.L < 9) or ($cl03.H < 9))} #order:7
+#case:mine_step '7' { $col = 7 and ($cl03.L = 9) and (($cl13.L < 9) or ($cl03.H < 9))} #order:7
 $temp_1 = 7
 $cl03.L = 0
-#case:mine '6' { $col = 7 and ($cl13.L = 9) and (($cl03.L < 9) or ($cl23.L < 9) or ($cl13.H < 9))} #order:6
+#case:mine_step '6' { $col = 7 and ($cl13.L = 9) and (($cl03.L < 9) or ($cl23.L < 9) or ($cl13.H < 9))} #order:6
 $temp_1 = 6
 $cl13.L = 0
-#case:mine '5' { $col = 7 and ($cl23.L = 9) and (($cl13.L < 9) or ($cl33.L < 9) or ($cl23.H < 9))} #order:5
+#case:mine_step '5' { $col = 7 and ($cl23.L = 9) and (($cl13.L < 9) or ($cl33.L < 9) or ($cl23.H < 9))} #order:5
 $temp_1 = 5
 $cl23.L = 0
-#case:mine '4' { $col = 7 and ($cl33.L = 9) and (($cl23.L < 9) or ($cl43.L < 9) or ($cl33.H < 9))} #order:4
+#case:mine_step '4' { $col = 7 and ($cl33.L = 9) and (($cl23.L < 9) or ($cl43.L < 9) or ($cl33.H < 9))} #order:4
 $temp_1 = 4
 $cl33.L = 0
-#case:mine '3' { $col = 7 and ($cl43.L = 9) and (($cl33.L < 9) or ($cl53.L < 9) or ($cl43.H < 9))} #order:3
+#case:mine_step '3' { $col = 7 and ($cl43.L = 9) and (($cl33.L < 9) or ($cl53.L < 9) or ($cl43.H < 9))} #order:3
 $temp_1 = 3
 $cl43.L = 0
-#case:mine '2' { $col = 7 and ($cl53.L = 9) } #order:2
+#case:mine_step '2' { $col = 7 and ($cl53.L = 9) } #order:2
 $temp_1 = 2
 $cl53.L = 0
-#case:mine 'Другая ячейка' #order:8
+#case:mine_step 'Другая ячейка' #order:8
 #case:game_lose 'Отказаться от выполнения' #order:9
+
+// col    = X
+// temp_1 = Y
+// temp_3 = pos
+// temp_4 = cnt (10 - mine)
+// temp_5 = ix
+// temp_6 = mn
+#site:mine_calc
+$temp_3 = $temp_1 * 10 + $col
+$temp_4 = 0
+$temp_5 = 0
+#case:mine_calc_1
+
+#site:mine_calc_1
+$temp_5 = $temp_5 + 1
+#case:mine_calc_ret { $temp_5 > 4 }
+#case:mine_calc_2 { $temp_5 == 1 }
+$temp_6 = $mn1
+#case:mine_calc_2 { $temp_5 == 2 }
+$temp_6 = $mn2
+#case:mine_calc_2 { $temp_5 == 3 }
+$temp_6 = $mn3
+#case:mine_calc_2 { $temp_5 == 4 }
+$temp_6 = $mn4
+
+#site:mine_calc_2
+$temp_6 = $temp_6 div 100
+$temp_7 = $temp_6 mod 100
+#case:mine_calc_ret { $temp_7 = $temp_3 }
+$temp_4 = 10
+#case:mine_calc_1 { $temp_7 = 0 }
+#case:mine_calc_3 { $temp_7 = ($temp_3 - 1) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_3 { $temp_7 <> ($temp_3 - 1) and $temp_7 <> 0 and $temp_7 <> $temp_3}
+
+#site:mine_calc_3
+#case:mine_calc_4 { $temp_7 = ($temp_3 + 1) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_4 { $temp_7 <> ($temp_3 + 1) }
+
+#site:mine_calc_4
+#case:mine_calc_5 { $temp_7 = ($temp_3 - 10) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_5 { $temp_7 <> ($temp_3 - 10) }
+
+#site:mine_calc_5
+#case:mine_calc_6 { $temp_7 = ($temp_3 + 10) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_6 { $temp_7 <> ($temp_3 + 10) }
+
+#site:mine_calc_6
+#case:mine_calc_7 { $temp_7 = ($temp_3 - 9) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_7 { $temp_7 <> ($temp_3 - 9) }
+
+#site:mine_calc_7
+#case:mine_calc_8 { $temp_7 = ($temp_3 + 9) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_8 { $temp_7 <> ($temp_3 + 9) }
+
+#site:mine_calc_8
+#case:mine_calc_9 { $temp_9 = ($temp_3 - 11) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_9 { $temp_9 <> ($temp_3 - 11) }
+
+#site:mine_calc_9
+#case:mine_calc_2 { $temp_9 = ($temp_3 + 11) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_2 { $temp_9 <> ($temp_3 + 11) }
+
+#site:mine_calc_ret
+#return
+
+#site:mine_step
+#case:mine_calc #return:mine_step_1
+
+#site:mine_step_1
+#case:game_lose { $temp_4 >= 9 }
+#case:mine_show { $temp_4 < 9 } #return:mine
 
 #position:entry:96:399
 #position:inc:96:441
@@ -3699,3 +3778,16 @@ $cl53.L = 0
 #position:mine_show_ret:928:819
 #position:mine_ad:1696:273
 #position:mine_eh:1824:273
+#position:mine_step:1504:483
+#position:mine_calc:1440:483
+#position:mine_calc_1:1440:525
+#position:mine_calc_2:1440:567
+#position:mine_calc_ret:1568:777
+#position:mine_calc_3:1440:609
+#position:mine_calc_4:1440:651
+#position:mine_calc_5:1440:693
+#position:mine_calc_6:1440:735
+#position:mine_calc_7:1440:777
+#position:mine_calc_8:1440:819
+#position:mine_step_1:1504:525
+#position:mine_calc_9:1504:819
