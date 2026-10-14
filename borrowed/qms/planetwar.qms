@@ -3459,7 +3459,7 @@ $temp_4 = 8
 #case:mine_init_1
 
 #site:mine_init_1
-$echars.spy = 2
+$echars.spy = 1
 $temp_1 = $temp_1 + 1
 $temp_2 = 0
 #case:mine_prepare { ($temp_1 >= 5) and ($echars.spy = 3) }
