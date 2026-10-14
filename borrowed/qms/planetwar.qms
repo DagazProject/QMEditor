@@ -3333,7 +3333,7 @@ $temp_3 = 0
 #site:mine_show
 $temp_5 = $temp_3 mod 10
 $temp_6 = $temp_3 div 10
-#for:y:1..6
+#for:y:1..7
   #case:mine_show_ret { $temp_6 = [$y] and $temp_5 = 1 }
     $cl[$y - 1]0.H = $temp_4
   #case:mine_show_ret { $temp_6 = [$y] and $temp_5 = 2 }
@@ -3353,6 +3353,72 @@ $temp_6 = $temp_3 div 10
 #end
 
 #site:mine_show_ret
+#return
+
+#site:mine_calc
+$temp_3 = (7 - $temp_1 + 1) * 10 + ($col + 1)
+$temp_4 = 0
+$temp_5 = 0
+#case:mine_calc_1
+
+#site:mine_calc_1
+$temp_5 = $temp_5 + 1
+#case:mine_calc_ret { $temp_5 > 4 }
+#case:mine_calc_2 { $temp_5 = 1 }
+$temp_6 = $mn1
+#case:mine_calc_2 { $temp_5 = 2 }
+$temp_6 = $mn2
+#case:mine_calc_2 { $temp_5 = 3 }
+$temp_6 = $mn3
+#case:mine_calc_2 { $temp_5 = 4 }
+$temp_6 = $mn4
+
+#site:mine_calc_2
+$temp_6 = $temp_6 div 100
+$temp_7 = $temp_6 mod 100
+#case:mine_calc_ret { $temp_7 = $temp_3 }
+$temp_4 = 10
+#case:mine_calc_1 { $temp_7 = 0 }
+#case:mine_calc_3 { $temp_7 = ($temp_3 - 1) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_3 { $temp_7 <> ($temp_3 - 1) and $temp_7 <> 0 and $temp_7 <> $temp_3}
+
+#site:mine_calc_3
+#case:mine_calc_4 { $temp_7 = ($temp_3 + 1) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_4 { $temp_7 <> ($temp_3 + 1) }
+
+#site:mine_calc_4
+#case:mine_calc_5 { $temp_7 = ($temp_3 - 10) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_5 { $temp_7 <> ($temp_3 - 10) }
+
+#site:mine_calc_5
+#case:mine_calc_6 { $temp_7 = ($temp_3 + 10) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_6 { $temp_7 <> ($temp_3 + 10) }
+
+#site:mine_calc_6
+#case:mine_calc_7 { $temp_7 = ($temp_3 - 9) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_7 { $temp_7 <> ($temp_3 - 9) }
+
+#site:mine_calc_7
+#case:mine_calc_8 { $temp_7 = ($temp_3 + 9) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_8 { $temp_7 <> ($temp_3 + 9) }
+
+#site:mine_calc_8
+#case:mine_calc_9 { $temp_7 = ($temp_3 - 11) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_9 { $temp_7 <> ($temp_3 - 11) }
+
+#site:mine_calc_9
+#case:mine_calc_2 { $temp_7 = ($temp_3 + 11) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_2 { $temp_7 <> ($temp_3 + 11) }
+
+#site:mine_calc_ret
 #return
 
 #site:mine_init
@@ -3393,16 +3459,20 @@ $temp_4 = 8
 #case:mine_init_1
 
 #site:mine_init_1
-$echars.spy = 3
+$echars.spy = 2
 $temp_1 = $temp_1 + 1
 $temp_2 = 0
-#case:mine { ($temp_1 >= 5) and ($echars.spy = 3) }
+#case:mine_prepare { ($temp_1 >= 5) and ($echars.spy = 3) }
+$col = 0
 #case:mine_init_2 { ($temp_1 < 5) and ($echars.spy = 3) }
-#case:mine { ($temp_1 >= 4) and ($echars.spy = 2) }
+#case:mine_prepare { ($temp_1 >= 4) and ($echars.spy = 2) }
+$col = 0
 #case:mine_init_2 { ($temp_1 < 4) and ($echars.spy = 2) }
-#case:mine { ($temp_1 >= 3) and ($echars.spy = 1) }
+#case:mine_prepare { ($temp_1 >= 3) and ($echars.spy = 1) }
+$col = 0
 #case:mine_init_2 { ($temp_1 < 3) and ($echars.spy = 1) }
-#case:mine { ($temp_1 >= 2) and ($echars.spy = 0) }
+#case:mine_prepare { ($temp_1 >= 2) and ($echars.spy = 0) }
+$col = 0
 #case:mine_init_2 { ($temp_1 < 2) and ($echars.spy = 0) }
 
 #site:mine_init_2
@@ -3417,14 +3487,26 @@ $temp_5 = 1
 
 #site:mine_init_4
 #case:mine_init_3 { $temp_3 = 0 }
-#case:mine_show { $temp_3 > 0 } #return:mine_init_5 // <--
-//#case:mine_init_5 { $temp_3 > 0 }
+//#case:mine_show { $temp_3 > 0 } #return:mine_init_5 // <--
+#case:mine_init_5 { $temp_3 > 0 }
 
 #site:mine_init_5
 #for:ix:1..4
   #case:mine_init_2 { $temp_1 = [$ix] }
     $mn[$ix] = $mn[$ix] * 100 + $temp_3
 #end
+
+#site:mine_prepare
+$temp_1 = 1
+#case:mine_calc #return:mine_prepare_1
+
+#site:mine_prepare_1
+#case:mine_show #return:mine_prepare_2
+
+#site:mine_prepare_2
+#case:mine_prepare { $col < 7 }
+$col = $col + 1
+#case:mine { $col >= 7 }
 
 #site:mine
 $col = -1
@@ -3610,78 +3692,6 @@ $cl53.L = 0
 #case:mine 'Другая ячейка' #order:8
 #case:game_lose 'Отказаться от выполнения' #order:9
 
-// col    = X
-// temp_1 = Y
-// temp_3 = pos
-// temp_4 = cnt (10 - mine)
-// temp_5 = ix
-// temp_6 = mn
-#site:mine_calc
-$temp_3 = (7 - $temp_1 + 1) * 10 + ($col + 1)
-$temp_4 = 0
-$temp_5 = 0
-#case:mine_calc_1
-
-#site:mine_calc_1
-$temp_5 = $temp_5 + 1
-#case:mine_calc_ret { $temp_5 > 4 }
-#case:mine_calc_2 { $temp_5 = 1 }
-$temp_6 = $mn1
-#case:mine_calc_2 { $temp_5 = 2 }
-$temp_6 = $mn2
-#case:mine_calc_2 { $temp_5 = 3 }
-$temp_6 = $mn3
-#case:mine_calc_2 { $temp_5 = 4 }
-$temp_6 = $mn4
-
-#site:mine_calc_2
-$temp_6 = $temp_6 div 100
-$temp_7 = $temp_6 mod 100
-#case:mine_calc_ret { $temp_7 = $temp_3 }
-$temp_4 = 10
-#case:mine_calc_1 { $temp_7 = 0 }
-#case:mine_calc_3 { $temp_7 = ($temp_3 - 1) }
-$temp_4 = $temp_4 + 1
-#case:mine_calc_3 { $temp_7 <> ($temp_3 - 1) and $temp_7 <> 0 and $temp_7 <> $temp_3}
-
-#site:mine_calc_3
-#case:mine_calc_4 { $temp_7 = ($temp_3 + 1) }
-$temp_4 = $temp_4 + 1
-#case:mine_calc_4 { $temp_7 <> ($temp_3 + 1) }
-
-#site:mine_calc_4
-#case:mine_calc_5 { $temp_7 = ($temp_3 - 10) }
-$temp_4 = $temp_4 + 1
-#case:mine_calc_5 { $temp_7 <> ($temp_3 - 10) }
-
-#site:mine_calc_5
-#case:mine_calc_6 { $temp_7 = ($temp_3 + 10) }
-$temp_4 = $temp_4 + 1
-#case:mine_calc_6 { $temp_7 <> ($temp_3 + 10) }
-
-#site:mine_calc_6
-#case:mine_calc_7 { $temp_7 = ($temp_3 - 9) }
-$temp_4 = $temp_4 + 1
-#case:mine_calc_7 { $temp_7 <> ($temp_3 - 9) }
-
-#site:mine_calc_7
-#case:mine_calc_8 { $temp_7 = ($temp_3 + 9) }
-$temp_4 = $temp_4 + 1
-#case:mine_calc_8 { $temp_7 <> ($temp_3 + 9) }
-
-#site:mine_calc_8
-#case:mine_calc_9 { $temp_7 = ($temp_3 - 11) }
-$temp_4 = $temp_4 + 1
-#case:mine_calc_9 { $temp_7 <> ($temp_3 - 11) }
-
-#site:mine_calc_9
-#case:mine_calc_2 { $temp_7 = ($temp_3 + 11) }
-$temp_4 = $temp_4 + 1
-#case:mine_calc_2 { $temp_7 <> ($temp_3 + 11) }
-
-#site:mine_calc_ret
-#return
-
 #site:mine_step
 #case:mine_calc #return:mine_step_1
 
@@ -3792,3 +3802,6 @@ $temp_4 = $temp_4 + 1
 #position:mine_calc_8:1440:819
 #position:mine_step_1:1504:525
 #position:mine_calc_9:1504:819
+#position:mine_prepare:1184:357
+#position:mine_prepare_1:1184:399
+#position:mine_prepare_2:1184:441
