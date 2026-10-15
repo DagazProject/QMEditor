@@ -1307,11 +1307,11 @@ $manc = 15
 #maim
 $manc = 0
 #case:mancala_init 'Попробовать ещё раз'
-#site:game_win
+#site:game_win #hide:charges:countdown
 #page:1
 Победа!
 #case:entry 'Сыграем ещё?'
-#site:game_lose
+#site:game_lose #hide:charges:countdown
 #page:1
 Нет так нет...
 #case:entry 'Сыграем ещё?'
@@ -3239,6 +3239,11 @@ $temp_6 = $sline1 + $sline2 + $sline3 + $sline4
     $temp_9 = [$i]
 #end
 
+#var:charges #range:0..10 #default:0 #hide #order:2
+  #text:1..10 'Зарядов: $'
+#var:countdown #range:0..100 #default:0 #hide #order:3
+  #text:1..10 'До обнаружения: $'
+
 #var:col #range:-1..7 #default:-1 #hide
   #text:-1..-1 '^  A B C D E F G H ^'
   #text:0..0   '^  * B C D E F G H ^'
@@ -3377,7 +3382,7 @@ $temp_6 = $mn4
 $temp_6 = $temp_6 div 100
 $temp_7 = $temp_6 mod 100
 #case:mine_calc_ret { $temp_7 = $temp_3 }
-$temp_4 = 10
+$temp_4 = $temp_4 + 10
 #case:mine_calc_1 { $temp_7 = 0 }
 #case:mine_calc_3 { $temp_7 = ($temp_3 - 1) }
 $temp_4 = $temp_4 + 1
@@ -3421,7 +3426,8 @@ $temp_4 = $temp_4 + 1
 #site:mine_calc_ret
 #return
 
-#site:mine_init
+#site:mine_init #show:charges:countdown
+$echars.spy = 1
 $cl60   = 0
 $cl61   = 0
 $cl62   = 0
@@ -3456,10 +3462,12 @@ $mn3    = 0
 $mn4    = 0
 $temp_1 = 0
 $temp_4 = 8
+$temp_9 = 0
 #case:mine_init_1
 
 #site:mine_init_1
-$echars.spy = 1
+$charges = 2
+$countdown = 0
 $temp_1 = $temp_1 + 1
 $temp_2 = 0
 #case:mine_prepare { ($temp_1 >= 5) and ($echars.spy = 3) }
@@ -3513,6 +3521,9 @@ $col = -1
 #aim
 #case:mine_ad 'A-D' #order:1
 #case:mine_eh 'E-H' #order:2
+#case:mine 'Подорвать' { $temp_9 = 0 and $charges > 0 } #order:3
+$charges = $charges - 1
+$temp_9 = 1
 #case:game_lose 'Отказаться от выполнения' #order:9
 
 #site:mine_ad
@@ -3696,9 +3707,29 @@ $cl53.L = 0
 #case:mine_calc #return:mine_step_1
 
 #site:mine_step_1
-#case:game_lose { $temp_4 >= 9 }
-#case:game_win { $temp_4 < 9 and $temp_1 >= 7 }
-#case:mine_show { $temp_4 < 9 and $temp_1 < 7 } #return:mine
+#case:mine_step_2 { $temp_9 = 1 and $temp_4 >= 9 }
+$temp_4 = $temp_4 - 10
+$countdown = <5..8>
+#case:mine_step_2 { $temp_9 <> 1 or $temp_4 < 9 }
+
+#site:mine_step_2
+$temp_9 = 0
+#case:mine_lose { $temp_4 >= 9 }
+$variant = 1                                    
+#case:mine_lose { $countdown = 1 }
+$variant = 2                                    
+#case:game_win { $temp_4 < 9 and $temp_1 >= 7 and $countdown <> 1 } 
+#case:mine_show { $temp_4 < 9 and $temp_1 < 7 and $countdown <> 1 } #return:mine
+$countdown = $countdown - 1
+
+#site:mine_lose { $variant } #hide:charges:countdown
+#page:1
+%!!! БА-БАХ !!!%
+
+Жизнь великого рейнджера закончилась...
+#page:2
+%!!! Вас обнаружили !!!%
+#case:entry 'Сыграем ещё?'
 
 #position:entry:96:399
 #position:inc:96:441
@@ -3800,8 +3831,10 @@ $cl53.L = 0
 #position:mine_calc_6:1440:735
 #position:mine_calc_7:1440:777
 #position:mine_calc_8:1440:819
-#position:mine_step_1:1504:525
+#position:mine_step_2:1504:525
 #position:mine_calc_9:1504:819
 #position:mine_prepare:1184:357
 #position:mine_prepare_1:1184:399
 #position:mine_prepare_2:1184:441
+#position:mine_step_1:1504:567
+#position:mine_lose:1120:357
