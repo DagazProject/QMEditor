@@ -3060,14 +3060,14 @@ $temp_13 = 0
     $temp_8  = [$i] * 1000
     $temp_10 = [$i]
 #end
-#case:cow_2 '6' { $echars.spy > 0 } #order:5
-$temp_8  = $temp_8 + 6 * 100
+#case:cow_1 '6' { $echars.spy > 0 } #order:5
+$temp_8  = 6 * 1000
 $temp_10 = 6
-#case:cow_2 '7' { $echars.spy > 1 } #order:6
-$temp_8  = $temp_8 + 7 * 100
+#case:cow_1 '7' { $echars.spy > 1 } #order:6
+$temp_8  = 7 * 1000
 $temp_10 = 7
-#case:cow_2 '8' { $echars.spy > 2 } #order:7
-$temp_8  = $temp_8 + 8 * 100
+#case:cow_1 '8' { $echars.spy > 2 } #order:7
+$temp_8  = 8 * 1000
 $temp_10 = 8
 #case:game_lose 'Отказаться от выполнения' #order:9
 
@@ -3097,14 +3097,14 @@ $temp_11 = 8
     $temp_8  = $temp_8 + [$i] * 10
     $temp_12 = [$i]
 #end
-#case:cow_2 '6' { $echars.spy > 0 } #order:5
-$temp_8  = $temp_8 + 6 * 100
+#case:cow_3 '6' { $echars.spy > 0 } #order:5
+$temp_8  = $temp_8 + 6 * 10
 $temp_12 = 6
-#case:cow_2 '7' { $echars.spy > 1 } #order:6
-$temp_8  = $temp_8 + 7 * 100
+#case:cow_3 '7' { $echars.spy > 1 } #order:6
+$temp_8  = $temp_8 + 7 * 10
 $temp_12 = 7
-#case:cow_2 '8' { $echars.spy > 2 } #order:7
-$temp_8  = $temp_8 + 8 * 100
+#case:cow_3 '8' { $echars.spy > 2 } #order:7
+$temp_8  = $temp_8 + 8 * 10
 $temp_12 = 8
 #case:cow 'Начать заново' #order:8
 #case:game_lose 'Отказаться от выполнения' #order:9
@@ -3116,14 +3116,14 @@ $temp_12 = 8
     $temp_8  = $temp_8 + [$i]
     $temp_13 = [$i]
 #end
-#case:cow_2 '6' { $echars.spy > 0 } #order:5
-$temp_8  = $temp_8 + 6 * 100
+#case:cow_4 '6' { $echars.spy > 0 } #order:5
+$temp_8  = $temp_8 + 6
 $temp_13 = 6
-#case:cow_2 '7' { $echars.spy > 1 } #order:6
-$temp_8  = $temp_8 + 7 * 100
+#case:cow_4 '7' { $echars.spy > 1 } #order:6
+$temp_8  = $temp_8 + 7
 $temp_13 = 7
-#case:cow_2 '8' { $echars.spy > 2 } #order:7
-$temp_8  = $temp_8 + 8 * 100
+#case:cow_4 '8' { $echars.spy > 2 } #order:7
+$temp_8  = $temp_8 + 8
 $temp_13 = 8
 #case:cow 'Начать заново' #order:8
 #case:game_lose 'Отказаться от выполнения' #order:9
