@@ -78,14 +78,14 @@ Planet War
 #case:start { 1 = 0 } 'Играть'
 #case:mancala_init { 1 = 1 } 'Манкала'
 $variant = <1..2>
-#case:lightoff_init { 1 = 1 } 'Туши свет'
+#case:lightoff_init { 1 = 0 } 'Туши свет'
 $variant = <3..9>
-#case:solit_init { 1 = 1 } 'Солитер'
+#case:solit_init { 1 = 0 } 'Солитер'
 $variant = <10..12>
-#case:swap_init { 1 = 1 } 'Перестановка'
+#case:swap_init { 1 = 0 } 'Перестановка'
 $variant = 13 // <13..14>
-#case:cow_init { 1 = 1 } 'Быки и коровы'
-#case:mine_init { 1 = 1 } 'Сапёр'
+#case:cow_init { 1 = 0 } 'Быки и коровы'
+#case:mine_init { 1 = 0 } 'Сапёр'
 
 #site:start
 $erace               = <1..5>
@@ -841,7 +841,7 @@ $temp_2 = 0
 #page:1
 ^ ------------------------ ^
 ^  @manc @ms|      ^
-^ ($temp_1) ($temp_2) ($temp_3) ($temp_4) | ($temp_5) ^
+^ <link=A>($temp_1)</link> <link=B>($temp_2)</link> <link=C>($temp_3)</link> <link=D>($temp_4)</link> | ($temp_5) ^
 ^ ------------------------ ^
 ^  %A%   %B%   %C%   %D% @ms|      ^
 $ms = ($temp_1 > 9) + ($temp_2 > 9) + ($temp_3 > 9) + ($temp_4 > 9)
@@ -3803,38 +3803,37 @@ $countdown = $countdown - 1
 #position:cow_calc:416:357
 #position:cow_calc_1:416:315
 #position:cow_end:160:651
-
-#position:mine_init:1568:63
-#position:mine_init_1:1568:105
-#position:mine_init_3:1504:189
-#position:mine:1696:105
-#position:mine_col:1760:231
-#position:mine_check:1312:273
-#position:mine_check_1:1312:357
-#position:mine_check_ret:1376:357
-#position:mine_check_2:1312:399
-#position:mine_init_4:1504:273
-#position:mine_init_5:1568:315
-#position:mine_init_2:1568:147
-#position:mine_show:1312:483
-#position:mine_show_ret:928:819
-#position:mine_ad:1696:273
-#position:mine_eh:1824:273
-#position:mine_step:1504:483
-#position:mine_calc:1440:483
-#position:mine_calc_1:1440:525
-#position:mine_calc_2:1440:567
-#position:mine_calc_ret:1568:777
-#position:mine_calc_3:1440:609
-#position:mine_calc_4:1440:651
-#position:mine_calc_5:1440:693
-#position:mine_calc_6:1440:735
-#position:mine_calc_7:1440:777
-#position:mine_calc_8:1440:819
-#position:mine_step_2:1504:525
-#position:mine_calc_9:1504:819
-#position:mine_prepare:1184:357
-#position:mine_prepare_1:1184:399
-#position:mine_prepare_2:1184:441
-#position:mine_step_1:1504:567
-#position:mine_lose:1120:357
+#position:mine:96:651
+#position:mine_init:96:693
+#position:mine_init_1:96:735
+#position:mine_init_2:160:735
+#position:mine_init_3:96:777
+#position:mine_ad:96:819
+#position:mine_eh:224:819
+#position:mine_col:160:819
+#position:mine_step:480:357
+#position:mine_check:224:735
+#position:mine_init_4:224:777
+#position:mine_init_5:288:819
+#position:mine_check_ret:288:777
+#position:mine_check_1:288:735
+#position:mine_check_2:352:735
+#position:mine_prepare:352:777
+#position:mine_prepare_1:416:777
+#position:mine_calc:480:483
+#position:mine_step_2:480:525
+#position:mine_calc_1:480:567
+#position:mine_calc_2:480:609
+#position:mine_calc_3:480:651
+#position:mine_calc_4:480:693
+#position:mine_calc_5:480:735
+#position:mine_calc_6:480:777
+#position:mine_calc_7:480:819
+#position:mine_calc_8:416:819
+#position:mine_calc_9:352:819
+#position:mine_show_ret:544:819
+#position:mine_show:96:273
+#position:mine_lose:480:315
+#position:mine_prepare_2:544:777
+#position:mine_step_1:544:735
+#position:mine_calc_ret:544:693

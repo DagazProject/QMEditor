@@ -19,6 +19,7 @@ import { Store } from "./store";
 import { DivFadeinCss } from "./common";
 import { observable } from "mobx";
 import { assertNever } from "../assertNever";
+import { GameStyleRoot } from "./menu/gameStyle";
 
 @observer
 export class AppNavbar extends React.Component<{
@@ -33,8 +34,8 @@ export class AppNavbar extends React.Component<{
     const store = this.props.store;
     const tab0 = this.props.store.path.tab0;
     return (
-      <>
-        <Navbar color="light" light expand="md">
+      <GameStyleRoot>
+        <Navbar color="dark" dark expand="md" className="game-menu-navbar">
           <NavbarBrand href="#/">
             {l.hi} {player.Player}
           </NavbarBrand>
@@ -137,7 +138,7 @@ export class AppNavbar extends React.Component<{
         </Navbar>
 
         <Container className="mt-3">{this.props.children}</Container>
-      </>
+      </GameStyleRoot>
     );
   }
 }

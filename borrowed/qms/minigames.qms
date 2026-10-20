@@ -1,0 +1,3840 @@
+#macro:race
+  #text:0..0 ''
+  #text:1..1 'Человек'
+  #text:2..2 'Пеленг'
+  #text:3..3 'Малок'
+  #text:4..4 'Фэянин'
+  #text:5..5 'Гаалец'
+#end
+
+#macro:bonus
+  #text:0..0 '-1'
+  #text:1..1 ''
+  #text:2..2 '+1'
+  #text:3..3 '+2'
+#end
+
+#macro:chars:NM
+#var:[$NM] #range:0..16383 #default:0 #mod:4 #hide
+  #field:science      // 4096 Эффективность исследований
+  #field:spy          // 1024 Эффективность разведки
+  #field:defence      // 256  Эффективность защиты
+  #field:attack       // 64   Эффективность атаки
+  #field:chaotic      // 16   Хаотичность
+  #field:production   // 4    Эффективность производства
+  #field:reproduction // 1    Воспроизводство населения
+#end
+
+#var:frace #range:0..5 #default:0 #hide
+  #race
+#var:erace #range:0..5 #default:0 #hide
+  #race
+
+#chars:echars // Характеристики противника
+#chars:fchars // Характеристики игрока
+
+#var:temp_1 #range:0..100000000 #default:3 #hide
+  #bonus
+#var:temp_2 #range:0..100000000 #default:3 #hide
+  #bonus
+#var:temp_3 #range:0..100000000 #default:3 #hide
+  #bonus
+#var:temp_4 #range:0..100000000 #default:3 #hide
+  #bonus
+#var:temp_5 #range:0..100000000 #default:3 #hide
+  #bonus
+#var:temp_6 #range:0..100000000 #default:3 #hide
+  #bonus
+#var:temp_7 #range:0..100000000 #default:3 #hide
+  #bonus
+
+#macro:ct
+  #text:0..0 ' '
+  #text:1..1 '1'
+  #text:2..2 '2'
+  #text:3..3 '3'
+  #text:4..4 '4'
+  #text:5..5 '5'
+  #text:6..6 '6'
+  #text:7..7 '7'
+  #text:8..8 '8'
+  #text:9..9 '9'
+#end
+
+#var:temp_8 #range:0..99999 #default:0 #hide
+#var:temp_9 #range:0..100000000 #default:0 #hide
+
+#var:year #range:3027..4027 #default:3027 #hide #order:1
+  #text:3027..4027 'Год: $'
+
+#var:ebonus #range:0..3 #default:0 #hide // Нераспределённые бонусы противника
+#var:fbonus #range:0..3 #default:0 #hide // Нераспределённые бонусы игрока
+
+#var:variant #range:0..1000 #default:0 #hide // Вариант выбора
+
+#site:entry #default
+#page:1
+Planet War
+#case:start { 1 = 0 } 'Играть'
+#case:mancala_init { 1 = 1 } 'Манкала'
+$variant = <1..2>
+#case:lightoff_init { 1 = 1 } 'Туши свет'
+$variant = <3..9>
+#case:solit_init { 1 = 1 } 'Солитер'
+$variant = <10..12>
+#case:swap_init { 1 = 1 } 'Перестановка'
+$variant = 13 // <13..14>
+#case:cow_init { 1 = 1 } 'Быки и коровы'
+#case:mine_init { 1 = 1 } 'Сапёр'
+
+#site:start
+$erace               = <1..5>
+$echars              = 0
+$fchars              = 0
+#page:1
+Выбрать расу
+#case:race 'Человек' {$erace <> 1}
+$frace               = 1 // Человек
+$fchars              = 7573
+$fbonus              = 2 // +2
+#case:race 'Пеленг'  {$erace <> 2}
+$frace               = 2 // Пеленг
+$fchars              = 7766
+$fbonus              = 1 // +1
+#case:race 'Малок'   {$erace <> 3}
+$frace               = 3 // Малок
+$fchars              = 1525
+$fbonus              = 2 // +2
+#case:race 'Фэянин'  {$erace <> 4}
+$frace               = 4 // Фэянин
+$fchars              = 6937
+$fbonus              = 2 // +2
+#case:race 'Гаалец'  {$erace <> 5}
+$frace               = 5 // Гаалец
+$fchars              = 15125
+$fbonus              = 1 // +1
+
+#macro:raim:L
+$temp_1 = $[$L]chars.reproduction
+$temp_2 = $[$L]chars.production
+$temp_3 = $[$L]chars.chaotic
+$temp_4 = $[$L]chars.attack
+$temp_5 = $[$L]chars.defence
+$temp_6 = $[$L]chars.spy
+$temp_7 = $[$L]chars.science
+#page:1
+^ Раса: @[$L]race ^
+^ -------------------------------------- ^
+^ Воспроизводство:  @temp_1 ^
+^ Производство:     @temp_2 ^
+^ Хаотичность:      @temp_3 ^
+^ Атака:            @temp_4 ^
+^ Защита:           @temp_5 ^
+^ Шпионаж:          @temp_6 ^
+^ Наука:            @temp_7 ^
+^ -------------------------------------- ^
+^ Не распределено:  $[$L]bonus ^
+#end
+
+#site:race
+#raim:f
+#case:inc 'Увеличить' { $fbonus > 0 } #order:1
+#case:dec 'Уменьшить' #order:2
+#case:rand_3 'Играть' { $fbonus = 0 and $erace = 1 } #order:3
+$echars = 7573
+$ebonus = 2 
+#case:rand_3 'Играть' { $fbonus = 0 and $erace = 2 } #order:3
+$echars = 7766
+$ebonus = 1
+#case:rand_3 'Играть' { $fbonus = 0 and $erace = 3 } #order:3
+$echars = 1525
+$ebonus = 2
+#case:rand_3 'Играть' { $fbonus = 0 and $erace = 4 } #order:3
+$echars = 6937
+$ebonus = 2
+#case:rand_3 'Играть' { $fbonus = 0 and $erace = 5 } #order:3
+$echars = 15125
+$ebonus = 1
+#case:rand_1 'Распределить случайно' { $fbonus > 0 } #order:4
+#case:start 'Выбрать другую расу' #order:5
+
+#site:inc
+#raim:f
+#case:race 'Воспроизводство' { $fchars.reproduction < 3 } #order:1
+$fchars.reproduction = $fchars.reproduction + 1
+$fbonus = $fbonus - 1
+#case:race 'Производство' { $fchars.production < 3 } #order:2
+$fchars.production = $fchars.production + 1
+$fbonus = $fbonus - 1
+#case:race 'Хаотичность' { $fchars.chaotic < 3 } #order:3
+$fchars.chaotic = $fchars.chaotic + 1
+$fbonus = $fbonus - 1
+#case:race 'Атака' { $fchars.attack < 3 } #order:4
+$fchars.attack = $fchars.attack + 1
+$fbonus = $fbonus - 1
+#case:race 'Защита' { $fchars.defence < 3 } #order:5
+$fchars.defence = $fchars.defence + 1
+$fbonus = $fbonus - 1
+#case:race 'Шпионаж' { $fchars.spy < 3 } #order:6
+$fchars.spy = $fchars.spy + 1
+$fbonus = $fbonus - 1
+#case:race 'Наука' { $fchars.science < 3 } #order:7
+$fchars.science = $fchars.science + 1
+$fbonus = $fbonus - 1
+#case:race 'Вернуться' #order:8
+
+#site:dec
+#raim:f
+#case:race 'Воспроизводство' { $fchars.reproduction > 0 } #order:1
+$fchars.reproduction = $fchars.reproduction - 1
+$fbonus = $fbonus + 1
+#case:race 'Производство' { $fchars.production > 0 } #order:2
+$fchars.production = $fchars.production - 1
+$fbonus = $fbonus + 1
+#case:race 'Хаотичность' { $fchars.chaotic > 0 } #order:3
+$fchars.chaotic = $fchars.chaotic - 1
+$fbonus = $fbonus + 1
+#case:race 'Атака' { $fchars.attack > 0 } #order:4
+$fchars.attack = $fchars.attack - 1
+$fbonus = $fbonus + 1
+#case:race 'Защита' { $fchars.defence > 0 } #order:5
+$fchars.defence = $fchars.defence - 1
+$fbonus = $fbonus + 1
+#case:race 'Шпионаж' { $fchars.spy > 0 } #order:6
+$fchars.spy = $fchars.spy - 1
+$fbonus = $fbonus + 1
+#case:race 'Наука' { $fchars.science > 0 } #order:7
+$fchars.science = $fchars.science - 1
+$fbonus = $fbonus + 1
+#case:race 'Вернуться' #order:8
+
+#site:rand_1
+#case:race { $fbonus = 0 }
+#case:rand_2 { $fbonus > 0 }
+
+#site:rand_2
+$variant = <1..7>
+#case:rand_1 { $variant = 1 and $fchars.reproduction = 3 }
+#case:rand_1 { $variant = 1 and $fchars.reproduction < 3 }
+$fchars.reproduction = $fchars.reproduction + 1
+$fbonus = $fbonus - 1
+#case:rand_1 { $variant = 2 and $fchars.production = 3 }
+#case:rand_1 { $variant = 2 and $fchars.production < 3 }
+$fchars.production = $fchars.production + 1
+$fbonus = $fbonus - 1
+#case:rand_1 { $variant = 3 and $fchars.chaotic = 3 }
+#case:rand_1 { $variant = 3 and $fchars.chaotic < 3 }
+$fchars.chaotic = $fchars.chaotic + 1
+$fbonus = $fbonus - 1
+#case:rand_1 { $variant = 4 and $fchars.attack = 3 }
+#case:rand_1 { $variant = 4 and $fchars.attack < 3 }
+$fchars.attack = $fchars.attack + 1
+$fbonus = $fbonus - 1
+#case:rand_1 { $variant = 5 and $fchars.defence = 3 }
+#case:rand_1 { $variant = 5 and $fchars.defence < 3 }
+$fchars.defence = $fchars.defence + 1
+$fbonus = $fbonus - 1
+#case:rand_1 { $variant = 6 and $fchars.spy = 3 }
+#case:rand_1 { $variant = 6 and $fchars.spy < 3 }
+$fchars.spy = $fchars.spy + 1
+$fbonus = $fbonus - 1
+#case:rand_1 { $variant = 7 and $fchars.science = 3 }
+#case:rand_1 { $variant = 7 and $fchars.science < 3 }
+$fchars.science = $fchars.science + 1
+$fbonus = $fbonus - 1
+
+#site:rand_3
+#case:init { $ebonus = 0 }
+#case:rand_4 { $ebonus > 0 }
+
+#site:rand_4
+$variant = <1..7>
+#case:rand_3 { $variant = 1 and $echars.reproduction = 3 }
+#case:rand_3 { $variant = 1 and $echars.reproduction < 3 }
+$echars.reproduction = $echars.reproduction + 1
+$ebonus = $ebonus - 1
+#case:rand_3 { $variant = 2 and $echars.production = 3 }
+#case:rand_3 { $variant = 2 and $echars.production < 3 }
+$echars.production = $echars.production + 1
+$ebonus = $ebonus - 1
+#case:rand_3 { $variant = 3 and $echars.chaotic = 3}
+#case:rand_3 { $variant = 3 and $echars.chaotic < 3}
+$echars.chaotic = $echars.chaotic + 1
+$ebonus = $ebonus - 1
+#case:rand_3 { $variant = 4 and $echars.attack = 3 }
+#case:rand_3 { $variant = 4 and $echars.attack < 3 }
+$echars.attack = $echars.attack + 1
+$ebonus = $ebonus - 1
+#case:rand_3 { $variant = 5 and $echars.defence = 3 }
+#case:rand_3 { $variant = 5 and $echars.defence < 3 }
+$echars.defence = $echars.defence + 1
+$ebonus = $ebonus - 1
+#case:rand_3 { $variant = 6 and $echars.spy = 3 }
+#case:rand_3 { $variant = 6 and $echars.spy < 3 }
+$echars.spy = $echars.spy + 1
+$ebonus = $ebonus - 1
+#case:rand_3 { $variant = 7 and $echars.science = 3 }
+#case:rand_3 { $variant = 7 and $echars.science < 3 }
+$echars.science = $echars.science + 1
+$ebonus = $ebonus - 1
+
+#macro:planet
+  #text:0..0 ''
+  #text:1..1 'Кабруния'
+  #text:2..2 'Катраз'
+  #text:3..3 'Авалон'
+  #text:4..4 'Гралгар'
+  #text:5..5 'Велорат'
+  #text:6..6 'Дралимия'
+#end
+
+#macro:ptype
+  #text:0..0 ''
+  #text:1..1 'Столица'
+#end
+
+#macro:pop:NN
+#var:pop_[$NN] #range:0..1000000000 #default:32001 #hide
+  #field:total #mod:10000000
+  #field:science #mod:8
+  #field:capital #mod:2
+  #field:friend #mod:2
+#end
+
+#macro:arm:NN
+#var:arm_[$NN] #range:0..1000000000 #default:0 #hide
+  #field:arty #mod:1000
+  #field:navy #mod:1000
+  #field:land #mod:1000
+#end
+
+#macro:transfer:NN
+#var:transfer_[$NN] #range:0..1000000000 #default:0 #hide
+  #field:popl #mod:1000
+  #field:navy #mod:1000
+  #field:land #mod:1000
+#end
+
+#for:i:1..6
+  #pop:[$i]
+  #arm:[$i]
+  #transfer:[$i]
+#end
+
+#var:curr #range:1..6 #default:1 #hide
+  #planet
+
+#macro:paim
+^ Планета: @curr ^
+^ -------------------------------------- ^
+^ Население:  $temp_1 ^
+^ Пехота:     $temp_2 ^
+^ Авиация:    $temp_3 ^
+^ Артиллерия: $temp_4 ^
+^ Учёные:     $temp_6 ^
+//^ Разведка:   $temp_5 ^
+#end
+
+#site:init
+$pop_1 = ((($fchars.chaotic - 1) * <1..10>) + 1000) * 32 + 1
+$pop_2 = ((($fchars.chaotic - 1) * <1..10>) +  100) * 32 + 1
+$pop_3 = ((($fchars.chaotic - 1) * <1..10>) +  100) * 32 + 1
+$pop_4 = ((($fchars.chaotic - 1) * <1..10>) + 1000) * 32
+$pop_5 = ((($fchars.chaotic - 1) * <1..10>) +  100) * 32
+$pop_6 = ((($fchars.chaotic - 1) * <1..10>) +  100) * 32
+#case:game
+
+#site:game #show:year
+#case:main { $curr = 1 }
+$temp_1 = $pop_1.total
+$temp_2 = $arm_1.land
+$temp_3 = $arm_1.navy
+$temp_4 = $arm_1.arty
+//$temp_5 = $transfer_1.spy
+$temp_6 = $pop_1.science
+#case:main { $curr = 2 }
+$temp_1 = $pop_2.total
+$temp_2 = $arm_2.land
+$temp_3 = $arm_2.navy
+$temp_4 = $arm_2.arty
+//$temp_5 = $transfer_2.spy
+$temp_6 = $pop_2.science
+#case:main { $curr = 3 }
+$temp_1 = $pop_3.total
+$temp_2 = $arm_3.land
+$temp_3 = $arm_3.navy
+$temp_4 = $arm_3.arty
+//$temp_5 = $transfer_3.spy
+$temp_6 = $pop_3.science
+#case:main { $curr = 4 }
+$temp_1 = $pop_4.total
+$temp_2 = $arm_4.land
+$temp_3 = $arm_4.navy
+$temp_4 = $arm_4.arty
+//$temp_5 = $transfer_4.spy
+$temp_6 = $pop_4.science
+#case:main { $curr = 5 }
+$temp_1 = $pop_5.total
+$temp_2 = $arm_5.land
+$temp_3 = $arm_5.navy
+$temp_4 = $arm_5.arty
+//$temp_5 = $transfer_5.spy
+$temp_6 = $pop_5.science
+#case:main { $curr = 6 }
+$temp_1 = $pop_6.total
+$temp_2 = $arm_6.land
+$temp_3 = $arm_6.navy
+$temp_4 = $arm_6.arty
+//$temp_5 = $transfer_6.spy
+$temp_6 = $pop_6.science
+
+#site:main
+#page:1
+#paim
+#case:select 'Другая планета'                        #order:1
+#case:train  'Тренировать'                           #order:2
+$temp_8 = 0
+#case:transf 'Переместить'                           #order:3
+//#case:attack 'Атаковать'    { $temp_2 + $temp_3 > 0} #order:4
+//#case:scienc 'Исследования' { $temp_6 > 0 }          #order:5
+//#case:intelg 'Разведка'     { $temp_5 > 0 }          #order:6
+#case:wait   'Ждать'                                 #order:7
+
+#site:select
+#page:1
+#paim
+#case:game 'Кабруния' { $pop_1.friend = 1 and $curr <> 1 } #order:1
+$curr = 1
+#case:game 'Катраз' { $pop_2.friend = 1 and $curr <> 2 } #order:2
+$curr = 2
+#case:game 'Авалон' { $pop_3.friend = 1 and $curr <> 3 } #order:3
+$curr = 3
+#case:game 'Гралгар' { $pop_4.friend = 1 and $curr <> 4 } #order:4
+$curr = 4
+#case:game 'Велорат' { $pop_5.friend = 1 and $curr <> 5 } #order:5
+$curr = 5
+#case:game 'Дралимия' { $pop_6.friend = 1 and $curr <> 6 } #order:6
+$curr = 6
+#case:main 'Вернуться' #order:7
+
+#site:train
+#page:1
+#paim
+#case:train_what 'Пехоту' #order:1
+$variant = 1
+$temp_7  = 4 + $fchars.production
+#case:train_what 'Авиацию' #order:2
+$variant = 2
+$temp_7  = 3 + $fchars.production
+#case:train_what 'Артиллерию' #order:3
+$variant = 3
+$temp_7  = 2 + $fchars.production
+#case:train_what 'Учёных' #order:4
+$variant = 4
+#case:main 'Вернуться' #order:7
+
+#site:train_what { $variant }
+#page:1
+#paim
+^ -------------------------------------- ^
+^ Пехота:     $temp_8 ^
+#page:2
+#paim
+^ -------------------------------------- ^
+^ Авиация:    $temp_8 ^
+#page:3
+#paim
+^ -------------------------------------- ^
+^ Артиллерия: $temp_8 ^
+#page:4
+#paim
+^ -------------------------------------- ^
+^ Учёные:     $temp_8 ^
+#case:train_what 'Одного' { $temp_1 > 0 and $variant < 4 and ($temp_8 + 1) <= ((($temp_1 - 1) * $temp_7) div 100) } #order:1
+$temp_8 = $temp_8 + 1
+$temp_1 = $temp_1 - 1
+#case:train_what 'Одного' { $temp_1 > 0 and $variant >= 4 and $temp_8 < 5 } #order:1
+$temp_8 = $temp_8 + 1
+$temp_1 = $temp_1 - 100
+#case:train_what 'Десяток' { $temp_1 > 10 and $variant < 4  and ($temp_8 + 10) <= ((($temp_1 - 10) * $temp_7) div 100) } #order:2
+$temp_8 = $temp_8 + 10
+$temp_1 = $temp_1 - 10
+#case:train_temp 'Обучить' { $temp_8 > 0 } #order:3
+#case:main 'Отменить обучение' { $variant < 4 } #order:7
+$temp_1 = $temp_1 + $temp_8
+#case:main 'Отменить обучение' { $variant >= 4 } #order:7
+$temp_1 = $temp_1 + ($temp_8 * 100)
+
+#site:train_temp
+#case:main { $curr = 1 and $variant = 1 }
+$transfer_1.land = $transfer_1.land + $temp_8
+$temp_8 = 0
+#case:main { $curr = 1 and $variant = 2 }
+$transfer_1.navy = $transfer_1.navy + $temp_8
+$temp_8 = 0
+#case:main { $curr = 1 and $variant = 3 }
+$arm_1.arty = $arm_1.arty + $temp_8
+$temp_8 = 0
+#case:main { $curr = 1 and $variant = 4 }
+$pop_1.science = $pop_1.science + $temp_8
+$temp_8 = 0
+#case:main { $curr = 2 and $variant = 1 }
+$transfer_2.land = $transfer_2.land + $temp_8
+$temp_8 = 0
+#case:main { $curr = 2 and $variant = 2 }
+$transfer_2.navy = $transfer_2.navy + $temp_8
+$temp_8 = 0
+#case:main { $curr = 2 and $variant = 3 }
+$arm_2.arty = $arm_2.arty + $temp_8
+$temp_8 = 0
+#case:main { $curr = 2 and $variant = 4 }
+$pop_2.science = $pop_2.science + $temp_8
+$temp_8 = 0
+#case:main { $curr = 3 and $variant = 1 }
+$transfer_3.land = $transfer_3.land + $temp_8
+$temp_8 = 0
+#case:main { $curr = 3 and $variant = 2 }
+$transfer_3.navy = $transfer_3.navy + $temp_8
+$temp_8 = 0
+#case:main { $curr = 3 and $variant = 3 }
+$arm_3.arty = $arm_3.arty + $temp_8
+$temp_8 = 0
+#case:main { $curr = 3 and $variant = 4 }
+$pop_3.science = $pop_3.science + $temp_8
+$temp_8 = 0
+#case:main { $curr = 4 and $variant = 1 }
+$transfer_4.land = $transfer_4.land + $temp_8
+$temp_8 = 0
+#case:main { $curr = 4 and $variant = 2 }
+$transfer_4.navy = $transfer_4.navy + $temp_8
+$temp_8 = 0
+#case:main { $curr = 4 and $variant = 3 }
+$arm_4.arty = $arm_4.arty + $temp_8
+$temp_8 = 0
+#case:main { $curr = 4 and $variant = 4 }
+$pop_4.science = $pop_4.science + $temp_8
+$temp_8 = 0
+#case:main { $curr = 5 and $variant = 1 }
+$transfer_5.land = $transfer_5.land + $temp_8
+$temp_8 = 0
+#case:main { $curr = 5 and $variant = 2 }
+$transfer_5.navy = $transfer_5.navy + $temp_8
+$temp_8 = 0
+#case:main { $curr = 5 and $variant = 3 }
+$arm_5.arty = $arm_5.arty + $temp_8
+$temp_8 = 0
+#case:main { $curr = 5 and $variant = 4 }
+$pop_5.science = $pop_5.science + $temp_8
+$temp_8 = 0
+#case:main { $curr = 6 and $variant = 1 }
+$transfer_6.land = $transfer_6.land + $temp_8
+$temp_8 = 0
+#case:main { $curr = 6 and $variant = 2 }
+$transfer_6.navy = $transfer_6.navy + $temp_8
+$temp_8 = 0
+#case:main { $curr = 6 and $variant = 3 }
+$arm_6.arty = $arm_6.arty + $temp_8
+$temp_8 = 0
+#case:main { $curr = 6 and $variant = 4 }
+$pop_6.science = $pop_6.science + $temp_8
+$temp_8 = 0
+
+#macro:taim
+^ Планета: @curr ^
+^ -------------------------------------- ^
+^ Население:  $temp_1 ^
+^ Пехота:     $temp_2 ^
+^ Авиация:    $temp_3 ^
+#end
+
+#site:transf
+#page:1
+#taim
+#case:transf_num 'Население' { $temp_1 > 0 } #order:1
+$variant = 1
+#case:transf_num 'Пехоту' { $temp_2 > 0 } #order:2
+$variant = 2
+#case:transf_num 'Авиацию' { $temp_3 > 0 } #order:2
+$variant = 3
+#case:main 'Вернуться' #order:7
+
+#site:transf_num { $variant }
+#page:1
+#taim
+^ -------------------------------------- ^
+^ Население:  $temp_8 ^
+#page:2
+#taim
+^ -------------------------------------- ^
+^ Пехота:     $temp_8 ^
+#page:3
+#taim
+^ -------------------------------------- ^
+^ Авиация:    $temp_8 ^
+#case:transf_temp 'Одного' { $variant = 1 and $temp_1 > 0 } #order:1
+$temp_1 = $temp_1 - 1
+$temp_8 = $temp_8 + 1
+#case:transf_temp 'Одного' { $variant = 2 and $temp_2 > 0 } #order:1
+$temp_2 = $temp_2 - 1
+$temp_8 = $temp_8 + 1
+#case:transf_temp 'Одного' { $variant = 3 and $temp_3 > 0 } #order:1
+$temp_3 = $temp_3 - 1
+$temp_8 = $temp_8 + 1
+#case:transf_temp 'Десяток' { $variant = 1 and $temp_1 > 10 } #order:2
+$temp_1 = $temp_1 - 10
+$temp_8 = $temp_8 + 10
+#case:transf_temp 'Десяток' { $variant = 2 and $temp_2 > 10 } #order:2
+$temp_2 = $temp_2 - 10
+$temp_8 = $temp_8 + 10
+#case:transf_temp 'Десяток' { $variant = 3 and $temp_3 > 10 } #order:2
+$temp_3 = $temp_3 - 10
+$temp_8 = $temp_8 + 10
+#case:transf_temp 'Всех' { $variant = 1 and $temp_1 > 1 and $temp_1 <= 1000 } #order:3
+$temp_8 = $temp_8 + $temp_1
+$temp_1 = 0
+#case:transf_temp 'Всех' { $variant = 2 and $temp_2 > 1 and $temp_2 <= 1000 } #order:3
+$temp_8 = $temp_8 + $temp_2
+$temp_2 = 0
+#case:transf_temp 'Всех' { $variant = 3 and $temp_3 > 1 and $temp_3 <= 1000 } #order:3
+$temp_8 = $temp_8 + $temp_3
+$temp_3 = 0
+#case:transf_where 'Куда?' { $temp_8 > 0 } #order:4
+#case:main 'Отменить перевод' { $variant = 1 } #order:7
+$temp_1 = $temp_8
+$temp_8 = 0
+#case:main 'Отменить перевод' { $variant = 2 } #order:7
+$temp_2 = $temp_8
+$temp_8 = 0
+#case:main 'Отменить перевод' { $variant = 3 } #order:7
+$temp_3 = $temp_8
+$temp_8 = 0
+
+#site:transf_temp
+#case:transf_num
+
+#site:transf_where { $variant }
+#page:1
+#taim
+^ -------------------------------------- ^
+^ Население:  $temp_8 ^
+#page:2
+#taim
+^ -------------------------------------- ^
+^ Пехота:     $temp_8 ^
+#page:3
+#taim
+^ -------------------------------------- ^
+^ Авиация:    $temp_8 ^
+#case:transf_complete 'на Кабрунию' { $curr <> 1 and $pop_1.friend = 1 and $variant = 1 } #order:1
+$transfer_1.popl = $transfer_1.popl + $temp_8
+$temp_8 = $temp_1
+#case:transf_complete 'на Катраз'   { $curr <> 2 and $pop_2.friend = 1 and $variant = 1 } #order:1
+$transfer_2.popl = $transfer_2.popl + $temp_8
+$temp_8 = $temp_1
+#case:transf_complete 'на Авалон'   { $curr <> 3 and $pop_3.friend = 1 and $variant = 1 } #order:1
+$transfer_3.popl = $transfer_3.popl + $temp_8
+$temp_8 = $temp_1
+#case:transf_complete 'на Гралгар'  { $curr <> 4 and $pop_4.friend = 1 and $variant = 1 } #order:1
+$transfer_4.popl = $transfer_4.popl + $temp_8
+$temp_8 = $temp_1
+#case:transf_complete 'на Велорат'  { $curr <> 5 and $pop_5.friend = 1 and $variant = 1 } #order:1
+$transfer_5.popl = $transfer_5.popl + $temp_8
+$temp_8 = $temp_1
+#case:transf_complete 'на Дралимию' { $curr <> 6 and $pop_6.friend = 1 and $variant = 1 } #order:1
+$transfer_6.popl = $transfer_6.popl + $temp_8
+$temp_8 = $temp_1
+#case:transf_complete 'на Кабрунию' { $curr <> 1 and $pop_1.friend = 1 and $variant = 2 } #order:1
+$transfer_1.land = $transfer_1.land + $temp_8
+$temp_8 = $temp_2
+#case:transf_complete 'на Катраз'   { $curr <> 2 and $pop_2.friend = 1 and $variant = 2 } #order:1
+$transfer_2.land = $transfer_2.land + $temp_8
+$temp_8 = $temp_2
+#case:transf_complete 'на Авалон'   { $curr <> 3 and $pop_3.friend = 1 and $variant = 2 } #order:1
+$transfer_3.land = $transfer_3.land + $temp_8
+$temp_8 = $temp_2
+#case:transf_complete 'на Гралгар'  { $curr <> 4 and $pop_4.friend = 1 and $variant = 2 } #order:1
+$transfer_4.land = $transfer_4.land + $temp_8
+$temp_8 = $temp_2
+#case:transf_complete 'на Велорат'  { $curr <> 5 and $pop_5.friend = 1 and $variant = 2 } #order:1
+$transfer_5.land = $transfer_5.land + $temp_8
+$temp_8 = $temp_2
+#case:transf_complete 'на Дралимию' { $curr <> 6 and $pop_6.friend = 1 and $variant = 2 } #order:1
+$transfer_6.land = $transfer_6.land + $temp_8
+$temp_8 = $temp_2
+#case:transf_complete 'на Кабрунию' { $curr <> 1 and $pop_1.friend = 1 and $variant = 3 } #order:1
+$transfer_1.navy = $transfer_1.navy + $temp_8
+$temp_8 = $temp_3
+#case:transf_complete 'на Катраз'   { $curr <> 2 and $pop_2.friend = 1 and $variant = 3 } #order:1
+$transfer_2.navy = $transfer_2.navy + $temp_8
+$temp_8 = $temp_3
+#case:transf_complete 'на Авалон'   { $curr <> 3 and $pop_3.friend = 1 and $variant = 3 } #order:1
+$transfer_3.navy = $transfer_3.navy + $temp_8
+$temp_8 = $temp_3
+#case:transf_complete 'на Гралгар'  { $curr <> 4 and $pop_4.friend = 1 and $variant = 3 } #order:1
+$transfer_4.navy = $transfer_4.navy + $temp_8
+$temp_8 = $temp_3
+#case:transf_complete 'на Велорат'  { $curr <> 5 and $pop_5.friend = 1 and $variant = 3 } #order:1
+$transfer_5.navy = $transfer_5.navy + $temp_8
+$temp_8 = $temp_3
+#case:transf_complete 'на Дралимию' { $curr <> 6 and $pop_6.friend = 1 and $variant = 3 } #order:1
+$transfer_6.navy = $transfer_6.navy + $temp_8
+$temp_8 = $temp_3
+#case:main 'Отменить перевод' { $variant = 1 } #order:7
+$temp_1 = $temp_8
+$temp_8 = 0
+#case:main 'Отменить перевод' { $variant = 2 } #order:7
+$temp_2 = $temp_8
+$temp_8 = 0
+#case:main 'Отменить перевод' { $variant = 3 } #order:7
+$temp_3 = $temp_8
+$temp_8 = 0
+
+#site:transf_complete
+#case:pop_1 { $curr = 1 and $variant = 1 }
+$pop_1.total = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 2 and $variant = 1 }
+$pop_2.total = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 3 and $variant = 1 }
+$pop_3.total = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 4 and $variant = 1 }
+$pop_4.total = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 5 and $variant = 1 }
+$pop_5.total = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 6 and $variant = 1 }
+$pop_6.total = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 1 and $variant = 2 }
+$arm_1.land = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 2 and $variant = 2 }
+$arm_2.land = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 3 and $variant = 2 }
+$arm_3.land = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 4 and $variant = 2 }
+$arm_4.land = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 5 and $variant = 2 }
+$arm_5.land = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 6 and $variant = 2 }
+$arm_6.land = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 1 and $variant = 3 }
+$arm_1.navy = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 2 and $variant = 3 }
+$arm_2.navy = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 3 and $variant = 3 }
+$arm_3.navy = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 4 and $variant = 3 }
+$arm_4.navy = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 5 and $variant = 3 }
+$arm_5.navy = $temp_8
+$temp_8 = 0
+#case:pop_1 { $curr = 6 and $variant = 3 }
+$arm_6.navy = $temp_8
+$temp_8 = 0
+
+#site:transf_1
+$pop_1.total = $pop_1.total + $transfer_1.popl
+$pop_2.total = $pop_2.total + $transfer_2.popl
+$pop_3.total = $pop_3.total + $transfer_3.popl
+$pop_4.total = $pop_4.total + $transfer_4.popl
+$pop_5.total = $pop_5.total + $transfer_5.popl
+$pop_6.total = $pop_6.total + $transfer_6.popl
+#case:transf_2
+
+#site:transf_2
+$arm_1.land = $arm_1.land + $transfer_1.land
+$arm_2.land = $arm_2.land + $transfer_2.land
+$arm_3.land = $arm_3.land + $transfer_3.land
+$arm_4.land = $arm_4.land + $transfer_4.land
+$arm_5.land = $arm_5.land + $transfer_5.land
+$arm_6.land = $arm_6.land + $transfer_6.land
+#case:transf_3
+
+#site:transf_3
+$arm_1.navy = $arm_1.navy + $transfer_1.navy
+$arm_2.navy = $arm_2.navy + $transfer_2.navy
+$arm_3.navy = $arm_3.navy + $transfer_3.navy
+$arm_4.navy = $arm_4.navy + $transfer_4.navy
+$arm_5.navy = $arm_5.navy + $transfer_5.navy
+$arm_6.navy = $arm_6.navy + $transfer_6.navy
+$transfer_1 = 0
+$transfer_2 = 0
+$transfer_3 = 0
+$transfer_4 = 0
+$transfer_5 = 0
+$transfer_6 = 0
+#case:pop_1
+
+#site:pop_1
+$year = $year + 1
+$temp_1 = 10 + $fchars.reproduction + $fchars.chaotic * <1..5>
+$temp_2 = 10 + $echars.reproduction + $echars.chaotic * <1..5>
+#case:pop_2
+
+#site:pop_2
+$pop_1.total = $pop_1.total + $pop_1.friend * ((($temp_1 + $pop_1.capital * 10) * $pop_1.total) div 100)
+$pop_2.total = $pop_2.total + $pop_2.friend * ((($temp_1 + $pop_2.capital * 10) * $pop_2.total) div 100)
+$pop_3.total = $pop_3.total + $pop_3.friend * ((($temp_1 + $pop_3.capital * 10) * $pop_3.total) div 100)
+$pop_4.total = $pop_4.total + $pop_4.friend * ((($temp_1 + $pop_4.capital * 10) * $pop_4.total) div 100)
+$pop_5.total = $pop_5.total + $pop_5.friend * ((($temp_1 + $pop_5.capital * 10) * $pop_5.total) div 100)
+$pop_6.total = $pop_6.total + $pop_6.friend * ((($temp_1 + $pop_6.capital * 10) * $pop_6.total) div 100)
+$temp_1 = 0
+#case:pop_3
+
+#site:pop_3
+$pop_1.total = $pop_1.total + (1 - $pop_1.friend) * ((($temp_2 + $pop_1.capital * 10) * $pop_1.total) div 100)
+$pop_2.total = $pop_2.total + (1 - $pop_2.friend) * ((($temp_2 + $pop_2.capital * 10) * $pop_2.total) div 100)
+$pop_3.total = $pop_3.total + (1 - $pop_3.friend) * ((($temp_2 + $pop_3.capital * 10) * $pop_3.total) div 100)
+$pop_4.total = $pop_4.total + (1 - $pop_4.friend) * ((($temp_2 + $pop_4.capital * 10) * $pop_4.total) div 100)
+$pop_5.total = $pop_5.total + (1 - $pop_5.friend) * ((($temp_2 + $pop_5.capital * 10) * $pop_5.total) div 100)
+$pop_6.total = $pop_6.total + (1 - $pop_6.friend) * ((($temp_2 + $pop_6.capital * 10) * $pop_6.total) div 100)
+$temp_2 = 0
+#case:game
+
+#site:attack
+#case:transf_1
+
+#site:wait
+#case:transf_1
+
+#site:scienc #win
+#page:1
+...
+
+#site:intelg #win
+#page:1
+...
+
+#var:manc #range:0..15 #default:0 #mod:2 #hide
+  #text:0..0   '             '
+  #text:1..1   '*            '
+  #text:2..2   '    *        '
+  #text:4..4   '        *    '
+  #text:8..8   '            *'
+  #text:15..15 '*   *   *   *'
+  #field:d                        // 8
+  #field:c                        // 4
+  #field:b                        // 2
+  #field:a                        // 1
+
+#var:ms #range:0..4 #default:0 #hide
+  #text:0..0   ' '
+  #text:1..1   '  '
+  #text:2..2   '   '
+  #text:3..3   '    '
+  #text:4..4   '     '
+
+#macro:maim
+#page:1
+^ ------------------------ ^
+^  @manc @ms|      ^
+^ <link=A>($temp_1)</link> <link=B>($temp_2)</link> <link=C>($temp_3)</link> <link=D>($temp_4)</link> | ($temp_5) ^
+^ ------------------------ ^
+^  %A%   %B%   %C%   %D% @ms|      ^
+$ms = ($temp_1 > 9) + ($temp_2 > 9) + ($temp_3 > 9) + ($temp_4 > 9)
+#end
+
+#site:mancala_init
+#case:mancala { $variant = 1 }
+$manc   = 15
+$temp_1 = 2
+$temp_2 = 2
+$temp_3 = 2
+$temp_4 = 2
+$temp_5 = 0
+#case:mancala { $variant = 2 }
+$manc   = 15
+$temp_1 = 6
+$temp_2 = 6
+$temp_3 = 6
+$temp_4 = 6
+$temp_5 = 0
+
+#site:mancala
+#maim
+#case:mancala_cont 'A' { $temp_1 = 1 and $manc.a > 0 } #order:1
+$temp_1 = 0
+$temp_2 = $temp_2 + 1
+$manc = 2
+#case:mancala_cont 'B' { $temp_2 = 1 and $manc.b > 0 } #order:2
+$temp_2 = 0
+$temp_3 = $temp_3 + 1
+$manc = 4
+#case:mancala_cont 'C' { $temp_3 = 1 and $manc.c > 0 } #order:3
+$temp_3 = 0
+$temp_4 = $temp_4 + 1
+$manc = 8
+#case:mancala_cont 'D' { $temp_4 = 1 and $manc.d > 0 } #order:4
+$temp_4 = 0
+$temp_5 = $temp_5 + 1
+$manc = 15
+#case:mancala_cont 'A' { $temp_1 = 2 and $manc.a > 0 } #order:1
+$temp_1 = 0
+$temp_2 = $temp_2 + 1
+$temp_3 = $temp_3 + 1
+$manc = 4
+#case:mancala_cont 'B' { $temp_2 = 2 and $manc.b > 0 } #order:2
+$temp_2 = 0
+$temp_3 = $temp_3 + 1
+$temp_4 = $temp_4 + 1
+$manc = 8
+#case:mancala_cont 'C' { $temp_3 = 2 and $manc.c > 0 } #order:3
+$temp_3 = 0
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$manc = 15
+#case:mancala_cont 'D' { $temp_4 = 2 and $manc.d > 0 } #order:4
+$temp_4 = 0
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$manc = 1
+#case:mancala_cont 'A' { $temp_1 = 3 and $manc.a > 0 } #order:1
+$temp_1 = 0
+$temp_2 = $temp_2 + 1
+$temp_3 = $temp_3 + 1
+$temp_4 = $temp_4 + 1
+$manc = 8
+#case:mancala_cont 'B' { $temp_2 = 3 and $manc.b > 0 } #order:2
+$temp_2 = 0
+$temp_3 = $temp_3 + 1
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$manc = 15
+#case:mancala_cont 'C' { $temp_3 = 3 and $manc.c > 0 } #order:3
+$temp_3 = 0
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$manc = 1
+#case:mancala_cont 'D' { $temp_4 = 3 and $manc.d > 0 } #order:4
+$temp_4 = 0
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$temp_2 = $temp_2 + 1
+$manc = 2
+#case:mancala_cont 'A' { $temp_1 = 4 and $manc.a > 0 } #order:1
+$temp_1 = 0
+$temp_2 = $temp_2 + 1
+$temp_3 = $temp_3 + 1
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$manc = 15
+#case:mancala_cont 'B' { $temp_2 = 4 and $manc.b > 0 } #order:2
+$temp_2 = 0
+$temp_3 = $temp_3 + 1
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$manc = 1
+#case:mancala_cont 'C' { $temp_3 = 4 and $manc.c > 0 } #order:3
+$temp_3 = 0
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$temp_2 = $temp_2 + 1
+$manc = 2
+#case:mancala_cont 'D' { $temp_4 = 4 and $manc.d > 0 } #order:4
+$temp_4 = 0
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$temp_2 = $temp_2 + 1
+$temp_3 = $temp_3 + 1
+$manc = 4
+#case:mancala_cont 'A' { $temp_1 = 5 and $manc.a > 0 } #order:1
+$temp_1 = 1
+$temp_2 = $temp_2 + 1
+$temp_3 = $temp_3 + 1
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$manc = 1
+#case:mancala_cont 'B' { $temp_2 = 5 and $manc.b > 0 } #order:2
+$temp_2 = 1
+$temp_3 = $temp_3 + 1
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$manc = 2
+#case:mancala_cont 'C' { $temp_3 = 5 and $manc.c > 0 } #order:3
+$temp_3 = 1
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$temp_2 = $temp_2 + 1
+$manc = 4
+#case:mancala_cont 'D' { $temp_4 = 5 and $manc.d > 0 } #order:4
+$temp_4 = 1
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$temp_2 = $temp_2 + 1
+$temp_3 = $temp_3 + 1
+$manc = 8
+#case:mancala_cont 'A' { $temp_1 = 6 and $manc.a > 0 } #order:1
+$temp_1 = 1
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 1
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$manc = 2
+#case:mancala_cont 'B' { $temp_2 = 6 and $manc.b > 0 } #order:2
+$temp_2 = 1
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$manc = 4
+#case:mancala_cont 'C' { $temp_3 = 6 and $manc.c > 0 } #order:3
+$temp_3 = 1
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$temp_2 = $temp_2 + 1
+$manc = 8
+#case:mancala_cont 'D' { $temp_4 = 6 and $manc.d > 0 } #order:4
+$temp_4 = 1
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 1
+$temp_2 = $temp_2 + 1
+$temp_3 = $temp_3 + 1
+$manc = 15
+#case:mancala_cont 'A' { $temp_1 = 7 and $manc.a > 0 } #order:1
+$temp_1 = 1
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 1
+$temp_5 = $temp_5 + 1
+$manc = 4
+#case:mancala_cont 'B' { $temp_2 = 7 and $manc.b > 0 } #order:2
+$temp_2 = 1
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 1
+$temp_1 = $temp_1 + 1
+$manc = 8
+#case:mancala_cont 'C' { $temp_3 = 7 and $manc.c > 0 } #order:3
+$temp_3 = 1
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 1
+$temp_2 = $temp_2 + 1
+$manc = 15
+#case:mancala_cont 'D' { $temp_4 = 7 and $manc.d > 0 } #order:4
+$temp_4 = 1
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 1
+$temp_3 = $temp_3 + 1
+$manc = 1
+#case:mancala_cont 'A' { $temp_1 = 8 and $manc.a > 0 } #order:1
+$temp_1 = 1
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 1
+$manc = 8
+#case:mancala_cont 'B' { $temp_2 = 8 and $manc.b > 0 } #order:2
+$temp_2 = 1
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 1
+$manc = 15
+#case:mancala_cont 'C' { $temp_3 = 8 and $manc.c > 0 } #order:3
+$temp_3 = 1
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 1
+$manc = 1
+#case:mancala_cont 'D' { $temp_4 = 8 and $manc.d > 0 } #order:4
+$temp_4 = 1
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 1
+$manc = 2
+#case:mancala_cont 'A' { $temp_1 = 9 and $manc.a > 0 } #order:1
+$temp_1 = 1
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$manc = 15
+#case:mancala_cont 'B' { $temp_2 = 9 and $manc.b > 0 } #order:2
+$temp_2 = 1
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$manc = 1
+#case:mancala_cont 'C' { $temp_3 = 9 and $manc.c > 0 } #order:3
+$temp_3 = 1
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 2
+$manc = 2
+#case:mancala_cont 'D' { $temp_4 = 9 and $manc.d > 0 } #order:4
+$temp_4 = 1
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 2
+$manc = 4
+#case:mancala_cont 'A' { $temp_1 = 10 and $manc.a > 0 } #order:1
+$temp_1 = 2
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$manc = 1
+#case:mancala_cont 'B' { $temp_2 = 10 and $manc.b > 0 } #order:2
+$temp_2 = 2
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$manc = 2
+#case:mancala_cont 'C' { $temp_3 = 10 and $manc.c > 0 } #order:3
+$temp_3 = 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 2
+$manc = 4
+#case:mancala_cont 'D' { $temp_4 = 10 and $manc.d > 0 } #order:4
+$temp_4 = 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 2
+$manc = 8
+#case:mancala_cont 'A' { $temp_1 = 11 and $manc.a > 0 } #order:1
+$temp_1 = 2
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 2
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$manc = 2
+#case:mancala_cont 'B' { $temp_2 = 11 and $manc.b > 0 } #order:2
+$temp_2 = 2
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$manc = 4
+#case:mancala_cont 'C' { $temp_3 = 11 and $manc.c > 0 } #order:3
+$temp_3 = 2
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 2
+$manc = 8
+#case:mancala_cont 'D' { $temp_4 = 11 and $manc.d > 0 } #order:4
+$temp_4 = 2
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 2
+$manc = 15
+#case:mancala_cont 'A' { $temp_1 = 12 and $manc.a > 0 } #order:1
+$temp_1 = 2
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 2
+$temp_5 = $temp_5 + 2
+$manc = 4
+#case:mancala_cont 'B' { $temp_2 = 12 and $manc.b > 0 } #order:2
+$temp_2 = 2
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 2
+$temp_1 = $temp_1 + 2
+$manc = 8
+#case:mancala_cont 'C' { $temp_3 = 12 and $manc.c > 0 } #order:3
+$temp_3 = 2
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 2
+$temp_2 = $temp_2 + 2
+$manc = 15
+#case:mancala_cont 'D' { $temp_4 = 12 and $manc.d > 0 } #order:4
+$temp_4 = 2
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 2
+$temp_3 = $temp_3 + 2
+$manc = 1
+#case:mancala_cont 'A' { $temp_1 = 13 and $manc.a > 0 } #order:1
+$temp_1 = 2
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 2
+$manc = 8
+#case:mancala_cont 'B' { $temp_2 = 13 and $manc.b > 0 } #order:2
+$temp_2 = 2
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 2
+$manc = 15
+#case:mancala_cont 'C' { $temp_3 = 13 and $manc.c > 0 } #order:3
+$temp_3 = 2
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 2
+$manc = 1
+#case:mancala_cont 'D' { $temp_4 = 13 and $manc.d > 0 } #order:4
+$temp_4 = 2
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 2
+$manc = 2
+#case:mancala_cont 'A' { $temp_1 = 14 and $manc.a > 0 } #order:1
+$temp_1 = 2
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$manc = 15
+#case:mancala_cont 'B' { $temp_2 = 14 and $manc.b > 0 } #order:2
+$temp_2 = 2
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$manc = 1
+#case:mancala_cont 'C' { $temp_3 = 14 and $manc.c > 0 } #order:3
+$temp_3 = 2
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 3
+$manc = 2
+#case:mancala_cont 'D' { $temp_4 = 14 and $manc.d > 0 } #order:4
+$temp_4 = 2
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 3
+$manc = 4
+#case:mancala_cont 'A' { $temp_1 = 15 and $manc.a > 0 } #order:1
+$temp_1 = 3
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$manc = 1
+#case:mancala_cont 'B' { $temp_2 = 15 and $manc.b > 0 } #order:2
+$temp_2 = 3
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$manc = 2
+#case:mancala_cont 'C' { $temp_3 = 15 and $manc.c > 0 } #order:3
+$temp_3 = 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 3
+$manc = 4
+#case:mancala_cont 'D' { $temp_4 = 15 and $manc.d > 0 } #order:4
+$temp_4 = 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 3
+$manc = 8
+#case:mancala_cont 'A' { $temp_1 = 16 and $manc.a > 0 } #order:1
+$temp_1 = 3
+$temp_2 = $temp_2 + 4
+$temp_3 = $temp_3 + 3
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$manc = 2
+#case:mancala_cont 'B' { $temp_2 = 16 and $manc.b > 0 } #order:2
+$temp_2 = 3
+$temp_3 = $temp_3 + 4
+$temp_4 = $temp_4 + 3
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$manc = 4
+#case:mancala_cont 'C' { $temp_3 = 16 and $manc.c > 0 } #order:3
+$temp_3 = 3
+$temp_4 = $temp_4 + 4
+$temp_5 = $temp_5 + 3
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 3
+$manc = 8
+#case:mancala_cont 'D' { $temp_4 = 16 and $manc.d > 0 } #order:4
+$temp_4 = 3
+$temp_5 = $temp_5 + 4
+$temp_1 = $temp_1 + 3
+$temp_2 = $temp_2 + 3
+$temp_3 = $temp_3 + 3
+$manc = 15
+#case:game_lose 'Отказаться от выполнения' #order:7
+
+#site:mancala_cont
+#case:game_win { $temp_1 + $temp_2 + $temp_3 + $temp_4 = 0 }
+#case:mancala { $temp_1 + $temp_2 + $temp_3 + $temp_4 > 0 and $manc = 15 }
+#case:mancala { $temp_1 > 1 and $manc.a > 0 }
+#case:mancala { $temp_2 > 1 and $manc.b > 0 }
+#case:mancala { $temp_3 > 1 and $manc.c > 0 }
+#case:mancala { $temp_4 > 1 and $manc.d > 0 }
+#case:mancala_lose { $manc = 1 and $temp_1 < 2 }
+#case:mancala_lose { $manc = 2 and $temp_2 < 2 }
+#case:mancala_lose { $manc = 4 and $temp_3 < 2 }
+#case:mancala_lose { $manc = 8 and $temp_4 < 2 }
+
+#site:mancala_lose
+#maim
+$manc = 0
+#case:mancala_init 'Попробовать ещё раз'
+#site:game_win #hide:charges:countdown
+#page:1
+Победа!
+#case:entry 'Сыграем ещё?'
+#site:game_lose #hide:charges:countdown
+#page:1
+Нет так нет...
+#case:entry 'Сыграем ещё?'
+
+#macro:lcell
+  #text:0..0 '.'
+  #text:1..1 'x'
+  #text:2..2 'X'
+  #text:3..3 'x'
+  #text:4..4 'X'
+  #text:5..5 'x'
+  #text:6..6 'X'
+  #text:7..7 'x'
+  #text:8..8 'X'
+#end
+
+#for:i:1..5
+  #var:A[$i] #range:0..8 #default:0 #hide
+    #lcell
+  #var:B[$i] #range:0..8 #default:0 #hide
+    #lcell
+  #var:C[$i] #range:0..8 #default:0 #hide
+    #lcell
+  #var:D[$i] #range:0..8 #default:0 #hide
+    #lcell
+#end
+
+#var:LC #range:0..4 #hide
+  #text:0..0 ' A B C D'
+  #text:1..1 ' * B C D'
+  #text:2..2 ' A * C D'
+  #text:3..3 ' A B * D'
+  #text:4..4 ' A B C *'
+
+#macro:laim
+#page:1
+^   +---------+ ^
+^ %4% | @A4 @B4 @C4 @D4 | ^
+^ %3% | @A3 @B3 @C3 @D3 | ^
+^ %2% | @A2 @B2 @C2 @D2 | ^
+^ %1% | @A1 @B1 @C1 @D1 | ^
+^   +---------+ ^
+^    @LC   ^
+#end
+
+#site:lightoff_init
+$A1 = <0..1>
+$B1 = <0..1>
+$C1 = <0..1>
+$D1 = <0..1>
+$A2 = <0..1>
+$B2 = <0..1>
+$C2 = <0..1>
+$D2 = <0..1>
+$A3 = <0..1>
+$B3 = <0..1>
+$C3 = <0..1>
+$D3 = <0..1>
+$A4 = <0..1>
+$B4 = <0..1>
+$C4 = <0..1>
+$D4 = <0..1>
+#case:lightoff
+
+#site:lightoff
+#laim
+$LC = 0
+#case:lightoff_row 'A' #order:1
+$LC = 1
+#case:lightoff_row 'B' #order:2
+$LC = 2
+#case:lightoff_row 'C' #order:3
+$LC = 3
+#case:lightoff_row 'D' #order:4
+$LC = 4
+#case:game_lose 'Отказаться от выполнения' #order:7
+
+#site:lightoff_row
+#laim
+#case:lightoff_cont '4' #order:1
+$temp_1 = 4
+#case:lightoff_cont '3' #order:2
+$temp_1 = 3
+#case:lightoff_cont '2' #order:3
+$temp_1 = 2
+#case:lightoff_cont '1' #order:4
+$temp_1 = 1
+#case:lightoff 'Другой столбец' #order:5
+#case:game_lose 'Отказаться от выполнения' #order:7
+
+#site:lightoff_cont 
+#case:lightoff_check { $variant = 3 and $LC = 1 and $temp_1 = 4 }
+$A4 = 1 - $A4
+$A3 = 1 - $A3
+$B4 = 1 - $B4
+#case:lightoff_check { $variant = 3 and $LC = 1 and $temp_1 = 3 }
+$A3 = 1 - $A3
+$A4 = 1 - $A4
+$A2 = 1 - $A2
+$B3 = 1 - $B3
+#case:lightoff_check { $variant = 3 and $LC = 1 and $temp_1 = 2 }
+$A2 = 1 - $A2
+$A3 = 1 - $A3
+$A1 = 1 - $A1
+$B2 = 1 - $B2
+#case:lightoff_check { $variant = 3 and $LC = 1 and $temp_1 = 1 }
+$A1 = 1 - $A1
+$A2 = 1 - $A2
+$B1 = 1 - $B1
+#case:lightoff_check { $variant = 3 and $LC = 2 and $temp_1 = 4 }
+$B4 = 1 - $B4
+$B3 = 1 - $B3
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+#case:lightoff_check { $variant = 3 and $LC = 2 and $temp_1 = 3 }
+$B3 = 1 - $B3
+$B4 = 1 - $B4
+$B2 = 1 - $B2
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+#case:lightoff_check { $variant = 3 and $LC = 2 and $temp_1 = 2 }
+$B2 = 1 - $B2
+$B3 = 1 - $B3
+$B1 = 1 - $B1
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 3 and $LC = 2 and $temp_1 = 1 }
+$B1 = 1 - $B1
+$B2 = 1 - $B2
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 3 and $LC = 3 and $temp_1 = 4 }
+$C4 = 1 - $C4
+$C3 = 1 - $C3
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 3 and $LC = 3 and $temp_1 = 3 }
+$C3 = 1 - $C3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 3 and $LC = 3 and $temp_1 = 2 }
+$C2 = 1 - $C2
+$C3 = 1 - $C3
+$C1 = 1 - $C1
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 3 and $LC = 3 and $temp_1 = 1 }
+$C1 = 1 - $C1
+$C2 = 1 - $C2
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 3 and $LC = 4 and $temp_1 = 4 }
+$D4 = 1 - $D4
+$D3 = 1 - $D3
+$C4 = 1 - $C4
+#case:lightoff_check { $variant = 3 and $LC = 4 and $temp_1 = 3 }
+$D3 = 1 - $D3
+$D4 = 1 - $D4
+$D2 = 1 - $D2
+$C3 = 1 - $C3
+#case:lightoff_check { $variant = 3 and $LC = 4 and $temp_1 = 2 }
+$D2 = 1 - $D2
+$D3 = 1 - $D3
+$D1 = 1 - $D1
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 3 and $LC = 4 and $temp_1 = 1 }
+$D1 = 1 - $D1
+$D2 = 1 - $D2
+$C1 = 1 - $C1
+
+#case:lightoff_check { $variant = 4 and $LC = 1 and $temp_1 = 4 }
+$A4 = 1 - $A4
+$A3 = 1 - $A3
+$A2 = 1 - $A2
+$A1 = 1 - $A1
+$B4 = 1 - $B4
+$C4 = 1 - $C4
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 4 and $LC = 1 and $temp_1 = 3 }
+$A3 = 1 - $A3
+$A4 = 1 - $A4
+$A2 = 1 - $A2
+$A1 = 1 - $A1
+$B3 = 1 - $B3
+$C3 = 1 - $C3
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 4 and $LC = 1 and $temp_1 = 2 }
+$A2 = 1 - $A2
+$A3 = 1 - $A3
+$A4 = 1 - $A4
+$A1 = 1 - $A1
+$B2 = 1 - $B2
+$C2 = 1 - $C2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 4 and $LC = 1 and $temp_1 = 1 }
+$A1 = 1 - $A1
+$A2 = 1 - $A2
+$A3 = 1 - $A3
+$A4 = 1 - $A4
+$B1 = 1 - $B1
+$C1 = 1 - $C1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 4 and $LC = 2 and $temp_1 = 4 }
+$B4 = 1 - $B4
+$B3 = 1 - $B3
+$B2 = 1 - $B2
+$B1 = 1 - $B1
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 4 and $LC = 2 and $temp_1 = 3 }
+$B3 = 1 - $B3
+$B4 = 1 - $B4
+$B2 = 1 - $B2
+$B1 = 1 - $B1
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 4 and $LC = 2 and $temp_1 = 2 }
+$B2 = 1 - $B2
+$B4 = 1 - $B4
+$B3 = 1 - $B3
+$B1 = 1 - $B1
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 4 and $LC = 2 and $temp_1 = 1 }
+$B1 = 1 - $B1
+$B2 = 1 - $B2
+$B3 = 1 - $B3
+$B4 = 1 - $B4
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 4 and $LC = 3 and $temp_1 = 4 }
+$C4 = 1 - $C4
+$C3 = 1 - $C3
+$C2 = 1 - $C2
+$C1 = 1 - $C1
+$A4 = 1 - $A4
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 4 and $LC = 3 and $temp_1 = 3 }
+$C3 = 1 - $C3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+$C1 = 1 - $C1
+$A3 = 1 - $A3
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 4 and $LC = 3 and $temp_1 = 2 }
+$C2 = 1 - $C2
+$C4 = 1 - $C4
+$C3 = 1 - $C3
+$C1 = 1 - $C1
+$A2 = 1 - $A2
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 4 and $LC = 3 and $temp_1 = 1 }
+$C1 = 1 - $C1
+$C2 = 1 - $C2
+$C3 = 1 - $C3
+$C4 = 1 - $C4
+$A1 = 1 - $A1
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 4 and $LC = 4 and $temp_1 = 4 }
+$D4 = 1 - $D4
+$D3 = 1 - $D3
+$D2 = 1 - $D2
+$D1 = 1 - $D1
+$A4 = 1 - $A4
+$B4 = 1 - $B4
+$C4 = 1 - $C4
+#case:lightoff_check { $variant = 4 and $LC = 4 and $temp_1 = 3 }
+$D3 = 1 - $D3
+$D4 = 1 - $D4
+$D1 = 1 - $D1
+$D2 = 1 - $D2
+$A3 = 1 - $A3
+$B3 = 1 - $B3
+$C3 = 1 - $C3
+#case:lightoff_check { $variant = 4 and $LC = 4 and $temp_1 = 2 }
+$D2 = 1 - $D2
+$D1 = 1 - $D1
+$D3 = 1 - $D3
+$D4 = 1 - $D4
+$A2 = 1 - $A2
+$B2 = 1 - $B2
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 4 and $LC = 4 and $temp_1 = 1 }
+$D1 = 1 - $D1
+$D2 = 1 - $D2
+$D3 = 1 - $D3
+$D4 = 1 - $D4
+$A1 = 1 - $A1
+$B1 = 1 - $B1
+$C1 = 1 - $C1
+
+#case:lightoff_check { $variant = 5 and $LC = 1 and $temp_1 = 4 }
+$A4 = 1 - $A4
+$B3 = 1 - $B3
+#case:lightoff_check { $variant = 5 and $LC = 1 and $temp_1 = 3 }
+$A3 = 1 - $A3
+$B2 = 1 - $B2
+$B4 = 1 - $B4
+#case:lightoff_check { $variant = 5 and $LC = 1 and $temp_1 = 2 }
+$A2 = 1 - $A2
+$B1 = 1 - $B1
+$B3 = 1 - $B3
+#case:lightoff_check { $variant = 5 and $LC = 1 and $temp_1 = 1 }
+$A1 = 1 - $A1
+$B2 = 1 - $B2
+#case:lightoff_check { $variant = 5 and $LC = 2 and $temp_1 = 4 }
+$B4 = 1 - $B4
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+#case:lightoff_check { $variant = 5 and $LC = 2 and $temp_1 = 3 }
+$B3 = 1 - $B3
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 5 and $LC = 2 and $temp_1 = 2 }
+$B2 = 1 - $B2
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 5 and $LC = 2 and $temp_1 = 1 }
+$B1 = 1 - $B1
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 5 and $LC = 3 and $temp_1 = 4 }
+$C4 = 1 - $C4
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 5 and $LC = 3 and $temp_1 = 3 }
+$C3 = 1 - $C3
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 5 and $LC = 3 and $temp_1 = 2 }
+$C2 = 1 - $C2
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 5 and $LC = 3 and $temp_1 = 1 }
+$C1 = 1 - $C1
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 5 and $LC = 4 and $temp_1 = 4 }
+$D4 = 1 - $D4
+$C3 = 1 - $C3
+#case:lightoff_check { $variant = 5 and $LC = 4 and $temp_1 = 3 }
+$D3 = 1 - $D3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 5 and $LC = 4 and $temp_1 = 2 }
+$D2 = 1 - $D2
+$C3 = 1 - $C3
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 5 and $LC = 4 and $temp_1 = 1 }
+$D1 = 1 - $D1
+$C2 = 1 - $C2
+
+#case:lightoff_check { $variant = 6 and $LC = 1 and $temp_1 = 4 }
+$A4 = 1 - $A4
+$B3 = 1 - $B3
+$C2 = 1 - $C2
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 6 and $LC = 1 and $temp_1 = 3 }
+$A3 = 1 - $A3
+$B2 = 1 - $B2
+$C1 = 1 - $C1
+$B4 = 1 - $B4
+#case:lightoff_check { $variant = 6 and $LC = 1 and $temp_1 = 2 }
+$A2 = 1 - $A2
+$B1 = 1 - $B1
+$B3 = 1 - $B3
+$C4 = 1 - $C4
+#case:lightoff_check { $variant = 6 and $LC = 1 and $temp_1 = 1 }
+$A1 = 1 - $A1
+$B2 = 1 - $B2
+$C3 = 1 - $C3
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 6 and $LC = 2 and $temp_1 = 4 }
+$B4 = 1 - $B4
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 6 and $LC = 2 and $temp_1 = 3 }
+$B3 = 1 - $B3
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 6 and $LC = 2 and $temp_1 = 2 }
+$B2 = 1 - $B2
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$D4 = 1 - $D4
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 6 and $LC = 2 and $temp_1 = 1 }
+$B1 = 1 - $B1
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 6 and $LC = 3 and $temp_1 = 4 }
+$C4 = 1 - $C4
+$B3 = 1 - $B3
+$A2 = 1 - $A2
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 6 and $LC = 3 and $temp_1 = 3 }
+$C3 = 1 - $C3
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+$B2 = 1 - $B2
+$A1 = 1 - $A1
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 6 and $LC = 3 and $temp_1 = 2 }
+$C2 = 1 - $C2
+$B3 = 1 - $B3
+$A4 = 1 - $A4
+$D3 = 1 - $D3
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 6 and $LC = 3 and $temp_1 = 1 }
+$C1 = 1 - $C1
+$B2 = 1 - $B2
+$A3 = 1 - $A3
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 6 and $LC = 4 and $temp_1 = 4 }
+$D4 = 1 - $D4
+$C3 = 1 - $C3
+$B2 = 1 - $B2
+$A1 = 1 - $A1
+#case:lightoff_check { $variant = 6 and $LC = 4 and $temp_1 = 3 }
+$D3 = 1 - $D3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+$B1 = 1 - $B1
+#case:lightoff_check { $variant = 6 and $LC = 4 and $temp_1 = 2 }
+$D2 = 1 - $D2
+$C3 = 1 - $C3
+$B4 = 1 - $B4
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 6 and $LC = 4 and $temp_1 = 1 }
+$D1 = 1 - $D1
+$C2 = 1 - $C2
+$B3 = 1 - $B3
+$A4 = 1 - $A4
+
+#case:lightoff_check { $variant = 7 and $LC = 1 and $temp_1 = 4 }
+$A4 = 1 - $A4
+$A3 = 1 - $A3
+$B4 = 1 - $B4
+$B3 = 1 - $B3
+#case:lightoff_check { $variant = 7 and $LC = 1 and $temp_1 = 3 }
+$A3 = 1 - $A3
+$A4 = 1 - $A4
+$A2 = 1 - $A2
+$B3 = 1 - $B3
+$B2 = 1 - $B2
+$B4 = 1 - $B4
+#case:lightoff_check { $variant = 7 and $LC = 1 and $temp_1 = 2 }
+$A2 = 1 - $A2
+$A3 = 1 - $A3
+$A1 = 1 - $A1
+$B2 = 1 - $B2
+$B1 = 1 - $B1
+$B3 = 1 - $B3
+#case:lightoff_check { $variant = 7 and $LC = 1 and $temp_1 = 1 }
+$A1 = 1 - $A1
+$A2 = 1 - $A2
+$B1 = 1 - $B1
+$B2 = 1 - $B2
+#case:lightoff_check { $variant = 7 and $LC = 2 and $temp_1 = 4 }
+$B4 = 1 - $B4
+$B3 = 1 - $B3
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+#case:lightoff_check { $variant = 7 and $LC = 2 and $temp_1 = 3 }
+$B3 = 1 - $B3
+$B4 = 1 - $B4
+$B2 = 1 - $B2
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 7 and $LC = 2 and $temp_1 = 2 }
+$B2 = 1 - $B2
+$B3 = 1 - $B3
+$B1 = 1 - $B1
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 7 and $LC = 2 and $temp_1 = 1 }
+$B1 = 1 - $B1
+$B2 = 1 - $B2
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 7 and $LC = 3 and $temp_1 = 4 }
+$C4 = 1 - $C4
+$C3 = 1 - $C3
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 7 and $LC = 3 and $temp_1 = 3 }
+$C3 = 1 - $C3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 7 and $LC = 3 and $temp_1 = 2 }
+$C2 = 1 - $C2
+$C3 = 1 - $C3
+$C1 = 1 - $C1
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 7 and $LC = 3 and $temp_1 = 1 }
+$C1 = 1 - $C1
+$C2 = 1 - $C2
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 7 and $LC = 4 and $temp_1 = 4 }
+$D4 = 1 - $D4
+$D3 = 1 - $D3
+$C4 = 1 - $C4
+$C3 = 1 - $C3
+#case:lightoff_check { $variant = 7 and $LC = 4 and $temp_1 = 3 }
+$D3 = 1 - $D3
+$D4 = 1 - $D4
+$D2 = 1 - $D2
+$C3 = 1 - $C3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 7 and $LC = 4 and $temp_1 = 2 }
+$D2 = 1 - $D2
+$D3 = 1 - $D3
+$D1 = 1 - $D1
+$C2 = 1 - $C2
+$C3 = 1 - $C1
+$C3 = 1 - $C1
+#case:lightoff_check { $variant = 7 and $LC = 4 and $temp_1 = 1 }
+$D1 = 1 - $D1
+$D2 = 1 - $D2
+$C1 = 1 - $C1
+$C2 = 1 - $C2
+
+#case:lightoff_check { $variant = 8 and $LC = 1 and $temp_1 = 4 }
+$A4 = 1 - $A4
+$A3 = 1 - $A3
+$A2 = 1 - $A2
+$A1 = 1 - $A1
+$B4 = 1 - $B4
+$C4 = 1 - $C4
+$D4 = 1 - $D4
+$B3 = 1 - $B3
+$C2 = 1 - $C2
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 8 and $LC = 1 and $temp_1 = 3 }
+$A3 = 1 - $A3
+$A4 = 1 - $A4
+$A2 = 1 - $A2
+$A1 = 1 - $A1
+$B3 = 1 - $B3
+$C3 = 1 - $C3
+$D3 = 1 - $D3
+$B2 = 1 - $B2
+$C1 = 1 - $C1
+$B4 = 1 - $B4
+#case:lightoff_check { $variant = 8 and $LC = 1 and $temp_1 = 2 }
+$A2 = 1 - $A2
+$A3 = 1 - $A3
+$A4 = 1 - $A4
+$A1 = 1 - $A1
+$B2 = 1 - $B2
+$C2 = 1 - $C2
+$D2 = 1 - $D2
+$B1 = 1 - $B1
+$B3 = 1 - $B3
+$C4 = 1 - $C4
+#case:lightoff_check { $variant = 8 and $LC = 1 and $temp_1 = 1 }
+$A1 = 1 - $A1
+$A2 = 1 - $A2
+$A3 = 1 - $A3
+$A4 = 1 - $A4
+$B1 = 1 - $B1
+$C1 = 1 - $C1
+$D1 = 1 - $D1
+$B2 = 1 - $B2
+$C3 = 1 - $C3
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 8 and $LC = 2 and $temp_1 = 4 }
+$B4 = 1 - $B4
+$B3 = 1 - $B3
+$B2 = 1 - $B2
+$B1 = 1 - $B1
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+$D4 = 1 - $D4
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 8 and $LC = 2 and $temp_1 = 3 }
+$B3 = 1 - $B3
+$B4 = 1 - $B4
+$B2 = 1 - $B2
+$B1 = 1 - $B1
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$D3 = 1 - $D3
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 8 and $LC = 2 and $temp_1 = 2 }
+$B2 = 1 - $B2
+$B4 = 1 - $B4
+$B3 = 1 - $B3
+$B1 = 1 - $B1
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+$D2 = 1 - $D2
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$D4 = 1 - $D4
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 8 and $LC = 2 and $temp_1 = 1 }
+$B1 = 1 - $B1
+$B2 = 1 - $B2
+$B3 = 1 - $B3
+$B4 = 1 - $B4
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+$D1 = 1 - $D1
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 8 and $LC = 3 and $temp_1 = 4 }
+$C4 = 1 - $C4
+$C3 = 1 - $C3
+$C2 = 1 - $C2
+$C1 = 1 - $C1
+$A4 = 1 - $A4
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+$B3 = 1 - $B3
+$A2 = 1 - $A2
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 8 and $LC = 3 and $temp_1 = 3 }
+$C3 = 1 - $C3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+$C1 = 1 - $C1
+$A3 = 1 - $A3
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+$B2 = 1 - $B2
+$A1 = 1 - $A1
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 8 and $LC = 3 and $temp_1 = 2 }
+$C2 = 1 - $C2
+$C4 = 1 - $C4
+$C3 = 1 - $C3
+$C1 = 1 - $C1
+$A2 = 1 - $A2
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+$B3 = 1 - $B3
+$A4 = 1 - $A4
+$D3 = 1 - $D3
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 8 and $LC = 3 and $temp_1 = 1 }
+$C1 = 1 - $C1
+$C2 = 1 - $C2
+$C3 = 1 - $C3
+$C4 = 1 - $C4
+$A1 = 1 - $A1
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+$B2 = 1 - $B2
+$A3 = 1 - $A3
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 8 and $LC = 4 and $temp_1 = 4 }
+$D4 = 1 - $D4
+$D3 = 1 - $D3
+$D2 = 1 - $D2
+$D1 = 1 - $D1
+$A4 = 1 - $A4
+$B4 = 1 - $B4
+$C4 = 1 - $C4
+$C3 = 1 - $C3
+$B2 = 1 - $B2
+$A1 = 1 - $A1
+#case:lightoff_check { $variant = 8 and $LC = 4 and $temp_1 = 3 }
+$D3 = 1 - $D3
+$D4 = 1 - $D4
+$D1 = 1 - $D1
+$D2 = 1 - $D2
+$A3 = 1 - $A3
+$B3 = 1 - $B3
+$C3 = 1 - $C3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+$B1 = 1 - $B1
+#case:lightoff_check { $variant = 8 and $LC = 4 and $temp_1 = 2 }
+$D2 = 1 - $D2
+$D1 = 1 - $D1
+$D3 = 1 - $D3
+$D4 = 1 - $D4
+$A2 = 1 - $A2
+$B2 = 1 - $B2
+$C2 = 1 - $C2
+$C3 = 1 - $C3
+$B4 = 1 - $B4
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 8 and $LC = 4 and $temp_1 = 1 }
+$D1 = 1 - $D1
+$D2 = 1 - $D2
+$D3 = 1 - $D3
+$D4 = 1 - $D4
+$A1 = 1 - $A1
+$B1 = 1 - $B1
+$C1 = 1 - $C1
+$C2 = 1 - $C2
+$B3 = 1 - $B3
+$A4 = 1 - $A4
+
+#case:lightoff_check { $variant = 9 and $LC = 1 and $temp_1 = 4 }
+$A4 = 1 - $A4
+$B2 = 1 - $B2
+$C3 = 1 - $C3
+#case:lightoff_check { $variant = 9 and $LC = 1 and $temp_1 = 3 }
+$A3 = 1 - $A3
+$C4 = 1 - $C4
+$C2 = 1 - $C2
+$B1 = 1 - $B1
+#case:lightoff_check { $variant = 9 and $LC = 1 and $temp_1 = 2 }
+$A2 = 1 - $A2
+$B4 = 1 - $B4
+$C3 = 1 - $C3
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 9 and $LC = 1 and $temp_1 = 1 }
+$A1 = 1 - $A1
+$B3 = 1 - $B3
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 9 and $LC = 2 and $temp_1 = 4 }
+$B4 = 1 - $B4
+$A2 = 1 - $A2
+$C2 = 1 - $C2
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 9 and $LC = 2 and $temp_1 = 3 }
+$B3 = 1 - $B3
+$A1 = 1 - $A1
+$C1 = 1 - $C1
+$D4 = 1 - $D4
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 9 and $LC = 2 and $temp_1 = 2 }
+$B2 = 1 - $B2
+$A4 = 1 - $A4
+$C4 = 1 - $C4
+$D3 = 1 - $D3
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 9 and $LC = 2 and $temp_1 = 1 }
+$B1 = 1 - $B1
+$A3 = 1 - $A3
+$C3 = 1 - $C3
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 9 and $LC = 3 and $temp_1 = 4 }
+$C4 = 1 - $C4
+$A3 = 1 - $A3
+$B2 = 1 - $B2
+$D2 = 1 - $D2
+#case:lightoff_check { $variant = 9 and $LC = 3 and $temp_1 = 3 }
+$C3 = 1 - $C3
+$A4 = 1 - $A4
+$A2 = 1 - $A2
+$B1 = 1 - $B1
+$D1 = 1 - $D1
+#case:lightoff_check { $variant = 9 and $LC = 3 and $temp_1 = 2 }
+$C2 = 1 - $C2
+$A1 = 1 - $A1
+$A3 = 1 - $A3
+$B4 = 1 - $B4
+$D4 = 1 - $D4
+#case:lightoff_check { $variant = 9 and $LC = 3 and $temp_1 = 1 }
+$C1 = 1 - $C1
+$A2 = 1 - $A2
+$B3 = 1 - $B3
+$D3 = 1 - $D3
+#case:lightoff_check { $variant = 9 and $LC = 4 and $temp_1 = 4 }
+$D4 = 1 - $D4
+$B3 = 1 - $B3
+$C2 = 1 - $C2
+#case:lightoff_check { $variant = 9 and $LC = 4 and $temp_1 = 3 }
+$D3 = 1 - $D3
+$B4 = 1 - $B4
+$B2 = 1 - $B2
+$C1 = 1 - $C1
+#case:lightoff_check { $variant = 9 and $LC = 4 and $temp_1 = 2 }
+$D2 = 1 - $D2
+$B1 = 1 - $B1
+$B3 = 1 - $B3
+$C4 = 1 - $C4
+#case:lightoff_check { $variant = 9 and $LC = 4 and $temp_1 = 1 }
+$D1 = 1 - $D1
+$B2 = 1 - $B2
+$C3 = 1 - $C3
+
+#site:lightoff_check
+#case:lightoff { $A1 + $A2 + $A3 + $A4 + $B1 + $B2 + $B3 + $B4 + $C1 + $C2 + $C3 + $C4 + $D1 + $D2 + $D3 + $D4 > 0 }
+#case:game_win { $A1 + $A2 + $A3 + $A4 + $B1 + $B2 + $B3 + $B4 + $C1 + $C2 + $C3 + $C4 + $D1 + $D2 + $D3 + $D4 = 0 }
+
+#macro:scell
+  #text:0..0 ' .'
+  #text:1..1 ' o'
+#end
+
+#for:i:1..5
+  #var:sline[$i] #range:0..31 #default:0 #mod:2 #hide
+    #field:a // 16
+      #scell
+    #field:b // 8
+      #scell
+    #field:c // 4
+      #scell
+    #field:d // 2
+      #scell
+    #field:e // 1
+      #scell
+#end
+
+#var:SC #range:0..5 #hide
+  #text:0..0 ' A B C D E'
+  #text:1..1 ' * B C D E'
+  #text:2..2 ' A * C D E'
+  #text:3..3 ' A B * D E'
+  #text:4..4 ' A B C * E'
+  #text:5..5 ' A B C D *'
+
+#site:solit_init
+#case:solit { $variant = 10 }
+$sline5 = 4   // . . o . .
+$sline4 = 14  // . o o o .
+$sline3 = 4   // . . o . .
+$sline2 = 4   // . . o . .
+$sline1 = 0   // . . . . .
+$temp_2 = 5
+#case:solit { $variant = 11 }
+$sline5 = 4   // . . o . .
+$sline4 = 14  // . o o o .
+$sline3 = 27  // o o . o o
+$sline2 = 14  // . o o o .
+$sline1 = 4   // . . o . .
+$temp_2 = 11
+#case:solit { $variant = 12 }
+$sline5 = 0   // . . . . .
+$sline4 = 4   // . . o . .
+$sline3 = 14  // . o o o .
+$sline2 = 31  // o o o o o
+$sline1 = 0   // . . . . .
+$temp_2 = 8
+
+#site:solit
+#page:1
+^   +-----------+ ^
+^ %5% |@sline5 | ^
+^ %4% |@sline4 | ^
+^ %3% |@sline3 | ^
+^ %2% |@sline2 | ^
+^ %1% |@sline1 | ^
+^   +-----------+ ^
+^    @SC   ^
+$SC = 0
+#case:solit_row 'A' { $sline5.a + $sline4.a + $sline3.a + $sline2.a + $sline1.a > 0 } #order:1
+$SC = 1
+#case:solit_row 'B' { $sline5.b + $sline4.b + $sline3.b + $sline2.b + $sline1.b > 0 } #order:2
+$SC = 2
+#case:solit_row 'C' { $sline5.c + $sline4.c + $sline3.c + $sline2.c + $sline1.c > 0 } #order:3
+$SC = 3
+#case:solit_row 'D' { $sline5.d + $sline4.d + $sline3.d + $sline2.d + $sline1.d > 0 } #order:4
+$SC = 4
+#case:solit_row 'E' { $sline5.e + $sline4.e + $sline3.e + $sline2.e + $sline1.e > 0 } #order:5
+$SC = 5
+#case:game_lose 'Отказаться от выполнения' #order:7
+
+#site:solit_row
+#page:1
+^   +-----------+ ^
+^ %5% |@sline5 | ^
+^ %4% |@sline4 | ^
+^ %3% |@sline3 | ^
+^ %2% |@sline2 | ^
+^ %1% |@sline1 | ^
+^   +-----------+ ^
+^    @SC   ^
+#case:solit_cell '5' { $SC = 1 and $sline5.a > 0 }
+$temp_1 = 5
+#case:solit_cell '5' { $SC = 2 and $sline5.b > 0 }
+$temp_1 = 5
+#case:solit_cell '5' { $SC = 3 and $sline5.c > 0 }
+$temp_1 = 5
+#case:solit_cell '5' { $SC = 4 and $sline5.d > 0 }
+$temp_1 = 5
+#case:solit_cell '5' { $SC = 5 and $sline5.e > 0 }
+$temp_1 = 5
+#case:solit_cell '4' { $SC = 1 and $sline4.a > 0 }
+$temp_1 = 4
+#case:solit_cell '4' { $SC = 2 and $sline4.b > 0 }
+$temp_1 = 4
+#case:solit_cell '4' { $SC = 3 and $sline4.c > 0 }
+$temp_1 = 4
+#case:solit_cell '4' { $SC = 4 and $sline4.d > 0 }
+$temp_1 = 4
+#case:solit_cell '4' { $SC = 5 and $sline4.e > 0 }
+$temp_1 = 4
+#case:solit_cell '3' { $SC = 1 and $sline3.a > 0 }
+$temp_1 = 3
+#case:solit_cell '3' { $SC = 2 and $sline3.b > 0 }
+$temp_1 = 3
+#case:solit_cell '3' { $SC = 3 and $sline3.c > 0 }
+$temp_1 = 3
+#case:solit_cell '3' { $SC = 4 and $sline3.d > 0 }
+$temp_1 = 3
+#case:solit_cell '3' { $SC = 5 and $sline3.e > 0 }
+$temp_1 = 3
+#case:solit_cell '2' { $SC = 1 and $sline2.a > 0 }
+$temp_1 = 2
+#case:solit_cell '2' { $SC = 2 and $sline2.b > 0 }
+$temp_1 = 2
+#case:solit_cell '2' { $SC = 3 and $sline2.c > 0 }
+$temp_1 = 2
+#case:solit_cell '2' { $SC = 4 and $sline2.d > 0 }
+$temp_1 = 2
+#case:solit_cell '2' { $SC = 5 and $sline2.e > 0 }
+$temp_1 = 2
+#case:solit_cell '1' { $SC = 1 and $sline1.a > 0 }
+$temp_1 = 1
+#case:solit_cell '1' { $SC = 2 and $sline1.b > 0 }
+$temp_1 = 1
+#case:solit_cell '1' { $SC = 3 and $sline1.c > 0 }
+$temp_1 = 1
+#case:solit_cell '1' { $SC = 4 and $sline1.d > 0 }
+$temp_1 = 1
+#case:solit_cell '1' { $SC = 5 and $sline1.e > 0 }
+$temp_1 = 1
+#case:solit 'Другой столбец' #order:6
+#case:game_lose 'Отказаться от выполнения' #order:7
+
+#site:solit_cell { $temp_1 }
+#page:1
+^   +-----------+ ^
+^ %5% |@sline5 | ^
+^ %4% |@sline4 | ^
+^ %3% |@sline3 | ^
+^ %2% |@sline2 | ^
+^ %*% |@sline1 | ^
+^   +-----------+ ^
+^    @SC   ^
+#page:2
+^   +-----------+ ^
+^ %5% |@sline5 | ^
+^ %4% |@sline4 | ^
+^ %3% |@sline3 | ^
+^ %*% |@sline2 | ^
+^ %1% |@sline1 | ^
+^   +-----------+ ^
+^    @SC   ^
+#page:3
+^   +-----------+ ^
+^ %5% |@sline5 | ^
+^ %4% |@sline4 | ^
+^ %*% |@sline3 | ^
+^ %2% |@sline2 | ^
+^ %1% |@sline1 | ^
+^   +-----------+ ^
+^    @SC   ^
+#page:4
+^   +-----------+ ^
+^ %5% |@sline5 | ^
+^ %*% |@sline4 | ^
+^ %3% |@sline3 | ^
+^ %2% |@sline2 | ^
+^ %1% |@sline1 | ^
+^   +-----------+ ^
+^    @SC   ^
+#page:5
+^   +-----------+ ^
+^ %*% |@sline5 | ^
+^ %4% |@sline4 | ^
+^ %3% |@sline3 | ^
+^ %2% |@sline2 | ^
+^ %1% |@sline1 | ^
+^   +-----------+ ^
+^    @SC   ^
+#case:solit_check 'C5' { $SC = 1 and $temp_1 = 5 and $sline5.b > 0 and $sline5.c = 0 } #order:1
+$sline5 = $sline5 - 16 - 8 + 4
+#case:solit_check 'A3' { $SC = 1 and $temp_1 = 5 and $sline4.a > 0 and $sline3.a = 0 } #order:1
+$sline5 = $sline5 - 16
+$sline4 = $sline4 - 16
+$sline3 = $sline3 + 16
+#case:solit_check 'C4' { $SC = 1 and $temp_1 = 4 and $sline4.b > 0 and $sline4.c = 0 } #order:1
+$sline4 = $sline4 - 16 - 8 + 4
+#case:solit_check 'A2' { $SC = 1 and $temp_1 = 4 and $sline3.a > 0 and $sline2.a = 0 } #order:1
+$sline4 = $sline4 - 16
+$sline3 = $sline3 - 16
+$sline2 = $sline2 + 16
+#case:solit_check 'C3' { $SC = 1 and $temp_1 = 3 and $sline3.b > 0 and $sline3.c = 0 } #order:1
+$sline3 = $sline3 - 16 - 8 + 4
+#case:solit_check 'A5' { $SC = 1 and $temp_1 = 3 and $sline4.a > 0 and $sline5.a = 0 } #order:1
+$sline3 = $sline3 - 16
+$sline4 = $sline4 - 16
+$sline5 = $sline5 + 16
+#case:solit_check 'A1' { $SC = 1 and $temp_1 = 3 and $sline2.a > 0 and $sline1.a = 0 } #order:1
+$sline3 = $sline3 - 16
+$sline2 = $sline2 - 16
+$sline1 = $sline1 + 16
+#case:solit_check 'C2' { $SC = 1 and $temp_1 = 2 and $sline2.b > 0 and $sline2.c = 0 } #order:1
+$sline2 = $sline2 - 16 - 8 + 4
+#case:solit_check 'A4' { $SC = 1 and $temp_1 = 2 and $sline3.a > 0 and $sline4.a = 0 } #order:1
+$sline2 = $sline2 - 16
+$sline3 = $sline3 - 16
+$sline4 = $sline4 + 16
+#case:solit_check 'C1' { $SC = 1 and $temp_1 = 1 and $sline1.b > 0 and $sline1.c = 0 } #order:1
+$sline1 = $sline1 - 16 - 8 + 4
+#case:solit_check 'A3' { $SC = 1 and $temp_1 = 1 and $sline2.a > 0 and $sline3.a = 0 } #order:1
+$sline1 = $sline1 - 16
+$sline2 = $sline2 - 16
+$sline3 = $sline3 + 16
+
+#case:solit_check 'D5' { $SC = 2 and $temp_1 = 5 and $sline5.c > 0 and $sline5.d = 0 } #order:1
+$sline5 = $sline5 - 8 - 4 + 2
+#case:solit_check 'B3' { $SC = 2 and $temp_1 = 5 and $sline4.b > 0 and $sline3.b = 0 } #order:1
+$sline5 = $sline5 - 8
+$sline4 = $sline4 - 8
+$sline3 = $sline3 + 8
+#case:solit_check 'D4' { $SC = 2 and $temp_1 = 4 and $sline4.c > 0 and $sline4.d = 0 } #order:1
+$sline4 = $sline4 - 8 - 4 + 2
+#case:solit_check 'B2' { $SC = 2 and $temp_1 = 4 and $sline3.b > 0 and $sline2.b = 0 } #order:1
+$sline4 = $sline4 - 8
+$sline3 = $sline3 - 8
+$sline2 = $sline2 + 8
+#case:solit_check 'D3' { $SC = 2 and $temp_1 = 3 and $sline3.c > 0 and $sline3.d = 0 } #order:1
+$sline3 = $sline3 - 8 - 4 + 2
+#case:solit_check 'B5' { $SC = 2 and $temp_1 = 3 and $sline4.b > 0 and $sline5.b = 0 } #order:1
+$sline3 = $sline3 - 8
+$sline4 = $sline4 - 8
+$sline5 = $sline5 + 8
+#case:solit_check 'B1' { $SC = 2 and $temp_1 = 3 and $sline2.b > 0 and $sline1.b = 0 } #order:1
+$sline3 = $sline3 - 8
+$sline2 = $sline2 - 8
+$sline1 = $sline1 + 8
+#case:solit_check 'D2' { $SC = 2 and $temp_1 = 2 and $sline2.c > 0 and $sline2.d = 0 } #order:1
+$sline2 = $sline2 - 8 - 4 + 2
+#case:solit_check 'B4' { $SC = 2 and $temp_1 = 2 and $sline3.b > 0 and $sline4.b = 0 } #order:1
+$sline2 = $sline2 - 8
+$sline3 = $sline3 - 8
+$sline4 = $sline4 + 8
+#case:solit_check 'D1' { $SC = 2 and $temp_1 = 1 and $sline1.c > 0 and $sline1.d = 0 } #order:1
+$sline1 = $sline1 - 8 - 4 + 2
+#case:solit_check 'B3' { $SC = 2 and $temp_1 = 1 and $sline2.b > 0 and $sline3.b = 0 } #order:1
+$sline1 = $sline1 - 8
+$sline2 = $sline2 - 8
+$sline3 = $sline3 + 8
+
+#case:solit_check 'E5' { $SC = 3 and $temp_1 = 5 and $sline5.d > 0 and $sline5.e = 0 } #order:1
+$sline5 = $sline5 - 4 - 2 + 1
+#case:solit_check 'A5' { $SC = 3 and $temp_1 = 5 and $sline5.b > 0 and $sline5.a = 0 } #order:1
+$sline5 = $sline5 - 4 - 8 + 16
+#case:solit_check 'C3' { $SC = 3 and $temp_1 = 5 and $sline4.c > 0 and $sline3.c = 0 } #order:1
+$sline5 = $sline5 - 4
+$sline4 = $sline4 - 4
+$sline3 = $sline3 + 4
+#case:solit_check 'E4' { $SC = 3 and $temp_1 = 4 and $sline4.d > 0 and $sline4.e = 0 } #order:1
+$sline4 = $sline4 - 4 - 2 + 1
+#case:solit_check 'A4' { $SC = 3 and $temp_1 = 4 and $sline4.b > 0 and $sline4.a = 0 } #order:1
+$sline4 = $sline4 - 4 - 8 + 16
+#case:solit_check 'C2' { $SC = 3 and $temp_1 = 4 and $sline3.c > 0 and $sline2.c = 0 } #order:1
+$sline4 = $sline4 - 4
+$sline3 = $sline3 - 4
+$sline2 = $sline2 + 4
+#case:solit_check 'E3' { $SC = 3 and $temp_1 = 3 and $sline3.d > 0 and $sline3.e = 0 } #order:1
+$sline3 = $sline3 - 4 - 2 + 1
+#case:solit_check 'A3' { $SC = 3 and $temp_1 = 3 and $sline3.b > 0 and $sline3.a = 0 } #order:1
+$sline3 = $sline3 - 4 - 8 + 16
+#case:solit_check 'C5' { $SC = 3 and $temp_1 = 3 and $sline4.c > 0 and $sline5.c = 0 } #order:1
+$sline3 = $sline3 - 4
+$sline4 = $sline4 - 4
+$sline5 = $sline5 + 4
+#case:solit_check 'C1' { $SC = 3 and $temp_1 = 3 and $sline2.c > 0 and $sline1.c = 0 } #order:1
+$sline3 = $sline3 - 4
+$sline2 = $sline2 - 4
+$sline1 = $sline1 + 4
+#case:solit_check 'E2' { $SC = 3 and $temp_1 = 2 and $sline2.d > 0 and $sline2.e = 0 } #order:1
+$sline2 = $sline2 - 4 - 2 + 1
+#case:solit_check 'A2' { $SC = 3 and $temp_1 = 2 and $sline2.b > 0 and $sline2.a = 0 } #order:1
+$sline2 = $sline2 - 4 - 8 + 16
+#case:solit_check 'C4' { $SC = 3 and $temp_1 = 2 and $sline3.c > 0 and $sline4.c = 0 } #order:1
+$sline2 = $sline2 - 4
+$sline3 = $sline3 - 4
+$sline4 = $sline4 + 4
+#case:solit_check 'E1' { $SC = 3 and $temp_1 = 1 and $sline1.d > 0 and $sline1.e = 0 } #order:1
+$sline1 = $sline1 - 4 - 2 + 1
+#case:solit_check 'A1' { $SC = 3 and $temp_1 = 1 and $sline1.b > 0 and $sline1.a = 0 } #order:1
+$sline1 = $sline1 - 4 - 8 + 16
+#case:solit_check 'C3' { $SC = 3 and $temp_1 = 1 and $sline2.c > 0 and $sline3.c = 0 } #order:1
+$sline1 = $sline1 - 4
+$sline2 = $sline2 - 4
+$sline3 = $sline3 + 4
+
+#case:solit_check 'B5' { $SC = 4 and $temp_1 = 5 and $sline5.c > 0 and $sline5.b = 0 } #order:1
+$sline5 = $sline5 - 2 - 4 + 8
+#case:solit_check 'D3' { $SC = 4 and $temp_1 = 5 and $sline4.d > 0 and $sline3.d = 0 } #order:1
+$sline5 = $sline5 - 2
+$sline4 = $sline4 - 2
+$sline3 = $sline3 + 2
+#case:solit_check 'B4' { $SC = 4 and $temp_1 = 4 and $sline4.c > 0 and $sline4.b = 0 } #order:1
+$sline4 = $sline4 - 2 - 4 + 8
+#case:solit_check 'D2' { $SC = 4 and $temp_1 = 4 and $sline3.d > 0 and $sline2.d = 0 } #order:1
+$sline4 = $sline4 - 2
+$sline3 = $sline3 - 2
+$sline2 = $sline2 + 2
+#case:solit_check 'B3' { $SC = 4 and $temp_1 = 3 and $sline3.c > 0 and $sline3.b = 0 } #order:1
+$sline3 = $sline3 - 2 - 4 + 8
+#case:solit_check 'D5' { $SC = 4 and $temp_1 = 3 and $sline4.d > 0 and $sline5.d = 0 } #order:1
+$sline3 = $sline3 - 2
+$sline4 = $sline4 - 2
+$sline5 = $sline5 + 2
+#case:solit_check 'D1' { $SC = 4 and $temp_1 = 3 and $sline2.d > 0 and $sline1.d = 0 } #order:1
+$sline3 = $sline3 - 2
+$sline2 = $sline2 - 2
+$sline1 = $sline1 + 2
+#case:solit_check 'B2' { $SC = 4 and $temp_1 = 2 and $sline2.c > 0 and $sline2.b = 0 } #order:1
+$sline2 = $sline2 - 2 - 4 + 8
+#case:solit_check 'D4' { $SC = 4 and $temp_1 = 2 and $sline3.d > 0 and $sline4.d = 0 } #order:1
+$sline2 = $sline2 - 2
+$sline3 = $sline3 - 2
+$sline4 = $sline4 + 2
+#case:solit_check 'B1' { $SC = 4 and $temp_1 = 1 and $sline1.c > 0 and $sline1.b = 0 } #order:1
+$sline1 = $sline1 - 2 - 4 + 8
+#case:solit_check 'D3' { $SC = 4 and $temp_1 = 1 and $sline2.d > 0 and $sline3.d = 0 } #order:1
+$sline1 = $sline1 - 2
+$sline2 = $sline2 - 2
+$sline3 = $sline3 + 2
+
+#case:solit_check 'C5' { $SC = 5 and $temp_1 = 5 and $sline5.d > 0 and $sline5.c = 0 } #order:1
+$sline5 = $sline5 - 1 - 2 + 4
+#case:solit_check 'E3' { $SC = 5 and $temp_1 = 5 and $sline4.e > 0 and $sline3.e = 0 } #order:1
+$sline5 = $sline5 - 1
+$sline4 = $sline4 - 1
+$sline3 = $sline3 + 1
+#case:solit_check 'C4' { $SC = 5 and $temp_1 = 4 and $sline4.d > 0 and $sline4.c = 0 } #order:1
+$sline4 = $sline4 - 1 - 2 + 4
+#case:solit_check 'E2' { $SC = 5 and $temp_1 = 4 and $sline3.e > 0 and $sline2.e = 0 } #order:1
+$sline4 = $sline4 - 1
+$sline3 = $sline3 - 1
+$sline2 = $sline2 + 1
+#case:solit_check 'C3' { $SC = 5 and $temp_1 = 3 and $sline3.d > 0 and $sline3.c = 0 } #order:1
+$sline3 = $sline3 - 1 - 2 + 4
+#case:solit_check 'E5' { $SC = 5 and $temp_1 = 3 and $sline4.e > 0 and $sline5.e = 0 } #order:1
+$sline3 = $sline3 - 1
+$sline4 = $sline4 - 1
+$sline5 = $sline5 + 1
+#case:solit_check 'E1' { $SC = 5 and $temp_1 = 3 and $sline2.e > 0 and $sline1.e = 0 } #order:1
+$sline3 = $sline3 - 1
+$sline2 = $sline2 - 1
+$sline1 = $sline1 + 1
+#case:solit_check 'C2' { $SC = 5 and $temp_1 = 2 and $sline2.d > 0 and $sline2.c = 0 } #order:1
+$sline2 = $sline2 - 1 - 2 + 4
+#case:solit_check 'E4' { $SC = 5 and $temp_1 = 2 and $sline3.e > 0 and $sline4.e = 0 } #order:1
+$sline2 = $sline2 - 1
+$sline3 = $sline3 - 1
+$sline4 = $sline4 + 1
+#case:solit_check 'C1' { $SC = 5 and $temp_1 = 1 and $sline1.d > 0 and $sline1.c = 0 } #order:1
+$sline1 = $sline1 - 1 - 2 + 4
+#case:solit_check 'E3' { $SC = 5 and $temp_1 = 1 and $sline2.e > 0 and $sline3.e = 0 } #order:1
+$sline1 = $sline1 - 1
+$sline2 = $sline2 - 1
+$sline3 = $sline3 + 1
+
+#case:solit 'Другая ячейка' #order:6
+#case:game_lose 'Отказаться от выполнения' #order:7
+
+#site:solit_check
+#case:game_win { $temp_2 = 1 }
+#case:solit { $temp_2 > 1 }
+$temp_2 = $temp_2 - 1
+
+#macro:saim
+^   +---------+ ^
+^ %5% | @A5 @B5 @C5 @D5 | ^
+^ %4% | @A4 @B4 @C4 @D4 | ^
+^ %3% | @A3 @B3 @C3 @D3 | ^
+^ %2% | @A2 @B2 @C2 @D2 | ^
+^ %1% | @A1 @B1 @C1 @D1 | ^
+^   +---------+ ^
+^    @LC   ^
+#end
+
+#macro:wl:P:N
+  #var:wline[$P][$N] #range:0..65535 #default:0 #mod:2 #hide
+    #field:dd // 32768
+    #field:dc // 16384
+    #field:db // 8192
+    #field:da // 4096
+    #field:cd // 2048
+    #field:cc // 1024
+    #field:cb // 512
+    #field:ca // 256
+    #field:bd // 128
+    #field:bc // 64
+    #field:bb // 34
+    #field:ba // 16
+    #field:ad // 8
+    #field:ac // 4
+    #field:ab // 2
+    #field:aa // 1
+#end
+
+#for:i:1..5
+  #wl:1:[$i]
+  #wl:2:[$i]
+#end
+
+#site:swap_init
+#case:swap { $variant = 13 }
+$temp_1 = 2 // Очерёдность хода (слоны)
+$A1 = 2
+$B1 = 4
+$C1 = 6
+$D1 = 8
+$A2 = 0
+$B2 = 0
+$C2 = 0
+$D2 = 0
+$A3 = 0
+$B3 = 0
+$C3 = 0
+$D3 = 0
+$A4 = 0
+$B4 = 0
+$C4 = 0
+$D4 = 0
+$A5 = 1
+$B5 = 3
+$C5 = 5
+$D5 = 7
+#case:swap { $variant = 14 }
+$temp_1 = 3
+$A1 = 2
+$B1 = 4
+$C1 = 6
+$D1 = 8
+$A2 = 0
+$B2 = 0
+$C2 = 0
+$D2 = 0
+$A3 = 0
+$B3 = 0
+$C3 = 0
+$D3 = 0
+$A4 = 0
+$B4 = 0
+$C4 = 0
+$D4 = 0
+$A5 = 1
+$B5 = 3
+$C5 = 5
+$D5 = 7
+
+#site:swap
+#page:1
+#saim
+$LC = 0
+$temp_2 = 0
+#for:Y:1..5
+  #case:swap_calc 'A[$Y]' { $A[$Y] > 0 and ($A[$Y] mod 2) = 1 and ($temp_1 mod 2) > 0 }
+  $LC = 1
+  $temp_2 = [$Y]
+  $temp_9 = $A[$Y]
+  #case:swap_calc 'A[$Y]' { $A[$Y] > 0 and ($A[$Y] mod 2) = 0 and ($temp_1 div 2) > 0 }
+  $LC = 1
+  $temp_2 = [$Y]
+  $temp_9 = $A[$Y]
+  #case:swap_calc 'B[$Y]' { $B[$Y] > 0 and ($B[$Y] mod 2) = 1 and ($temp_1 mod 2) > 0 }
+  $LC = 2
+  $temp_2 = [$Y]
+  $temp_9 = $B[$Y]
+  #case:swap_calc 'B[$Y]' { $B[$Y] > 0 and ($B[$Y] mod 2) = 0 and ($temp_1 div 2) > 0 }
+  $LC = 2
+  $temp_2 = [$Y]
+  $temp_9 = $B[$Y]
+  #case:swap_calc 'C[$Y]' { $C[$Y] > 0 and ($C[$Y] mod 2) = 1 and ($temp_1 mod 2) > 0 }
+  $LC = 3
+  $temp_2 = [$Y]
+  $temp_9 = $C[$Y]
+  #case:swap_calc 'C[$Y]' { $C[$Y] > 0 and ($C[$Y] mod 2) = 0 and ($temp_1 div 2) > 0 }
+  $LC = 3
+  $temp_2 = [$Y]
+  $temp_9 = $C[$Y]
+  #case:swap_calc 'D[$Y]' { $D[$Y] > 0 and ($D[$Y] mod 2) = 1 and ($temp_1 mod 2) > 0 }
+  $LC = 4
+  $temp_2 = [$Y]
+  $temp_9 = $D[$Y]
+  #case:swap_calc 'D[$Y]' { $D[$Y] > 0 and ($D[$Y] mod 2) = 0 and ($temp_1 div 2) > 0 }
+  $LC = 4
+  $temp_2 = [$Y]
+  $temp_9 = $D[$Y]
+#end
+#case:game_lose 'Отказаться от выполнения' #order:7
+
+#site:swap_calc_sub
+#for:Y:1..5
+  #case:swap_calc_ret { $temp_7 = 1 and $temp_8 = [$Y] and $A[$Y] > 0 }
+  #case:swap_calc_sub_1 { $temp_7 = 1 and $temp_8 = [$Y] and $A[$Y] = 0 }
+  #case:swap_calc_ret { $temp_7 = 2 and $temp_8 = [$Y] and $B[$Y] > 0 }
+  #case:swap_calc_sub_1 { $temp_7 = 2 and $temp_8 = [$Y] and $B[$Y] = 0 }
+  #case:swap_calc_ret { $temp_7 = 3 and $temp_8 = [$Y] and $C[$Y] > 0 }
+  #case:swap_calc_sub_1 { $temp_7 = 3 and $temp_8 = [$Y] and $C[$Y] = 0 }
+  #case:swap_calc_ret { $temp_7 = 4 and $temp_8 = [$Y] and $D[$Y] > 0 }
+  #case:swap_calc_sub_1 { $temp_7 = 4 and $temp_8 = [$Y] and $D[$Y] = 0 }
+#end
+
+#site:swap_calc_sub_1
+#for:Y:1..5
+  #case:swap_calc_ret { $temp_7 = 1 and $temp_8 = [$Y] and $temp_5 = 1 }
+    $wline1[$Y].aa = 1
+  #case:swap_calc_ret { $temp_7 = 2 and $temp_8 = [$Y] and $temp_5 = 1 }
+    $wline1[$Y].ab = 1
+  #case:swap_calc_ret { $temp_7 = 3 and $temp_8 = [$Y] and $temp_5 = 1 }
+    $wline1[$Y].ac = 1
+  #case:swap_calc_ret { $temp_7 = 4 and $temp_8 = [$Y] and $temp_5 = 1 }
+    $wline1[$Y].ad = 1
+  #case:swap_calc_ret { $temp_7 = 1 and $temp_8 = [$Y] and $temp_5 = 2 }
+    $wline2[$Y].aa = 1
+  #case:swap_calc_ret { $temp_7 = 2 and $temp_8 = [$Y] and $temp_5 = 2 }
+    $wline2[$Y].ab = 1
+  #case:swap_calc_ret { $temp_7 = 3 and $temp_8 = [$Y] and $temp_5 = 2 }
+    $wline2[$Y].ac = 1
+  #case:swap_calc_ret { $temp_7 = 4 and $temp_8 = [$Y] and $temp_5 = 2 }
+    $wline2[$Y].ad = 1
+  #case:swap_calc_ret { $temp_7 = 1 and $temp_8 = [$Y] and $temp_5 = 3 }
+    $wline1[$Y].ba = 1
+  #case:swap_calc_ret { $temp_7 = 2 and $temp_8 = [$Y] and $temp_5 = 3 }
+    $wline1[$Y].bb = 1
+  #case:swap_calc_ret { $temp_7 = 3 and $temp_8 = [$Y] and $temp_5 = 3 }
+    $wline1[$Y].bc = 1
+  #case:swap_calc_ret { $temp_7 = 4 and $temp_8 = [$Y] and $temp_5 = 3 }
+    $wline1[$Y].bd = 1
+  #case:swap_calc_ret { $temp_7 = 1 and $temp_8 = [$Y] and $temp_5 = 4 }
+    $wline2[$Y].ba = 1
+  #case:swap_calc_ret { $temp_7 = 2 and $temp_8 = [$Y] and $temp_5 = 4 }
+    $wline2[$Y].bb = 1
+  #case:swap_calc_ret { $temp_7 = 3 and $temp_8 = [$Y] and $temp_5 = 4 }
+    $wline2[$Y].bc = 1
+  #case:swap_calc_ret { $temp_7 = 4 and $temp_8 = [$Y] and $temp_5 = 4 }
+    $wline2[$Y].bd = 1
+  #case:swap_calc_ret { $temp_7 = 1 and $temp_8 = [$Y] and $temp_5 = 5 }
+    $wline1[$Y].ca = 1
+  #case:swap_calc_ret { $temp_7 = 2 and $temp_8 = [$Y] and $temp_5 = 5 }
+    $wline1[$Y].cb = 1
+  #case:swap_calc_ret { $temp_7 = 3 and $temp_8 = [$Y] and $temp_5 = 5 }
+    $wline1[$Y].cc = 1
+  #case:swap_calc_ret { $temp_7 = 4 and $temp_8 = [$Y] and $temp_5 = 5 }
+    $wline1[$Y].cd = 1
+  #case:swap_calc_ret { $temp_7 = 1 and $temp_8 = [$Y] and $temp_5 = 6 }
+    $wline2[$Y].ca = 1
+  #case:swap_calc_ret { $temp_7 = 2 and $temp_8 = [$Y] and $temp_5 = 6 }
+    $wline2[$Y].cb = 1
+  #case:swap_calc_ret { $temp_7 = 3 and $temp_8 = [$Y] and $temp_5 = 6 }
+    $wline2[$Y].cc = 1
+  #case:swap_calc_ret { $temp_7 = 4 and $temp_8 = [$Y] and $temp_5 = 6 }
+    $wline2[$Y].cd = 1
+  #case:swap_calc_ret { $temp_7 = 1 and $temp_8 = [$Y] and $temp_5 = 7 }
+    $wline1[$Y].da = 1
+  #case:swap_calc_ret { $temp_7 = 2 and $temp_8 = [$Y] and $temp_5 = 7 }
+    $wline1[$Y].db = 1
+  #case:swap_calc_ret { $temp_7 = 3 and $temp_8 = [$Y] and $temp_5 = 7 }
+    $wline1[$Y].dc = 1
+  #case:swap_calc_ret { $temp_7 = 4 and $temp_8 = [$Y] and $temp_5 = 7 }
+    $wline1[$Y].dd = 1
+  #case:swap_calc_ret { $temp_7 = 1 and $temp_8 = [$Y] and $temp_5 = 8 }
+    $wline2[$Y].da = 1
+  #case:swap_calc_ret { $temp_7 = 2 and $temp_8 = [$Y] and $temp_5 = 8 }
+    $wline2[$Y].db = 1
+  #case:swap_calc_ret { $temp_7 = 3 and $temp_8 = [$Y] and $temp_5 = 8 }
+    $wline2[$Y].dc = 1
+  #case:swap_calc_ret { $temp_7 = 4 and $temp_8 = [$Y] and $temp_5 = 8 }
+    $wline2[$Y].dd = 1
+#end
+
+#site:swap_calc_ret
+#return
+
+#site:swap_calc
+$wline11 = 0
+$wline12 = 0
+$wline13 = 0
+$wline14 = 0
+$wline15 = 0
+$wline21 = 0
+$wline22 = 0
+$wline23 = 0
+$wline24 = 0
+$wline25 = 0
+$temp_3  = 1 // X
+$temp_4  = 1 // Y
+$temp_6  = 1
+#case:swap_calc_1
+
+#site:swap_calc_1
+$temp_5 = 0
+#for:Y:1..5
+  #case:swap_calc_3 { $temp_3 = 1 and $temp_4 = [$Y] and $A[$Y] = 0 }
+  #case:swap_calc_3 { $temp_3 = 2 and $temp_4 = [$Y] and $B[$Y] = 0 }
+  #case:swap_calc_3 { $temp_3 = 3 and $temp_4 = [$Y] and $C[$Y] = 0 }
+  #case:swap_calc_3 { $temp_3 = 4 and $temp_4 = [$Y] and $D[$Y] = 0 }
+  #case:swap_calc_2 { $temp_3 = 1 and $temp_4 = [$Y] and $A[$Y] > 0 }
+  $temp_5 = $A[$Y]
+  $temp_7 = $temp_3
+  $temp_8 = $temp_4
+  #case:swap_calc_2 { $temp_3 = 2 and $temp_4 = [$Y] and $B[$Y] > 0 }
+  $temp_5 = $B[$Y]
+  $temp_7 = $temp_3
+  $temp_8 = $temp_4
+  #case:swap_calc_2 { $temp_3 = 3 and $temp_4 = [$Y] and $C[$Y] > 0 }
+  $temp_5 = $C[$Y]
+  $temp_7 = $temp_3
+  $temp_8 = $temp_4
+  #case:swap_calc_2 { $temp_3 = 4 and $temp_4 = [$Y] and $D[$Y] > 0 }
+  $temp_5 = $D[$Y]
+  $temp_7 = $temp_3
+  $temp_8 = $temp_4
+#end
+
+#site:swap_calc_2
+#case:swap_calc_5 { $temp_7 <= 1 or $temp_8 >= 5 }
+$temp_7 = $temp_3
+$temp_8 = $temp_4
+#case:swap_calc_sub { $temp_7 > 1 and $temp_8 < 5 } #return:swap_calc_2
+$temp_7 = $temp_7 - 1
+$temp_8 = $temp_8 + 1
+
+#site:swap_calc_5
+#case:swap_calc_6 { $temp_7 >= 4 or $temp_8 >= 5 }
+$temp_7 = $temp_3
+$temp_8 = $temp_4
+#case:swap_calc_sub { $temp_7 < 4 and $temp_8 < 5 } #return:swap_calc_5
+$temp_7 = $temp_7 + 1
+$temp_8 = $temp_8 + 1
+
+#site:swap_calc_6
+#case:swap_calc_7 { $temp_7 <= 1 or $temp_8 <= 1 }
+$temp_7 = $temp_3
+$temp_8 = $temp_4
+#case:swap_calc_sub { $temp_7 > 1 and $temp_8 > 1 } #return:swap_calc_6
+$temp_7 = $temp_7 - 1
+$temp_8 = $temp_8 - 1
+
+#site:swap_calc_7
+#case:swap_calc_3 { $temp_7 >= 4 or $temp_8 <= 1 }
+#case:swap_calc_sub { $temp_7 < 4 and $temp_8 > 1 } #return:swap_calc_7
+$temp_7 = $temp_7 + 1
+$temp_8 = $temp_8 - 1
+
+#site:swap_calc_3
+#case:swap_cell { $temp_3 = 4 and $temp_4 = 5 }
+#case:swap_calc_1 { $temp_3 = 4 and $temp_4 < 5 }
+$temp_3 = 1
+$temp_4 = $temp_4 + 1
+$temp_6 = 1
+#case:swap_calc_1 { $temp_3 < 4 }
+$temp_3 = $temp_3 + 1
+$temp_6 = $temp_6 * 2
+
+#site:swap_cell { $temp_2 }
+#page:1
+^   +---------+ ^
+^ %5% | @A5 @B5 @C5 @D5 | ^
+^ %4% | @A4 @B4 @C4 @D4 | ^
+^ %3% | @A3 @B3 @C3 @D3 | ^
+^ %2% | @A2 @B2 @C2 @D2 | ^
+^ %*% | @A1 @B1 @C1 @D1 | ^
+^   +---------+ ^
+^    @LC   ^
+#page:2
+^   +---------+ ^
+^ %5% | @A5 @B5 @C5 @D5 | ^
+^ %4% | @A4 @B4 @C4 @D4 | ^
+^ %3% | @A3 @B3 @C3 @D3 | ^
+^ %*% | @A2 @B2 @C2 @D2 | ^
+^ %1% | @A1 @B1 @C1 @D1 | ^
+^   +---------+ ^
+^    @LC   ^
+#page:3
+^   +---------+ ^
+^ %5% | @A5 @B5 @C5 @D5 | ^
+^ %4% | @A4 @B4 @C4 @D4 | ^
+^ %*% | @A3 @B3 @C3 @D3 | ^
+^ %2% | @A2 @B2 @C2 @D2 | ^
+^ %1% | @A1 @B1 @C1 @D1 | ^
+^   +---------+ ^
+^    @LC   ^
+#page:4
+^   +---------+ ^
+^ %5% | @A5 @B5 @C5 @D5 | ^
+^ %*% | @A4 @B4 @C4 @D4 | ^
+^ %3% | @A3 @B3 @C3 @D3 | ^
+^ %2% | @A2 @B2 @C2 @D2 | ^
+^ %1% | @A1 @B1 @C1 @D1 | ^
+^   +---------+ ^
+^    @LC   ^
+#page:5
+^   +---------+ ^
+^ %*% | @A5 @B5 @C5 @D5 | ^
+^ %4% | @A4 @B4 @C4 @D4 | ^
+^ %3% | @A3 @B3 @C3 @D3 | ^
+^ %2% | @A2 @B2 @C2 @D2 | ^
+^ %1% | @A1 @B1 @C1 @D1 | ^
+^   +---------+ ^
+^    @LC   ^
+#for:Y:1..5
+  #case:swap_clear 'A[$Y]' { $temp_9 = 1 and $wline1[$Y].aa > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1
+  $A[$Y] = $temp_9
+  #case:swap_clear 'A[$Y]' { $temp_9 = 2 and $wline2[$Y].aa > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1
+  $A[$Y] = $temp_9
+  #case:swap_clear 'A[$Y]' { $temp_9 = 3 and $wline1[$Y].ba > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1
+  $A[$Y] = $temp_9
+  #case:swap_clear 'A[$Y]' { $temp_9 = 4 and $wline2[$Y].ba > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1
+  $A[$Y] = $temp_9
+  #case:swap_clear 'A[$Y]' { $temp_9 = 5 and $wline1[$Y].ca > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1
+  $A[$Y] = $temp_9
+  #case:swap_clear 'A[$Y]' { $temp_9 = 6 and $wline2[$Y].ca > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1
+  $A[$Y] = $temp_9
+  #case:swap_clear 'A[$Y]' { $temp_9 = 7 and $wline1[$Y].da > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1
+  $A[$Y] = $temp_9
+  #case:swap_clear 'A[$Y]' { $temp_9 = 8 and $wline2[$Y].da > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1
+  $A[$Y] = $temp_9
+  #case:swap_clear 'B[$Y]' { $temp_9 = 1 and $wline1[$Y].ab > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1
+  $B[$Y] = $temp_9
+  #case:swap_clear 'B[$Y]' { $temp_9 = 2 and $wline2[$Y].ab > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1
+  $B[$Y] = $temp_9
+  #case:swap_clear 'B[$Y]' { $temp_9 = 3 and $wline1[$Y].bb > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1
+  $B[$Y] = $temp_9
+  #case:swap_clear 'B[$Y]' { $temp_9 = 4 and $wline2[$Y].bb > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1
+  $B[$Y] = $temp_9
+  #case:swap_clear 'B[$Y]' { $temp_9 = 5 and $wline1[$Y].cb > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1
+  $B[$Y] = $temp_9
+  #case:swap_clear 'B[$Y]' { $temp_9 = 6 and $wline2[$Y].cb > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1
+  $B[$Y] = $temp_9
+  #case:swap_clear 'B[$Y]' { $temp_9 = 7 and $wline1[$Y].db > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1
+  $B[$Y] = $temp_9
+  #case:swap_clear 'B[$Y]' { $temp_9 = 8 and $wline2[$Y].db > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1
+  $B[$Y] = $temp_9
+  #case:swap_clear 'C[$Y]' { $temp_9 = 1 and $wline1[$Y].ac > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1
+  $C[$Y] = $temp_9
+  #case:swap_clear 'C[$Y]' { $temp_9 = 2 and $wline2[$Y].ac > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1
+  $C[$Y] = $temp_9
+  #case:swap_clear 'C[$Y]' { $temp_9 = 3 and $wline1[$Y].bc > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1
+  $C[$Y] = $temp_9
+  #case:swap_clear 'C[$Y]' { $temp_9 = 4 and $wline2[$Y].bc > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1
+  $C[$Y] = $temp_9
+  #case:swap_clear 'C[$Y]' { $temp_9 = 5 and $wline1[$Y].cc > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1
+  $C[$Y] = $temp_9
+  #case:swap_clear 'C[$Y]' { $temp_9 = 6 and $wline2[$Y].cc > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1
+  $C[$Y] = $temp_9
+  #case:swap_clear 'C[$Y]' { $temp_9 = 7 and $wline1[$Y].dc > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1
+  $C[$Y] = $temp_9
+  #case:swap_clear 'C[$Y]' { $temp_9 = 8 and $wline2[$Y].dc > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1
+  $C[$Y] = $temp_9
+  #case:swap_clear 'D[$Y]' { $temp_9 = 1 and $wline1[$Y].ad > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1
+  $D[$Y] = $temp_9
+  #case:swap_clear 'D[$Y]' { $temp_9 = 2 and $wline2[$Y].ad > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1
+  $D[$Y] = $temp_9
+  #case:swap_clear 'D[$Y]' { $temp_9 = 3 and $wline1[$Y].bd > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1
+  $D[$Y] = $temp_9
+  #case:swap_clear 'D[$Y]' { $temp_9 = 4 and $wline2[$Y].bd > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1
+  $D[$Y] = $temp_9
+  #case:swap_clear 'D[$Y]' { $temp_9 = 5 and $wline1[$Y].cd > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1
+  $D[$Y] = $temp_9
+  #case:swap_clear 'D[$Y]' { $temp_9 = 6 and $wline2[$Y].cd > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1
+  $D[$Y] = $temp_9
+  #case:swap_clear 'D[$Y]' { $temp_9 = 7 and $wline1[$Y].dd > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1
+  $D[$Y] = $temp_9
+  #case:swap_clear 'D[$Y]' { $temp_9 = 8 and $wline2[$Y].dd > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1
+  $D[$Y] = $temp_9
+#end
+#case:swap 'Другая фигура' #order:5
+#case:game_lose 'Отказаться от выполнения' #order:7
+
+#site:swap_clear
+#for:Y:1..5
+  #case:swap_turn { $LC = 1 and $temp_2 = [$Y] }
+  $A[$Y] = 0
+  #case:swap_turn { $LC = 2 and $temp_2 = [$Y] }
+  $B[$Y] = 0
+  #case:swap_turn { $LC = 3 and $temp_2 = [$Y] }
+  $C[$Y] = 0
+  #case:swap_turn { $LC = 4 and $temp_2 = [$Y] }
+  $D[$Y] = 0
+#end
+
+#site:swap_turn
+#case:swap_check { $temp_1 = 1 }
+$temp_1 = 2
+#case:swap_check { $temp_1 = 2 }
+$temp_1 = 1
+#case:swap_check { $temp_1 = 3 }
+
+#site:swap_check
+#case:game_win { $A1 in [1;3;5;7] and $B1 in [1;3;5;7] and $C1 in [1;3;5;7] and $C1 in [1;3;5;7] and $A5 in [2;4;6;8] and $B5 in [2;4;6;8] and $C5 in [2;4;6;8] and $D5 in [2;4;6;8] }
+#case:swap { 1 - ($A1 in [1;3;5;7] and $B1 in [1;3;5;7] and $C1 in [1;3;5;7] and $C1 in [1;3;5;7] and $A5 in [2;4;6;8] and $B5 in [2;4;6;8] and $C5 in [2;4;6;8] and $D5 in [2;4;6;8]) }
+
+#for:i:1..5
+  #var:cline[$i] #range:0..9999 #default:0 #mod:10 #hide
+#end
+
+#var:temp_10 #range:0..99999 #default:0 #hide
+  #ct
+#var:temp_11 #range:0..99999 #default:0 #hide
+  #ct
+#var:temp_12 #range:0..99999 #default:0 #hide
+  #ct
+#var:temp_13 #range:0..99999 #default:0 #hide
+  #ct
+
+#macro:caim
+#page:1
+^ %????% |      ^
+^ -------------- ^
+^ @temp_10@temp_11@temp_12@temp_13 |      ^
+#page:2
+^ %????% |      ^
+^ -------------- ^
+^ $cline1 | @A1 @B1 @C1 @D1 ^
+^ @temp_10@temp_11@temp_12@temp_13 |      ^
+#page:3
+^ %????% |      ^
+^ -------------- ^
+^ $cline1 | @A1 @B1 @C1 @D1 ^
+^ $cline2 | @A2 @B2 @C2 @D2 ^
+^ @temp_10@temp_11@temp_12@temp_13 |      ^
+#page:4
+^ %????% |      ^
+^ -------------- ^
+^ $cline1 | @A1 @B1 @C1 @D1 ^
+^ $cline2 | @A2 @B2 @C2 @D2 ^
+^ $cline3 | @A3 @B3 @C3 @D3 ^
+^ @temp_10@temp_11@temp_12@temp_13 |      ^
+#page:5
+^ %????% |      ^
+^ -------------- ^
+^ $cline1 | @A1 @B1 @C1 @D1 ^
+^ $cline2 | @A2 @B2 @C2 @D2 ^
+^ $cline3 | @A3 @B3 @C3 @D3 ^
+^ $cline4 | @A4 @B4 @C4 @D4 ^
+^ @temp_10@temp_11@temp_12@temp_13 |      ^
+#page:6
+^ %????% |      ^
+^ -------------- ^
+^ $cline1 | @A1 @B1 @C1 @D1 ^
+^ $cline2 | @A2 @B2 @C2 @D2 ^
+^ $cline3 | @A3 @B3 @C3 @D3 ^
+^ $cline4 | @A4 @B4 @C4 @D4 ^
+^ $cline5 | @A5 @B5 @C5 @D5 ^
+^ @temp_10@temp_11@temp_12@temp_13 |      ^
+#end
+
+#site:cow_init
+$echars.spy = 3
+$temp_9 = 0
+$cline1 = 0
+$cline2 = 0
+$cline3 = 0
+$cline4 = 0
+$cline5 = 0
+#for:i:1..5
+  $A[$i] = 0
+  $B[$i] = 0
+  $C[$i] = 0
+  $D[$i] = 0
+#end
+#case:cow { $echars.spy = 0 }
+$temp_1 = <1..5>
+$temp_2 = <1..5>
+$temp_3 = <1..5>
+$temp_4 = <1..5>
+#case:cow { $echars.spy = 1 }
+$temp_1 = <1..6>
+$temp_2 = <1..6>
+$temp_3 = <1..6>
+$temp_4 = <1..6>
+#case:cow { $echars.spy = 2 }
+$temp_1 = <1..7>
+$temp_2 = <1..7>
+$temp_3 = <1..7>
+$temp_4 = <1..7>
+#case:cow { $echars.spy = 3 }
+$temp_1 = <1..8>
+$temp_2 = <1..8>
+$temp_3 = <1..8>
+$temp_4 = <1..8>
+
+#site:cow { $temp_9 + 1 }
+#caim
+$temp_8  = 0
+$temp_10 = 0
+$temp_11 = 0
+$temp_12 = 0
+$temp_13 = 0
+#for:i:1..5
+  #case:cow_1 '[$i]' #order:[$i - 1]
+    $temp_8  = [$i] * 1000
+    $temp_10 = [$i]
+#end
+#case:cow_1 '6' { $echars.spy > 0 } #order:5
+$temp_8  = 6 * 1000
+$temp_10 = 6
+#case:cow_1 '7' { $echars.spy > 1 } #order:6
+$temp_8  = 7 * 1000
+$temp_10 = 7
+#case:cow_1 '8' { $echars.spy > 2 } #order:7
+$temp_8  = 8 * 1000
+$temp_10 = 8
+#case:game_lose 'Отказаться от выполнения' #order:9
+
+#site:cow_1 { $temp_9 + 1 }
+#caim
+#for:i:1..5
+  #case:cow_2 '[$i]' #order:[$i - 1]
+    $temp_8  = $temp_8 + [$i] * 100
+    $temp_11 = [$i]
+#end
+#case:cow_2 '6' { $echars.spy > 0 } #order:5
+$temp_8  = $temp_8 + 6 * 100
+$temp_11 = 6
+#case:cow_2 '7' { $echars.spy > 1 } #order:6
+$temp_8  = $temp_8 + 7 * 100
+$temp_11 = 7
+#case:cow_2 '8' { $echars.spy > 2 } #order:7
+$temp_8  = $temp_8 + 8 * 100
+$temp_11 = 8
+#case:cow 'Начать заново' #order:8
+#case:game_lose 'Отказаться от выполнения' #order:9
+
+#site:cow_2 { $temp_9 + 1 }
+#caim
+#for:i:1..5
+  #case:cow_3 '[$i]' #order:[$i - 1]
+    $temp_8  = $temp_8 + [$i] * 10
+    $temp_12 = [$i]
+#end
+#case:cow_3 '6' { $echars.spy > 0 } #order:5
+$temp_8  = $temp_8 + 6 * 10
+$temp_12 = 6
+#case:cow_3 '7' { $echars.spy > 1 } #order:6
+$temp_8  = $temp_8 + 7 * 10
+$temp_12 = 7
+#case:cow_3 '8' { $echars.spy > 2 } #order:7
+$temp_8  = $temp_8 + 8 * 10
+$temp_12 = 8
+#case:cow 'Начать заново' #order:8
+#case:game_lose 'Отказаться от выполнения' #order:9
+
+#site:cow_3 { $temp_9 + 1 }
+#caim
+#for:i:1..5
+  #case:cow_4 '[$i]' #order:[$i - 1]
+    $temp_8  = $temp_8 + [$i]
+    $temp_13 = [$i]
+#end
+#case:cow_4 '6' { $echars.spy > 0 } #order:5
+$temp_8  = $temp_8 + 6
+$temp_13 = 6
+#case:cow_4 '7' { $echars.spy > 1 } #order:6
+$temp_8  = $temp_8 + 7
+$temp_13 = 7
+#case:cow_4 '8' { $echars.spy > 2 } #order:7
+$temp_8  = $temp_8 + 8
+$temp_13 = 8
+#case:cow 'Начать заново' #order:8
+#case:game_lose 'Отказаться от выполнения' #order:9
+
+#site:cow_4
+#case:game_win { $temp_1 * 1000 + $temp_2 * 100 + $temp_3 * 10 + $temp_4 = $temp_8 }
+#case:cow_calc { $temp_1 * 1000 + $temp_2 * 100 + $temp_3 * 10 + $temp_4 <> $temp_8 and $temp_9 < 5 }
+#case:cow_calc { $temp_1 * 1000 + $temp_2 * 100 + $temp_3 * 10 + $temp_4 <> $temp_8 and $temp_9 >= 5 }
+$temp_9 = 4
+#for:i:1..4
+   $cline[$i] = $cline[$i + 1]
+   $A[$i] = $A[$i + 1]
+   $B[$i] = $B[$i + 1]
+   $C[$i] = $C[$i + 1]
+   $D[$i] = $D[$i + 1]
+#end
+
+#site:cow_calc
+$temp_5 = ($temp_8 div 1000)
+$temp_6 = ($temp_8 div 100) mod 10
+$temp_7 = ($temp_8 div 10) mod 10
+#case:cow_calc_1
+$temp_5 = ($temp_5 = $temp_1) + ($temp_6 = $temp_2) + ($temp_7 = $temp_3) + (($temp_8 mod 10) = $temp_4)
+$sline1 = ($temp_5 <> $temp_1) and ($temp_5 = $temp_2 or $temp_5 = $temp_3 or $temp_5 = $temp_4)
+$sline2 = ($temp_6 <> $temp_2) and ($temp_6 = $temp_1 or $temp_6 = $temp_3 or $temp_6 = $temp_4)
+$sline3 = ($temp_7 <> $temp_3) and ($temp_7 = $temp_1 or $temp_7 = $temp_2 or $temp_7 = $temp_4)
+$sline4 = (($temp_8 mod 10) <> $temp_4) and (($temp_8 mod 10) = $temp_1 or ($temp_8 mod 10) = $temp_2 or ($temp_8 mod 10) = $temp_3)
+
+#site:cow_calc_1
+$temp_6 = $sline1 + $sline2 + $sline3 + $sline4
+#for:i:1..5
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 0 and $temp_6 = 0 }
+    $A[$i] = 0
+    $B[$i] = 0
+    $C[$i] = 0
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 0 and $temp_6 = 1 }
+    $A[$i] = 1
+    $B[$i] = 0
+    $C[$i] = 0
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 0 and $temp_6 = 2 }
+    $A[$i] = 1
+    $B[$i] = 1
+    $C[$i] = 0
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 0 and $temp_6 = 3 }
+    $A[$i] = 1
+    $B[$i] = 1
+    $C[$i] = 1
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 0 and $temp_6 = 4 }
+    $A[$i] = 1
+    $B[$i] = 1
+    $C[$i] = 1
+    $D[$i] = 1
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 1 and $temp_6 = 0 }
+    $A[$i] = 2
+    $B[$i] = 0
+    $C[$i] = 0
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 1 and $temp_6 = 1 }
+    $A[$i] = 2
+    $B[$i] = 1
+    $C[$i] = 0
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 1 and $temp_6 = 2 }
+    $A[$i] = 2
+    $B[$i] = 1
+    $C[$i] = 1
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 1 and $temp_6 = 3 }
+    $A[$i] = 2
+    $B[$i] = 1
+    $C[$i] = 1
+    $D[$i] = 1
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 2 and $temp_6 = 0 }
+    $A[$i] = 2
+    $B[$i] = 2
+    $C[$i] = 0
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 2 and $temp_6 = 1 }
+    $A[$i] = 2
+    $B[$i] = 2
+    $C[$i] = 1
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 2 and $temp_6 = 2 }
+    $A[$i] = 2
+    $B[$i] = 2
+    $C[$i] = 1
+    $D[$i] = 1
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 3 and $temp_6 = 0 }
+    $A[$i] = 2
+    $B[$i] = 2
+    $C[$i] = 2
+    $D[$i] = 0
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 3 and $temp_6 = 1 }
+    $A[$i] = 2
+    $B[$i] = 2
+    $C[$i] = 2
+    $D[$i] = 1
+  #case:cow_end { $temp_9 = [$i - 1] and $temp_5 = 4 and $temp_6 = 0 }
+    $A[$i] = 2
+    $B[$i] = 2
+    $C[$i] = 2
+    $D[$i] = 2
+#end
+
+#site:cow_end
+#for:i:1..5
+  #case:cow { $temp_9 = [$i - 1] }
+    $cline[$i] = $temp_8
+    $temp_9 = [$i]
+#end
+
+#var:charges #range:0..10 #default:0 #hide #order:2
+  #text:1..10 'Зарядов: $'
+#var:countdown #range:0..100 #default:0 #hide #order:3
+  #text:1..10 'До обнаружения: $'
+
+#var:col #range:-1..7 #default:-1 #hide
+  #text:-1..-1 '^  A B C D E F G H ^'
+  #text:0..0   '^  * B C D E F G H ^'
+  #text:1..1   '^  A * C D E F G H ^'
+  #text:2..2   '^  A B * D E F G H ^'
+  #text:3..3   '^  A B C * E F G H ^'
+  #text:4..4   '^  A B C D * F G H ^'
+  #text:5..5   '^  A B C D E * G H ^'
+  #text:6..6   '^  A B C D E F * H ^'
+  #text:7..7   '^  A B C D E F G * ^'
+#var:row #range:-1..5 #default:-1 #hide
+
+#macro:mine_cell:A:B
+  #var:cl[$A][$B] #range:0..99 #default:99 #mod:10 #hide
+    #field:H
+      #text:0..0 ' '
+      #text:1..1 '1'
+      #text:2..2 '2'
+      #text:3..3 '3'
+      #text:4..4 '4'
+      #text:5..5 '5'
+      #text:6..6 '6'
+      #text:7..7 '7'
+      #text:8..8 '8'
+      #text:9..9 '.'
+    #field:L
+      #text:0..0 '  '
+      #text:1..1 ' 1'
+      #text:2..2 ' 2'
+      #text:3..3 ' 3'
+      #text:4..4 ' 4'
+      #text:5..5 ' 5'
+      #text:6..6 ' 6'
+      #text:7..7 ' 7'
+      #text:8..8 ' 8'
+      #text:9..9 ' .'
+#end
+
+#for:y:0..6
+  #for:x:0..3
+    #mine_cell:[$y]:[$x]
+  #end
+#end
+
+#macro:aim
+#page:1
+^+-----------------+^
+^| @cl00 @cl01 @cl02 @cl03 |^ %7%
+^| @cl10 @cl11 @cl12 @cl13 |^ %6%
+^| @cl20 @cl21 @cl22 @cl23 |^ %5%
+^| @cl30 @cl31 @cl32 @cl33 |^ %4%
+^| @cl40 @cl41 @cl42 @cl43 |^ %3%
+^| @cl50 @cl51 @cl52 @cl53 |^ %2%
+^| @cl60 @cl61 @cl62 @cl63 |^ %1%
+^+-----------------+^
+@col
+#end
+
+#for:ix:1..4
+  #var:mn[$ix] #range:0..99999999 #hide
+#end
+
+#site:mine_check
+#case:mine_check_1 { $temp_5 = 1 }
+$temp_5 = $temp_5 + 1
+$temp_6 = $mn1
+#case:mine_check_1 { $temp_5 = 2 }
+$temp_5 = $temp_5 + 1
+$temp_6 = $mn2
+#case:mine_check_1 { $temp_5 = 3 }
+$temp_5 = $temp_5 + 1
+$temp_6 = $mn3
+#case:mine_check_1 { $temp_5 = 4 }
+$temp_5 = $temp_5 + 1
+$temp_6 = $mn4
+#case:mine_check_ret { $temp_5 > 4 }
+
+#site:mine_check_1
+$temp_7 = $temp_6 mod 100
+$temp_6 = $temp_6 div 100
+#case:mine_check_ret { $temp_7 = $temp_3 }
+$temp_3 = 0
+#case:mine_check { $temp_7 <> $temp_3 and $temp_6 = 0 and $temp_7 = 0 }
+#case:mine_check_2 { $temp_7 <> $temp_3 and ($temp_6 > 0 or $temp_7 > 0) }
+
+#site:mine_check_2
+#case:mine_check_1
+
+#site:mine_check_ret
+#return
+
+#site:mine_show
+$temp_5 = $temp_3 mod 10
+$temp_6 = $temp_3 div 10
+#for:y:1..7
+  #case:mine_show_ret { $temp_6 = [$y] and $temp_5 = 1 }
+    $cl[$y - 1]0.H = $temp_4
+  #case:mine_show_ret { $temp_6 = [$y] and $temp_5 = 2 }
+    $cl[$y - 1]0.L = $temp_4
+  #case:mine_show_ret { $temp_6 = [$y] and $temp_5 = 3 }
+    $cl[$y - 1]1.H = $temp_4
+  #case:mine_show_ret { $temp_6 = [$y] and $temp_5 = 4 }
+    $cl[$y - 1]1.L = $temp_4
+  #case:mine_show_ret { $temp_6 = [$y] and $temp_5 = 5 }
+    $cl[$y - 1]2.H = $temp_4
+  #case:mine_show_ret { $temp_6 = [$y] and $temp_5 = 6 }
+    $cl[$y - 1]2.L = $temp_4
+  #case:mine_show_ret { $temp_6 = [$y] and $temp_5 = 7 }
+    $cl[$y - 1]3.H = $temp_4
+  #case:mine_show_ret { $temp_6 = [$y] and $temp_5 = 8 }
+    $cl[$y - 1]3.L = $temp_4
+#end
+
+#site:mine_show_ret
+#return
+
+#site:mine_calc
+$temp_3 = (7 - $temp_1 + 1) * 10 + ($col + 1)
+$temp_4 = 0
+$temp_5 = 0
+#case:mine_calc_1
+
+#site:mine_calc_1
+$temp_5 = $temp_5 + 1
+#case:mine_calc_ret { $temp_5 > 4 }
+#case:mine_calc_2 { $temp_5 = 1 }
+$temp_6 = $mn1
+#case:mine_calc_2 { $temp_5 = 2 }
+$temp_6 = $mn2
+#case:mine_calc_2 { $temp_5 = 3 }
+$temp_6 = $mn3
+#case:mine_calc_2 { $temp_5 = 4 }
+$temp_6 = $mn4
+
+#site:mine_calc_2
+$temp_6 = $temp_6 div 100
+$temp_7 = $temp_6 mod 100
+#case:mine_calc_ret { $temp_7 = $temp_3 }
+$temp_4 = $temp_4 + 10
+#case:mine_calc_1 { $temp_7 = 0 }
+#case:mine_calc_3 { $temp_7 = ($temp_3 - 1) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_3 { $temp_7 <> ($temp_3 - 1) and $temp_7 <> 0 and $temp_7 <> $temp_3}
+
+#site:mine_calc_3
+#case:mine_calc_4 { $temp_7 = ($temp_3 + 1) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_4 { $temp_7 <> ($temp_3 + 1) }
+
+#site:mine_calc_4
+#case:mine_calc_5 { $temp_7 = ($temp_3 - 10) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_5 { $temp_7 <> ($temp_3 - 10) }
+
+#site:mine_calc_5
+#case:mine_calc_6 { $temp_7 = ($temp_3 + 10) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_6 { $temp_7 <> ($temp_3 + 10) }
+
+#site:mine_calc_6
+#case:mine_calc_7 { $temp_7 = ($temp_3 - 9) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_7 { $temp_7 <> ($temp_3 - 9) }
+
+#site:mine_calc_7
+#case:mine_calc_8 { $temp_7 = ($temp_3 + 9) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_8 { $temp_7 <> ($temp_3 + 9) }
+
+#site:mine_calc_8
+#case:mine_calc_9 { $temp_7 = ($temp_3 - 11) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_9 { $temp_7 <> ($temp_3 - 11) }
+
+#site:mine_calc_9
+#case:mine_calc_2 { $temp_7 = ($temp_3 + 11) }
+$temp_4 = $temp_4 + 1
+#case:mine_calc_2 { $temp_7 <> ($temp_3 + 11) }
+
+#site:mine_calc_ret
+#return
+
+#site:mine_init #show:charges:countdown
+$echars.spy = 1
+$cl60   = 0
+$cl61   = 0
+$cl62   = 0
+$cl63   = 0
+$cl50   = 99
+$cl51   = 99
+$cl52   = 99
+$cl53   = 99
+$cl40   = 99
+$cl41   = 99
+$cl42   = 99
+$cl43   = 99
+$cl30   = 99
+$cl31   = 99
+$cl32   = 99
+$cl33   = 99
+$cl20   = 99
+$cl21   = 99
+$cl22   = 99
+$cl23   = 99
+$cl10   = 99
+$cl11   = 99
+$cl12   = 99
+$cl13   = 99
+$cl00   = 99
+$cl01   = 99
+$cl02   = 99
+$cl03   = 99
+$mn1    = 0
+$mn2    = 0
+$mn3    = 0
+$mn4    = 0
+$temp_1 = 0
+$temp_4 = 8
+$temp_9 = 0
+#case:mine_init_1
+
+#site:mine_init_1
+$charges = 2
+$countdown = 0
+$temp_1 = $temp_1 + 1
+$temp_2 = 0
+#case:mine_prepare { ($temp_1 >= 5) and ($echars.spy = 3) }
+$col = 0
+#case:mine_init_2 { ($temp_1 < 5) and ($echars.spy = 3) }
+#case:mine_prepare { ($temp_1 >= 4) and ($echars.spy = 2) }
+$col = 0
+#case:mine_init_2 { ($temp_1 < 4) and ($echars.spy = 2) }
+#case:mine_prepare { ($temp_1 >= 3) and ($echars.spy = 1) }
+$col = 0
+#case:mine_init_2 { ($temp_1 < 3) and ($echars.spy = 1) }
+#case:mine_prepare { ($temp_1 >= 2) and ($echars.spy = 0) }
+$col = 0
+#case:mine_init_2 { ($temp_1 < 2) and ($echars.spy = 0) }
+
+#site:mine_init_2
+$temp_2 = $temp_2 + 1
+#case:mine_init_1 { $temp_2 > 4 }
+#case:mine_init_3 { $temp_2 <= 4 }
+
+#site:mine_init_3
+$temp_3 = <1..6>*10 + <1..8>
+#case:mine_check #return:mine_init_4
+$temp_5 = 1
+
+#site:mine_init_4
+#case:mine_init_3 { $temp_3 = 0 }
+//#case:mine_show { $temp_3 > 0 } #return:mine_init_5 // <--
+#case:mine_init_5 { $temp_3 > 0 }
+
+#site:mine_init_5
+#for:ix:1..4
+  #case:mine_init_2 { $temp_1 = [$ix] }
+    $mn[$ix] = $mn[$ix] * 100 + $temp_3
+#end
+
+#site:mine_prepare
+$temp_1 = 1
+#case:mine_calc #return:mine_prepare_1
+
+#site:mine_prepare_1
+#case:mine_show #return:mine_prepare_2
+
+#site:mine_prepare_2
+#case:mine_prepare { $col < 7 }
+$col = $col + 1
+#case:mine { $col >= 7 }
+
+#site:mine
+$col = -1
+#aim
+#case:mine_ad 'A-D' #order:1
+#case:mine_eh 'E-H' #order:2
+#case:mine 'Подорвать' { $temp_9 = 0 and $charges > 0 } #order:3
+$charges = $charges - 1
+$temp_9 = 1
+#case:game_lose 'Отказаться от выполнения' #order:9
+
+#site:mine_ad
+$col = -1
+#aim
+#case:mine_col 'A' #order:1
+$col = 0
+#case:mine_col 'B' #order:2
+$col = 1
+#case:mine_col 'C' #order:3
+$col = 2
+#case:mine_col 'D' #order:4
+$col = 3
+#case:mine 'Другой столбец' #order:8
+#case:game_lose 'Отказаться от выполнения' #order:9
+
+#site:mine_eh
+$col = -1
+#aim
+#case:mine_col 'E' #order:1
+$col = 4
+#case:mine_col 'F' #order:2
+$col = 5
+#case:mine_col 'G' #order:3
+$col = 6
+#case:mine_col 'H' #order:4
+$col = 7
+#case:mine 'Другой столбец' #order:8
+#case:game_lose 'Отказаться от выполнения' #order:9
+
+#site:mine_col
+#aim
+#case:mine_step '7' { $col = 0 and ($cl00.H = 9) and (($cl10.H < 9) or ($cl00.L < 9))} #order:7
+$temp_1 = 7
+$cl00.H = 0
+#case:mine_step '6' { $col = 0 and ($cl10.H = 9) and (($cl00.H < 9) or ($cl20.H < 9) or ($cl10.L < 9))} #order:6
+$temp_1 = 6
+$cl10.H = 0
+#case:mine_step '5' { $col = 0 and ($cl20.H = 9) and (($cl10.H < 9) or ($cl30.H < 9) or ($cl20.L < 9))} #order:5
+$temp_1 = 5
+$cl20.H = 0
+#case:mine_step '4' { $col = 0 and ($cl30.H = 9) and (($cl20.H < 9) or ($cl40.H < 9) or ($cl30.L < 9))} #order:4
+$temp_1 = 4
+$cl30.H = 0
+#case:mine_step '3' { $col = 0 and ($cl40.H = 9) and (($cl30.H < 9) or ($cl50.H < 9) or ($cl40.L < 9))} #order:3
+$temp_1 = 3
+$cl40.H = 0
+#case:mine_step '2' { $col = 0 and ($cl50.H = 9) } #order:2
+$temp_1 = 2
+$cl50.H = 0
+#case:mine_step '7' { $col = 1 and ($cl00.L = 9) and (($cl10.L < 9) or ($cl00.H < 9) or ($cl01.H < 9))} #order:7
+$temp_1 = 7
+$cl00.L = 0
+#case:mine_step '6' { $col = 1 and ($cl10.L = 9) and (($cl00.L < 9) or ($cl20.L < 9) or ($cl10.H < 9) or ($cl11.H < 9))} #order:6
+$temp_1 = 6
+$cl10.L = 0
+#case:mine_step '5' { $col = 1 and ($cl20.L = 9) and (($cl10.L < 9) or ($cl30.L < 9) or ($cl20.H < 9) or ($cl21.H < 9))} #order:5
+$temp_1 = 5
+$cl20.L = 0
+#case:mine_step '4' { $col = 1 and ($cl30.L = 9) and (($cl20.L < 9) or ($cl40.L < 9) or ($cl30.H < 9) or ($cl31.H < 9))} #order:4
+$temp_1 = 4
+$cl30.L = 0
+#case:mine_step '3' { $col = 1 and ($cl40.L = 9) and (($cl30.L < 9) or ($cl50.L < 9) or ($cl40.H < 9) or ($cl41.H < 9))} #order:3
+$temp_1 = 3
+$cl40.L = 0
+#case:mine_step '2' { $col = 1 and ($cl50.L = 9) } #order:2
+$temp_1 = 2
+$cl50.L = 0
+#case:mine_step '7' { $col = 2 and ($cl01.H = 9) and (($cl11.H < 9) or ($cl00.L < 9) or ($cl01.L < 9))} #order:7
+$temp_1 = 7
+$cl01.H = 0
+#case:mine_step '6' { $col = 2 and ($cl11.H = 9) and (($cl01.H < 9) or ($cl21.H < 9) or ($cl10.L < 9) or ($cl11.L < 9))} #order:6
+$temp_1 = 6
+$cl11.H = 0
+#case:mine_step '5' { $col = 2 and ($cl21.H = 9) and (($cl11.H < 9) or ($cl31.H < 9) or ($cl20.L < 9) or ($cl21.L < 9))} #order:5
+$temp_1 = 5
+$cl21.H = 0
+#case:mine_step '4' { $col = 2 and ($cl31.H = 9) and (($cl21.H < 9) or ($cl41.H < 9) or ($cl30.L < 9) or ($cl31.L < 9))} #order:4
+$temp_1 = 4
+$cl31.H = 0
+#case:mine_step '3' { $col = 2 and ($cl41.H = 9) and (($cl31.H < 9) or ($cl51.H < 9) or ($cl40.L < 9) or ($cl41.L < 9))} #order:3
+$temp_1 = 3
+$cl41.H = 0
+#case:mine_step '2' { $col = 2 and ($cl51.H = 9) } #order:2
+$temp_1 = 2
+$cl51.H = 0
+#case:mine_step '7' { $col = 3 and ($cl01.L = 9) and (($cl11.L < 9) or ($cl01.H < 9) or ($cl02.H < 9))} #order:7
+$temp_1 = 7
+$cl01.L = 0
+#case:mine_step '6' { $col = 3 and ($cl11.L = 9) and (($cl01.L < 9) or ($cl21.L < 9) or ($cl11.H < 9) or ($cl12.H < 9))} #order:6
+$temp_1 = 6
+$cl11.L = 0
+#case:mine_step '5' { $col = 3 and ($cl21.L = 9) and (($cl11.L < 9) or ($cl31.L < 9) or ($cl21.H < 9) or ($cl22.H < 9))} #order:5
+$temp_1 = 5
+$cl21.L = 0
+#case:mine_step '4' { $col = 3 and ($cl31.L = 9) and (($cl21.L < 9) or ($cl41.L < 9) or ($cl31.H < 9) or ($cl32.H < 9))} #order:4
+$temp_1 = 4
+$cl31.L = 0
+#case:mine_step '3' { $col = 3 and ($cl41.L = 9) and (($cl31.L < 9) or ($cl51.L < 9) or ($cl41.H < 9) or ($cl42.H < 9))} #order:3
+$temp_1 = 3
+$cl41.L = 0
+#case:mine_step '2' { $col = 3 and ($cl51.L = 9) } #order:2
+$temp_1 = 2
+$cl51.L = 0
+#case:mine_step '7' { $col = 4 and ($cl02.H = 9) and (($cl12.H < 9) or ($cl01.L < 9) or ($cl02.L < 9))} #order:7
+$temp_1 = 7
+$cl02.H = 0
+#case:mine_step '6' { $col = 4 and ($cl12.H = 9) and (($cl02.H < 9) or ($cl22.H < 9) or ($cl11.L < 9) or ($cl12.L < 9))} #order:6
+$temp_1 = 6
+$cl12.H = 0
+#case:mine_step '5' { $col = 4 and ($cl22.H = 9) and (($cl12.H < 9) or ($cl32.H < 9) or ($cl21.L < 9) or ($cl22.L < 9))} #order:5
+$temp_1 = 5
+$cl22.H = 0
+#case:mine_step '4' { $col = 4 and ($cl32.H = 9) and (($cl22.H < 9) or ($cl42.H < 9) or ($cl31.L < 9) or ($cl32.L < 9))} #order:4
+$temp_1 = 4
+$cl32.H = 0
+#case:mine_step '3' { $col = 4 and ($cl42.H = 9) and (($cl32.H < 9) or ($cl52.H < 9) or ($cl41.L < 9) or ($cl42.L < 9))} #order:3
+$temp_1 = 3
+$cl42.H = 0
+#case:mine_step '2' { $col = 4 and ($cl52.H = 9) } #order:2
+$temp_1 = 2
+$cl52.H = 0
+#case:mine_step '7' { $col = 5 and ($cl02.L = 9) and (($cl12.L < 9) or ($cl02.H < 9) or ($cl03.H < 9))} #order:7
+$temp_1 = 7
+$cl02.L = 0
+#case:mine_step '6' { $col = 5 and ($cl12.L = 9) and (($cl02.L < 9) or ($cl22.L < 9) or ($cl12.H < 9) or ($cl13.H < 9))} #order:6
+$temp_1 = 6
+$cl12.L = 0
+#case:mine_step '5' { $col = 5 and ($cl22.L = 9) and (($cl12.L < 9) or ($cl32.L < 9) or ($cl22.H < 9) or ($cl23.H < 9))} #order:5
+$temp_1 = 5
+$cl22.L = 0
+#case:mine_step '4' { $col = 5 and ($cl32.L = 9) and (($cl22.L < 9) or ($cl42.L < 9) or ($cl32.H < 9) or ($cl33.H < 9))} #order:4
+$temp_1 = 4
+$cl32.L = 0
+#case:mine_step '3' { $col = 5 and ($cl42.L = 9) and (($cl32.L < 9) or ($cl52.L < 9) or ($cl42.H < 9) or ($cl43.H < 9))} #order:3
+$temp_1 = 3
+$cl42.L = 0
+#case:mine_step '2' { $col = 5 and ($cl52.L = 9) } #order:2
+$temp_1 = 2
+$cl52.L = 0
+#case:mine_step '7' { $col = 6 and ($cl03.H = 9) and (($cl13.H < 9) or ($cl02.L < 9) or ($cl03.L < 9))} #order:7
+$temp_1 = 7
+$cl03.H = 0
+#case:mine_step '6' { $col = 6 and ($cl13.H = 9) and (($cl03.H < 9) or ($cl23.H < 9) or ($cl12.L < 9) or ($cl13.L < 9))} #order:6
+$temp_1 = 6
+$cl13.H = 0
+#case:mine_step '5' { $col = 6 and ($cl23.H = 9) and (($cl13.H < 9) or ($cl33.H < 9) or ($cl22.L < 9) or ($cl23.L < 9))} #order:5
+$temp_1 = 5
+$cl23.H = 0
+#case:mine_step '4' { $col = 6 and ($cl33.H = 9) and (($cl23.H < 9) or ($cl43.H < 9) or ($cl32.L < 9) or ($cl33.L < 9))} #order:4
+$temp_1 = 4
+$cl33.H = 0
+#case:mine_step '3' { $col = 6 and ($cl43.H = 9) and (($cl33.H < 9) or ($cl53.H < 9) or ($cl42.L < 9) or ($cl43.L < 9))} #order:3
+$temp_1 = 3
+$cl43.H = 0
+#case:mine_step '2' { $col = 6 and ($cl53.H = 9) } #order:2
+$temp_1 = 2
+$cl53.H = 0
+#case:mine_step '7' { $col = 7 and ($cl03.L = 9) and (($cl13.L < 9) or ($cl03.H < 9))} #order:7
+$temp_1 = 7
+$cl03.L = 0
+#case:mine_step '6' { $col = 7 and ($cl13.L = 9) and (($cl03.L < 9) or ($cl23.L < 9) or ($cl13.H < 9))} #order:6
+$temp_1 = 6
+$cl13.L = 0
+#case:mine_step '5' { $col = 7 and ($cl23.L = 9) and (($cl13.L < 9) or ($cl33.L < 9) or ($cl23.H < 9))} #order:5
+$temp_1 = 5
+$cl23.L = 0
+#case:mine_step '4' { $col = 7 and ($cl33.L = 9) and (($cl23.L < 9) or ($cl43.L < 9) or ($cl33.H < 9))} #order:4
+$temp_1 = 4
+$cl33.L = 0
+#case:mine_step '3' { $col = 7 and ($cl43.L = 9) and (($cl33.L < 9) or ($cl53.L < 9) or ($cl43.H < 9))} #order:3
+$temp_1 = 3
+$cl43.L = 0
+#case:mine_step '2' { $col = 7 and ($cl53.L = 9) } #order:2
+$temp_1 = 2
+$cl53.L = 0
+#case:mine 'Другая ячейка' #order:8
+#case:game_lose 'Отказаться от выполнения' #order:9
+
+#site:mine_step
+#case:mine_calc #return:mine_step_1
+
+#site:mine_step_1
+#case:mine_step_2 { $temp_9 = 1 and $temp_4 >= 9 }
+$temp_4 = $temp_4 - 10
+$countdown = <5..8>
+#case:mine_step_2 { $temp_9 <> 1 or $temp_4 < 9 }
+
+#site:mine_step_2
+$temp_9 = 0
+#case:mine_lose { $temp_4 >= 9 }
+$variant = 1                                    
+#case:mine_lose { $countdown = 1 }
+$variant = 2                                    
+#case:game_win { $temp_4 < 9 and $temp_1 >= 7 and $countdown <> 1 } 
+#case:mine_show { $temp_4 < 9 and $temp_1 < 7 and $countdown <> 1 } #return:mine
+$countdown = $countdown - 1
+
+#site:mine_lose { $variant } #hide:charges:countdown
+#page:1
+%!!! БА-БАХ !!!%
+
+Жизнь великого рейнджера закончилась...
+#page:2
+%!!! Вас обнаружили !!!%
+#case:entry 'Сыграем ещё?'
+
+#position:entry:96:399
+#position:inc:96:441
+#position:dec:160:441
+#position:start:160:399
+#position:race:224:399
+#position:rand_3:288:399
+#position:rand_1:288:441
+#position:rand_4:352:441
+#position:rand_2:352:399
+#position:game:224:441
+#position:init:96:357
+#position:main:96:315
+#position:select:96:231
+#position:train:160:315
+#position:transf:224:315
+#position:attack:288:315
+#position:scienc:352:315
+#position:intelg:416:315
+#position:wait:96:483
+#position:transf_num:224:231
+#position:transf_where:224:189
+#position:transf_temp:288:231
+#position:transf_complete:288:189
+#position:transf_1:160:483
+#position:transf_2:224:483
+#position:transf_3:288:483
+#position:pop_1:160:357
+#position:pop_2:224:357
+#position:pop_3:288:357
+#position:train_what:288:315
+#position:train_temp:160:231
+#position:mancala_init:352:483
+#position:mancala:352:357
+#position:mancala_lose:224:525
+#position:mancala_cont:160:525
+#position:game_win:96:525
+#position:lightoff_init:288:525
+#position:lightoff:352:525
+#position:lightoff_row:288:567
+#position:lightoff_cont:352:567
+#position:lightoff_check:352:315
+#position:solit_init:96:567
+#position:solit:160:567
+#position:game_lose:352:273
+#position:solit_row:288:273
+#position:solit_cell:224:567
+#position:solit_check:96:609
+#position:swap_init:224:651
+#position:swap:288:651
+#position:swap_calc:416:651
+#position:swap_calc_1:416:693
+#position:swap_calc_2:352:693
+#position:swap_calc_3:416:273
+#position:swap_calc_5:288:693
+#position:swap_calc_6:224:693
+#position:swap_calc_7:160:693
+#position:swap_calc_sub:480:399
+#position:swap_calc_sub_1:160:777
+#position:swap_calc_ret:480:441
+#position:swap_cell:352:651
+#position:swap_clear:160:315
+#position:swap_turn:224:315
+#position:swap_check:416:735
+#position:cow_init:160:609
+#position:cow:224:609
+#position:cow_1:288:609
+#position:cow_2:352:609
+#position:cow_3:416:609
+#position:cow_4:416:399
+#position:cow_calc:416:357
+#position:cow_calc_1:416:315
+#position:cow_end:160:651
+
+#position:mine_init:1568:63
+#position:mine_init_1:1568:105
+#position:mine_init_3:1504:189
+#position:mine:1696:105
+#position:mine_col:1760:231
+#position:mine_check:1312:273
+#position:mine_check_1:1312:357
+#position:mine_check_ret:1376:357
+#position:mine_check_2:1312:399
+#position:mine_init_4:1504:273
+#position:mine_init_5:1568:315
+#position:mine_init_2:1568:147
+#position:mine_show:1312:483
+#position:mine_show_ret:928:819
+#position:mine_ad:1696:273
+#position:mine_eh:1824:273
+#position:mine_step:1504:483
+#position:mine_calc:1440:483
+#position:mine_calc_1:1440:525
+#position:mine_calc_2:1440:567
+#position:mine_calc_ret:1568:777
+#position:mine_calc_3:1440:609
+#position:mine_calc_4:1440:651
+#position:mine_calc_5:1440:693
+#position:mine_calc_6:1440:735
+#position:mine_calc_7:1440:777
+#position:mine_calc_8:1440:819
+#position:mine_step_2:1504:525
+#position:mine_calc_9:1504:819
+#position:mine_prepare:1184:357
+#position:mine_prepare_1:1184:399
+#position:mine_prepare_2:1184:441
+#position:mine_step_1:1504:567
+#position:mine_lose:1120:357
