@@ -78,14 +78,14 @@ Planet War
 #case:start { 1 = 0 } 'Играть'
 #case:mancala_init { 1 = 1 } 'Манкала'
 $variant = <1..2>
-#case:lightoff_init { 1 = 0 } 'Туши свет'
+#case:lightoff_init { 1 = 1 } 'Туши свет'
 $variant = <3..9>
-#case:solit_init { 1 = 0 } 'Солитер'
+#case:solit_init { 1 = 1 } 'Солитер'
 $variant = <10..12>
-#case:swap_init { 1 = 0 } 'Перестановка'
+#case:swap_init { 1 = 1 } 'Перестановка'
 $variant = 13 // <13..14>
-#case:cow_init { 1 = 0 } 'Быки и коровы'
-#case:mine_init { 1 = 0 } 'Сапёр'
+#case:cow_init { 1 = 1 } 'Быки и коровы'
+#case:mine_init { 1 = 1 } 'Сапёр'
 
 #site:start
 $erace               = <1..5>
@@ -1349,10 +1349,10 @@ $manc = 0
 #macro:laim
 #page:1
 ^   +---------+ ^
-^ %4% | @A4 @B4 @C4 @D4 | ^
-^ %3% | @A3 @B3 @C3 @D3 | ^
-^ %2% | @A2 @B2 @C2 @D2 | ^
-^ %1% | @A1 @B1 @C1 @D1 | ^
+^ %4% | <link=A;4>@A4</link> <link=B;4>@B4</link> <link=C;4>@C4</link> <link=D;4>@D4</link> | ^
+^ %3% | <link=A;3>@A3</link> <link=B;3>@B3</link> <link=C;3>@C3</link> <link=D;3>@D3</link> | ^
+^ %2% | <link=A;2>@A2</link> <link=B;2>@B2</link> <link=C;2>@C2</link> <link=D;2>@D2</link> | ^
+^ %1% | <link=A;1>@A1</link> <link=B;1>@B1</link> <link=C;1>@C1</link> <link=D;1>@D1</link> | ^
 ^   +---------+ ^
 ^    @LC   ^
 #end
@@ -1391,13 +1391,13 @@ $LC = 4
 
 #site:lightoff_row
 #laim
-#case:lightoff_cont '4' #order:1
+#case:lightoff_cont '4' #order:1 #sound:card.wav
 $temp_1 = 4
-#case:lightoff_cont '3' #order:2
+#case:lightoff_cont '3' #order:2 #sound:card.wav
 $temp_1 = 3
-#case:lightoff_cont '2' #order:3
+#case:lightoff_cont '2' #order:3 #sound:card.wav
 $temp_1 = 2
-#case:lightoff_cont '1' #order:4
+#case:lightoff_cont '1' #order:4 #sound:card.wav
 $temp_1 = 1
 #case:lightoff 'Другой столбец' #order:5
 #case:game_lose 'Отказаться от выполнения' #order:7
@@ -2535,11 +2535,11 @@ $temp_2 = $temp_2 - 1
 
 #macro:saim
 ^   +---------+ ^
-^ %5% | @A5 @B5 @C5 @D5 | ^
-^ %4% | @A4 @B4 @C4 @D4 | ^
-^ %3% | @A3 @B3 @C3 @D3 | ^
-^ %2% | @A2 @B2 @C2 @D2 | ^
-^ %1% | @A1 @B1 @C1 @D1 | ^
+^ %5% | <link=A5>@A5</link> <link=B5>@B5</link> <link=C5>@C5</link> <link=D5>@D5</link> | ^
+^ %4% | <link=A4>@A4</link> <link=B4>@B4</link> <link=C4>@C4</link> <link=D4>@D4</link> | ^
+^ %3% | <link=A3>@A3</link> <link=B3>@B3</link> <link=C3>@C3</link> <link=D3>@D3</link> | ^
+^ %2% | <link=A2>@A2</link> <link=B2>@B2</link> <link=C2>@C2</link> <link=D2>@D2</link> | ^
+^ %1% | <link=A1>@A1</link> <link=B1>@B1</link> <link=C1>@C1</link> <link=D1>@D1</link> | ^
 ^   +---------+ ^
 ^    @LC   ^
 #end
@@ -2823,113 +2823,113 @@ $temp_6 = $temp_6 * 2
 #site:swap_cell { $temp_2 }
 #page:1
 ^   +---------+ ^
-^ %5% | @A5 @B5 @C5 @D5 | ^
-^ %4% | @A4 @B4 @C4 @D4 | ^
-^ %3% | @A3 @B3 @C3 @D3 | ^
-^ %2% | @A2 @B2 @C2 @D2 | ^
-^ %*% | @A1 @B1 @C1 @D1 | ^
+^ %5% | <link=A5>@A5</link> <link=B5>@B5</link> <link=C5>@C5</link> <link=D5>@D5</link> | ^
+^ %4% | <link=A4>@A4</link> <link=B4>@B4</link> <link=C4>@C4</link> <link=D4>@D4</link> | ^
+^ %3% | <link=A3>@A3</link> <link=B3>@B3</link> <link=C3>@C3</link> <link=D3>@D3</link> | ^
+^ %2% | <link=A2>@A2</link> <link=B2>@B2</link> <link=C2>@C2</link> <link=D2>@D2</link> | ^
+^ %*% | <link=A1>@A1</link> <link=B1>@B1</link> <link=C1>@C1</link> <link=D1>@D1</link> | ^
 ^   +---------+ ^
 ^    @LC   ^
 #page:2
 ^   +---------+ ^
-^ %5% | @A5 @B5 @C5 @D5 | ^
-^ %4% | @A4 @B4 @C4 @D4 | ^
-^ %3% | @A3 @B3 @C3 @D3 | ^
-^ %*% | @A2 @B2 @C2 @D2 | ^
-^ %1% | @A1 @B1 @C1 @D1 | ^
+^ %5% | <link=A5>@A5</link> <link=B5>@B5</link> <link=C5>@C5</link> <link=D5>@D5</link> | ^
+^ %4% | <link=A4>@A4</link> <link=B4>@B4</link> <link=C4>@C4</link> <link=D4>@D4</link> | ^
+^ %3% | <link=A3>@A3</link> <link=B3>@B3</link> <link=C3>@C3</link> <link=D3>@D3</link> | ^
+^ %*% | <link=A2>@A2</link> <link=B2>@B2</link> <link=C2>@C2</link> <link=D2>@D2</link> | ^
+^ %1% | <link=A1>@A1</link> <link=B1>@B1</link> <link=C1>@C1</link> <link=D1>@D1</link> | ^
 ^   +---------+ ^
 ^    @LC   ^
 #page:3
 ^   +---------+ ^
-^ %5% | @A5 @B5 @C5 @D5 | ^
-^ %4% | @A4 @B4 @C4 @D4 | ^
-^ %*% | @A3 @B3 @C3 @D3 | ^
-^ %2% | @A2 @B2 @C2 @D2 | ^
-^ %1% | @A1 @B1 @C1 @D1 | ^
+^ %5% | <link=A5>@A5</link> <link=B5>@B5</link> <link=C5>@C5</link> <link=D5>@D5</link> | ^
+^ %4% | <link=A4>@A4</link> <link=B4>@B4</link> <link=C4>@C4</link> <link=D4>@D4</link> | ^
+^ %*% | <link=A3>@A3</link> <link=B3>@B3</link> <link=C3>@C3</link> <link=D3>@D3</link> | ^
+^ %2% | <link=A2>@A2</link> <link=B2>@B2</link> <link=C2>@C2</link> <link=D2>@D2</link> | ^
+^ %1% | <link=A1>@A1</link> <link=B1>@B1</link> <link=C1>@C1</link> <link=D1>@D1</link> | ^
 ^   +---------+ ^
 ^    @LC   ^
 #page:4
 ^   +---------+ ^
-^ %5% | @A5 @B5 @C5 @D5 | ^
-^ %*% | @A4 @B4 @C4 @D4 | ^
-^ %3% | @A3 @B3 @C3 @D3 | ^
-^ %2% | @A2 @B2 @C2 @D2 | ^
-^ %1% | @A1 @B1 @C1 @D1 | ^
+^ %5% | <link=A5>@A5</link> <link=B5>@B5</link> <link=C5>@C5</link> <link=D5>@D5</link> | ^
+^ %*% | <link=A4>@A4</link> <link=B4>@B4</link> <link=C4>@C4</link> <link=D4>@D4</link> | ^
+^ %3% | <link=A3>@A3</link> <link=B3>@B3</link> <link=C3>@C3</link> <link=D3>@D3</link> | ^
+^ %2% | <link=A2>@A2</link> <link=B2>@B2</link> <link=C2>@C2</link> <link=D2>@D2</link> | ^
+^ %1% | <link=A1>@A1</link> <link=B1>@B1</link> <link=C1>@C1</link> <link=D1>@D1</link> | ^
 ^   +---------+ ^
 ^    @LC   ^
 #page:5
 ^   +---------+ ^
-^ %*% | @A5 @B5 @C5 @D5 | ^
-^ %4% | @A4 @B4 @C4 @D4 | ^
-^ %3% | @A3 @B3 @C3 @D3 | ^
-^ %2% | @A2 @B2 @C2 @D2 | ^
-^ %1% | @A1 @B1 @C1 @D1 | ^
+^ %*% | <link=A5>@A5</link> <link=B5>@B5</link> <link=C5>@C5</link> <link=D5>@D5</link> | ^
+^ %4% | <link=A4>@A4</link> <link=B4>@B4</link> <link=C4>@C4</link> <link=D4>@D4</link> | ^
+^ %3% | <link=A3>@A3</link> <link=B3>@B3</link> <link=C3>@C3</link> <link=D3>@D3</link> | ^
+^ %2% | <link=A2>@A2</link> <link=B2>@B2</link> <link=C2>@C2</link> <link=D2>@D2</link> | ^
+^ %1% | <link=A1>@A1</link> <link=B1>@B1</link> <link=C1>@C1</link> <link=D1>@D1</link> | ^
 ^   +---------+ ^
 ^    @LC   ^
 #for:Y:1..5
-  #case:swap_clear 'A[$Y]' { $temp_9 = 1 and $wline1[$Y].aa > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1
+  #case:swap_clear 'A[$Y]' { $temp_9 = 1 and $wline1[$Y].aa > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1 #sound:slide.ogg
   $A[$Y] = $temp_9
-  #case:swap_clear 'A[$Y]' { $temp_9 = 2 and $wline2[$Y].aa > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1
+  #case:swap_clear 'A[$Y]' { $temp_9 = 2 and $wline2[$Y].aa > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1 #sound:slide.ogg
   $A[$Y] = $temp_9
-  #case:swap_clear 'A[$Y]' { $temp_9 = 3 and $wline1[$Y].ba > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1
+  #case:swap_clear 'A[$Y]' { $temp_9 = 3 and $wline1[$Y].ba > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1 #sound:slide.ogg
   $A[$Y] = $temp_9
-  #case:swap_clear 'A[$Y]' { $temp_9 = 4 and $wline2[$Y].ba > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1
+  #case:swap_clear 'A[$Y]' { $temp_9 = 4 and $wline2[$Y].ba > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1 #sound:slide.ogg
   $A[$Y] = $temp_9
-  #case:swap_clear 'A[$Y]' { $temp_9 = 5 and $wline1[$Y].ca > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1
+  #case:swap_clear 'A[$Y]' { $temp_9 = 5 and $wline1[$Y].ca > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1 #sound:slide.ogg
   $A[$Y] = $temp_9
-  #case:swap_clear 'A[$Y]' { $temp_9 = 6 and $wline2[$Y].ca > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1
+  #case:swap_clear 'A[$Y]' { $temp_9 = 6 and $wline2[$Y].ca > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1 #sound:slide.ogg
   $A[$Y] = $temp_9
-  #case:swap_clear 'A[$Y]' { $temp_9 = 7 and $wline1[$Y].da > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1
+  #case:swap_clear 'A[$Y]' { $temp_9 = 7 and $wline1[$Y].da > 0 and $wline2[$Y].aa = 0 and $wline2[$Y].ba = 0 and $wline2[$Y].ca = 0 and $wline2[$Y].da = 0 } #order:1 #sound:slide.ogg
   $A[$Y] = $temp_9
-  #case:swap_clear 'A[$Y]' { $temp_9 = 8 and $wline2[$Y].da > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1
+  #case:swap_clear 'A[$Y]' { $temp_9 = 8 and $wline2[$Y].da > 0 and $wline1[$Y].aa = 0 and $wline1[$Y].ba = 0 and $wline1[$Y].ca = 0 and $wline1[$Y].da = 0 } #order:1 #sound:slide.ogg
   $A[$Y] = $temp_9
-  #case:swap_clear 'B[$Y]' { $temp_9 = 1 and $wline1[$Y].ab > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1
+  #case:swap_clear 'B[$Y]' { $temp_9 = 1 and $wline1[$Y].ab > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1 #sound:slide.ogg
   $B[$Y] = $temp_9
-  #case:swap_clear 'B[$Y]' { $temp_9 = 2 and $wline2[$Y].ab > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1
+  #case:swap_clear 'B[$Y]' { $temp_9 = 2 and $wline2[$Y].ab > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1 #sound:slide.ogg
   $B[$Y] = $temp_9
-  #case:swap_clear 'B[$Y]' { $temp_9 = 3 and $wline1[$Y].bb > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1
+  #case:swap_clear 'B[$Y]' { $temp_9 = 3 and $wline1[$Y].bb > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1 #sound:slide.ogg
   $B[$Y] = $temp_9
-  #case:swap_clear 'B[$Y]' { $temp_9 = 4 and $wline2[$Y].bb > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1
+  #case:swap_clear 'B[$Y]' { $temp_9 = 4 and $wline2[$Y].bb > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1 #sound:slide.ogg
   $B[$Y] = $temp_9
-  #case:swap_clear 'B[$Y]' { $temp_9 = 5 and $wline1[$Y].cb > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1
+  #case:swap_clear 'B[$Y]' { $temp_9 = 5 and $wline1[$Y].cb > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1 #sound:slide.ogg
   $B[$Y] = $temp_9
-  #case:swap_clear 'B[$Y]' { $temp_9 = 6 and $wline2[$Y].cb > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1
+  #case:swap_clear 'B[$Y]' { $temp_9 = 6 and $wline2[$Y].cb > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1 #sound:slide.ogg
   $B[$Y] = $temp_9
-  #case:swap_clear 'B[$Y]' { $temp_9 = 7 and $wline1[$Y].db > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1
+  #case:swap_clear 'B[$Y]' { $temp_9 = 7 and $wline1[$Y].db > 0 and $wline2[$Y].ab = 0 and $wline2[$Y].bb = 0 and $wline2[$Y].cb = 0 and $wline2[$Y].db = 0 } #order:1 #sound:slide.ogg
   $B[$Y] = $temp_9
-  #case:swap_clear 'B[$Y]' { $temp_9 = 8 and $wline2[$Y].db > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1
+  #case:swap_clear 'B[$Y]' { $temp_9 = 8 and $wline2[$Y].db > 0 and $wline1[$Y].ab = 0 and $wline1[$Y].bb = 0 and $wline1[$Y].cb = 0 and $wline1[$Y].db = 0 } #order:1 #sound:slide.ogg
   $B[$Y] = $temp_9
-  #case:swap_clear 'C[$Y]' { $temp_9 = 1 and $wline1[$Y].ac > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1
+  #case:swap_clear 'C[$Y]' { $temp_9 = 1 and $wline1[$Y].ac > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1 #sound:slide.ogg
   $C[$Y] = $temp_9
-  #case:swap_clear 'C[$Y]' { $temp_9 = 2 and $wline2[$Y].ac > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1
+  #case:swap_clear 'C[$Y]' { $temp_9 = 2 and $wline2[$Y].ac > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1 #sound:slide.ogg
   $C[$Y] = $temp_9
-  #case:swap_clear 'C[$Y]' { $temp_9 = 3 and $wline1[$Y].bc > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1
+  #case:swap_clear 'C[$Y]' { $temp_9 = 3 and $wline1[$Y].bc > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1 #sound:slide.ogg
   $C[$Y] = $temp_9
-  #case:swap_clear 'C[$Y]' { $temp_9 = 4 and $wline2[$Y].bc > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1
+  #case:swap_clear 'C[$Y]' { $temp_9 = 4 and $wline2[$Y].bc > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1 #sound:slide.ogg
   $C[$Y] = $temp_9
-  #case:swap_clear 'C[$Y]' { $temp_9 = 5 and $wline1[$Y].cc > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1
+  #case:swap_clear 'C[$Y]' { $temp_9 = 5 and $wline1[$Y].cc > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1 #sound:slide.ogg
   $C[$Y] = $temp_9
-  #case:swap_clear 'C[$Y]' { $temp_9 = 6 and $wline2[$Y].cc > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1
+  #case:swap_clear 'C[$Y]' { $temp_9 = 6 and $wline2[$Y].cc > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1 #sound:slide.ogg
   $C[$Y] = $temp_9
-  #case:swap_clear 'C[$Y]' { $temp_9 = 7 and $wline1[$Y].dc > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1
+  #case:swap_clear 'C[$Y]' { $temp_9 = 7 and $wline1[$Y].dc > 0 and $wline2[$Y].ac = 0 and $wline2[$Y].bc = 0 and $wline2[$Y].cc = 0 and $wline2[$Y].dc = 0 } #order:1 #sound:slide.ogg
   $C[$Y] = $temp_9
-  #case:swap_clear 'C[$Y]' { $temp_9 = 8 and $wline2[$Y].dc > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1
+  #case:swap_clear 'C[$Y]' { $temp_9 = 8 and $wline2[$Y].dc > 0 and $wline1[$Y].ac = 0 and $wline1[$Y].bc = 0 and $wline1[$Y].cc = 0 and $wline1[$Y].dc = 0 } #order:1 #sound:slide.ogg
   $C[$Y] = $temp_9
-  #case:swap_clear 'D[$Y]' { $temp_9 = 1 and $wline1[$Y].ad > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1
+  #case:swap_clear 'D[$Y]' { $temp_9 = 1 and $wline1[$Y].ad > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1 #sound:slide.ogg
   $D[$Y] = $temp_9
-  #case:swap_clear 'D[$Y]' { $temp_9 = 2 and $wline2[$Y].ad > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1
+  #case:swap_clear 'D[$Y]' { $temp_9 = 2 and $wline2[$Y].ad > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1 #sound:slide.ogg
   $D[$Y] = $temp_9
-  #case:swap_clear 'D[$Y]' { $temp_9 = 3 and $wline1[$Y].bd > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1
+  #case:swap_clear 'D[$Y]' { $temp_9 = 3 and $wline1[$Y].bd > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1 #sound:slide.ogg
   $D[$Y] = $temp_9
-  #case:swap_clear 'D[$Y]' { $temp_9 = 4 and $wline2[$Y].bd > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1
+  #case:swap_clear 'D[$Y]' { $temp_9 = 4 and $wline2[$Y].bd > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1 #sound:slide.ogg
   $D[$Y] = $temp_9
-  #case:swap_clear 'D[$Y]' { $temp_9 = 5 and $wline1[$Y].cd > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1
+  #case:swap_clear 'D[$Y]' { $temp_9 = 5 and $wline1[$Y].cd > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1 #sound:slide.ogg
   $D[$Y] = $temp_9
-  #case:swap_clear 'D[$Y]' { $temp_9 = 6 and $wline2[$Y].cd > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1
+  #case:swap_clear 'D[$Y]' { $temp_9 = 6 and $wline2[$Y].cd > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1 #sound:slide.ogg
   $D[$Y] = $temp_9
-  #case:swap_clear 'D[$Y]' { $temp_9 = 7 and $wline1[$Y].dd > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1
+  #case:swap_clear 'D[$Y]' { $temp_9 = 7 and $wline1[$Y].dd > 0 and $wline2[$Y].ad = 0 and $wline2[$Y].bd = 0 and $wline2[$Y].cd = 0 and $wline2[$Y].dd = 0 } #order:1 #sound:slide.ogg
   $D[$Y] = $temp_9
-  #case:swap_clear 'D[$Y]' { $temp_9 = 8 and $wline2[$Y].dd > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1
+  #case:swap_clear 'D[$Y]' { $temp_9 = 8 and $wline2[$Y].dd > 0 and $wline1[$Y].ad = 0 and $wline1[$Y].bd = 0 and $wline1[$Y].cd = 0 and $wline1[$Y].dd = 0 } #order:1 #sound:slide.ogg
   $D[$Y] = $temp_9
 #end
 #case:swap 'Другая фигура' #order:5
@@ -3714,7 +3714,7 @@ $countdown = <5..8>
 
 #site:mine_step_2
 $temp_9 = 0
-#case:mine_lose { $temp_4 >= 9 }
+#case:mine_lose { $temp_4 >= 9 } #sound:shoot.wav
 $variant = 1                                    
 #case:mine_lose { $countdown = 1 }
 $variant = 2                                    
