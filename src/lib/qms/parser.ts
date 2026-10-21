@@ -134,6 +134,8 @@ interface Case {
   ret: string;
   isDay: boolean;
   cnt: number;
+  image: string;
+  sound: string;
   jump: Jump | null;
 }
 
@@ -141,6 +143,7 @@ interface Page {
   num: number;
   lines: string[];
   image: string;
+  sound: string;
 }
 
 interface Site {
@@ -160,6 +163,7 @@ interface Site {
   x: number | null;
   y: number | null;
   image: string;
+  sound: string;
 }
 
 interface Global {
@@ -236,12 +240,14 @@ function createCase(from: string, to: string): Case {
     ret: "",
     isDay: false,
     cnt: 0,
-    jump: null,
+    image: "",
+    sound: "",
+    jump: null
   };
 }
 
 function createPage(num: number): Page {
-  return { num, lines: [], image: "" };
+  return { num, lines: [], image: "", sound: "" };
 }
 
 function createSite(name: string, id: LocationId): Site {
@@ -262,6 +268,7 @@ function createSite(name: string, id: LocationId): Site {
     x: null,
     y: null,
     image: "",
+    sound: ""
   };
 }
 
@@ -849,6 +856,15 @@ function parseSite(line: string, ctx: ParseContext) {
     site.image = p[1];
   }
   site.isDay = /#day/.test(line);
+
+  const imgMatch = line.match(/#image:(\S+)/);
+  if (imgMatch) {
+    site.image = imgMatch[1];
+  }
+  const soundMatch = line.match(/#sound:(\S+)/);
+  if (soundMatch) {
+    site.sound = soundMatch[1];
+  }
 }
 
 function parseCase(line: string, ctx: ParseContext) {
@@ -925,6 +941,14 @@ function parseCase(line: string, ctx: ParseContext) {
       ctx.vid = 1;
     }
     c.ret = p[1];
+  }
+  const imgMatch = line.match(/#image:(\S+)/);
+  if (imgMatch) {
+    c.image = imgMatch[1];
+  }
+  const soundMatch = line.match(/#sound:(\S+)/);
+  if (soundMatch) {
+    c.sound = soundMatch[1];
   }
 }
 
@@ -1074,6 +1098,10 @@ function parsePage(line: string, ctx: ParseContext) {
     const imgMatch = line.match(/#image:(\S+)/);
     if (imgMatch) {
       scope.site.image = imgMatch[1];
+    }
+    const soundMatch = line.match(/#sound:(\S+)/);
+    if (soundMatch) {
+      scope.site.sound = soundMatch[1];
     }
   }
 }
@@ -1485,8 +1513,8 @@ function prepareLocation(ctx: ParseContext, site: Site) {
         newlines++;
       }
     }
-    if (page.image) {
-      site.loc.media[page.num - 1] = { img: page.image, sound: undefined, track: undefined };
+    if (page.image || page.sound) {
+      site.loc.media[page.num - 1] = { img: page.image, sound: page.sound, track: undefined };
     }
   }
 
@@ -1561,6 +1589,13 @@ function prepareJump(ctx: ParseContext, c: Case) {
   }
   c.jump.priority = c.priority;
   c.jump.showingOrder = c.order;
+
+  if (c.image) {
+    c.jump.img = c.image;
+  }
+  if (c.sound) {
+    c.jump.sound = c.sound;
+  }
 }
 
 function addReturns(ctx: ParseContext, jump: Case, ret: string) {
