@@ -2257,6 +2257,11 @@ $temp_2 = 8
 ^ %1% |@slineS1 | ^
 ^   +-----------+ ^
 ^    @SC   ^
+$slineS5 = $sline5
+$slineS4 = $sline4
+$slineS3 = $sline3
+$slineS2 = $sline2
+$slineS1 = $sline1
 $SC = 0
 #case:solit_row 'A' { $sline5.a + $sline4.a + $sline3.a + $sline2.a + $sline1.a > 0 } #order:1
 $SC = 1
@@ -2379,6 +2384,11 @@ $temp_1 = 1
 ^ %1% |@slineD1 | ^
 ^   +-----------+ ^
 ^    @SC   ^
+$slineD5 = $sline5
+$slineD4 = $sline4
+$slineD3 = $sline3
+$slineD2 = $sline2
+$slineD1 = $sline1
 #case:solit_check 'C5' { $SC = 1 and $temp_1 = 5 and $sline5.b > 0 and $sline5.c = 0 } #order:1 #sound:slide.ogg
 $sline5 = $sline5 - 16 - 8 + 4
 #case:solit_check 'A3' { $SC = 1 and $temp_1 = 5 and $sline4.a > 0 and $sline3.a = 0 } #order:1 #sound:slide.ogg
@@ -3295,7 +3305,7 @@ $temp_6 = $sline1 + $sline2 + $sline3 + $sline4
   #text:7..7   '^  A B C D E F G * ^'
 #var:row #range:-1..5 #default:-1 #hide
 
-#macro:mine_cell:A:B
+#macro:mine_cell:A:B:R:X:Y
   #var:cl[$A][$B] #range:0..99 #default:99 #mod:10 #hide
     #field:H
       #text:0..0 ' '
@@ -3307,7 +3317,7 @@ $temp_6 = $sline1 + $sline2 + $sline3 + $sline4
       #text:6..6 '6'
       #text:7..7 '7'
       #text:8..8 '8'
-      #text:9..9 '.'
+      #text:9..9 '<link=[$R];[$X];[7-$A]>.</link>'
     #field:L
       #text:0..0 '  '
       #text:1..1 ' 1'
@@ -3318,13 +3328,14 @@ $temp_6 = $sline1 + $sline2 + $sline3 + $sline4
       #text:6..6 ' 6'
       #text:7..7 ' 7'
       #text:8..8 ' 8'
-      #text:9..9 ' .'
+      #text:9..9 ' <link=[$R];[$Y];[7-$A]>.</link>'
 #end
 
 #for:y:0..6
-  #for:x:0..3
-    #mine_cell:[$y]:[$x]
-  #end
+  #mine_cell:[$y]:0:A-D:A:B
+  #mine_cell:[$y]:1:A-D:C:D
+  #mine_cell:[$y]:2:E-H:E:F
+  #mine_cell:[$y]:3:E-H:G:H
 #end
 
 #macro:aim
@@ -3802,7 +3813,7 @@ $countdown = $countdown - 1
 #position:train_what:288:315
 #position:train_temp:160:231
 #position:mancala_init:352:483
-//#position:mancala:352:357
+#position:mancala:352:357
 #position:mancala_lose:224:525
 #position:mancala_cont:160:525
 #position:game_win:96:525
@@ -3812,7 +3823,7 @@ $countdown = $countdown - 1
 #position:lightoff_cont:352:567
 #position:lightoff_check:352:315
 #position:solit_init:96:567
-//#position:solit:160:567
+#position:solit:160:567
 #position:game_lose:352:273
 #position:solit_row:288:273
 #position:solit_cell:224:567
