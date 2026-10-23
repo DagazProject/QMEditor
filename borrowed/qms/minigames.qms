@@ -3188,6 +3188,9 @@ $temp_1 = 1
 
 #site:cow_init
 $echars.spy = 3
+$slineS1    = 5  // Попыток до подсказки
+$slineS2    = 10 // Попыток до поражения
+$slineS3    = 0
 $temp_9 = 0
 $cline1 = 0
 $cline2 = 0
@@ -3221,7 +3224,7 @@ $temp_2 = <1..8>
 $temp_3 = <1..8>
 $temp_4 = <1..8>
 
-#site:cow { $temp_9 + 1 }
+#site:cow { $temp_9 + 1 + $slineS3 }
 #caim
 $temp_8  = 0
 $temp_10 = 0
@@ -3245,7 +3248,7 @@ $temp_10 = 8
 #case:cow_help 'Почитать правила' #order:9
 #case:game_lose 'Отказаться от выполнения' #order:9
 
-#site:cow_1 { $temp_9 + 1 }
+#site:cow_1 { $temp_9 + 1 + $slineS3 }
 #caim
 #for:i:1..5
   #case:cow_2 '[$i]' #order:[$i - 1]
@@ -3264,7 +3267,7 @@ $temp_11 = 8
 #case:cow 'Начать заново' #order:8
 #case:game_lose 'Отказаться от выполнения' #order:9
 
-#site:cow_2 { $temp_9 + 1 }
+#site:cow_2 { $temp_9 + 1 + $slineS3 }
 #caim
 #for:i:1..5
   #case:cow_3 '[$i]' #order:[$i - 1]
@@ -3283,7 +3286,7 @@ $temp_12 = 8
 #case:cow 'Начать заново' #order:8
 #case:game_lose 'Отказаться от выполнения' #order:9
 
-#site:cow_3 { $temp_9 + 1 }
+#site:cow_3 { $temp_9 + 1 + $slineS3 }
 #caim
 #for:i:1..5
   #case:cow_4 '[$i]' #order:[$i - 1]
@@ -3302,10 +3305,20 @@ $temp_13 = 8
 #case:cow 'Начать заново' #order:8
 #case:game_lose 'Отказаться от выполнения' #order:9
 
+#site:cow_hint
+$slineS3 = <1..2>
+#case:cow_4
+$slineS1 = 0
+$slineS3 = $slineS3 * 6
+
 #site:cow_4
-#case:game_win { $temp_1 * 1000 + $temp_2 * 100 + $temp_3 * 10 + $temp_4 = $temp_8 }
-#case:cow_calc { $temp_1 * 1000 + $temp_2 * 100 + $temp_3 * 10 + $temp_4 <> $temp_8 and $temp_9 < 5 }
-#case:cow_calc { $temp_1 * 1000 + $temp_2 * 100 + $temp_3 * 10 + $temp_4 <> $temp_8 and $temp_9 >= 5 }
+#case:game_win { $temp_1 * 1000 + $temp_2 * 100 + $temp_3 * 10 + $temp_4 = $temp_8 and $slineS2 <> 1 }
+#case:game_lose { $slineS2 = 1 }
+#case:cow_hint { $slineS1 = 1 }
+#case:cow_calc { $temp_1 * 1000 + $temp_2 * 100 + $temp_3 * 10 + $temp_4 <> $temp_8 and $temp_9 < 5 and $slineS2 > 1 and $slineS1 <> 1 }
+$slineS1 = $slineS1 - 1
+$slineS2 = $slineS2 - 1
+#case:cow_calc { $temp_1 * 1000 + $temp_2 * 100 + $temp_3 * 10 + $temp_4 <> $temp_8 and $temp_9 >= 5 and $slineS2 > 1 and $slineS1 <> 1 }
 $temp_9 = 4
 #for:i:1..4
    $cline[$i] = $cline[$i + 1]
