@@ -1306,7 +1306,7 @@ $manc = 15
 #case:mancala_help 'Почитать правила' #order:5
 #case:game_lose 'Отказаться от выполнения' #order:7
 
-#site:mancala_cont #sound:seed
+#site:mancala_cont // #sound:seed
 #case:game_win { $temp_1 + $temp_2 + $temp_3 + $temp_4 = 0 }
 #case:mancala { $temp_1 + $temp_2 + $temp_3 + $temp_4 > 0 and $manc = 15 }
 #case:mancala { $temp_1 > 1 and $manc.a > 0 }
@@ -3060,22 +3060,43 @@ $temp_1 = 1
 #var:temp_13 #range:0..99999 #default:0 #hide
   #ct
 
+#var:cowl_1 #range:0..3 #default:0 #hide
+  #text:0..0 '^<link=1>[%1%]</link> <link=3>[%3%]</link> <link=5>[%5%]</link>^'
+  #text:1..1 '^<link=1>[%1%]</link> <link=3>[%3%]</link> <link=5>[%5%]</link>^'
+  #text:2..2 '^<link=1>[%1%]</link> <link=3>[%3%]</link> <link=5>[%5%]</link> <link=7>[%7%]</link>^'
+  #text:3..3 '^<link=1>[%1%]</link> <link=3>[%3%]</link> <link=5>[%5%]</link> <link=7>[%7%]</link>^'
+
+#var:cowl_2 #range:0..3 #default:0 #hide
+  #text:0..0 '^  <link=2>[%2%]</link> <link=4>[%4%]</link>^'
+  #text:1..1 '^<link=2>[%2%]</link> <link=4>[%4%]</link> <link=6>[%6%]</link>^'
+  #text:2..2 '^  <link=2>[%2%]</link> <link=4>[%4%]</link> <link=6>[%6%]</link>^'
+  #text:3..3 '^<link=2>[%2%]</link> <link=4>[%4%]</link> <link=6>[%6%]</link> <link=8>[%8%]</link>^'
+
 #macro:caim
 #page:1
 ^ %????% |      ^
 ^ -------------- ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:2
 ^ %????% |      ^
 ^ -------------- ^
 ^ $cline1 | @A1 @B1 @C1 @D1 ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:3
 ^ %????% |      ^
 ^ -------------- ^
 ^ $cline1 | @A1 @B1 @C1 @D1 ^
 ^ $cline2 | @A2 @B2 @C2 @D2 ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:4
 ^ %????% |      ^
 ^ -------------- ^
@@ -3083,6 +3104,9 @@ $temp_1 = 1
 ^ $cline2 | @A2 @B2 @C2 @D2 ^
 ^ $cline3 | @A3 @B3 @C3 @D3 ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:5
 ^ %????% |      ^
 ^ -------------- ^
@@ -3091,6 +3115,9 @@ $temp_1 = 1
 ^ $cline3 | @A3 @B3 @C3 @D3 ^
 ^ $cline4 | @A4 @B4 @C4 @D4 ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:6
 ^ %????% |      ^
 ^ -------------- ^
@@ -3100,21 +3127,33 @@ $temp_1 = 1
 ^ $cline4 | @A4 @B4 @C4 @D4 ^
 ^ $cline5 | @A5 @B5 @C5 @D5 ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:7
 ^ %???$temp_4% |      ^
 ^ -------------- ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:8
 ^ %???$temp_4% |      ^
 ^ -------------- ^
 ^ $cline1 | @A1 @B1 @C1 @D1 ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:9
 ^ %???$temp_4% |      ^
 ^ -------------- ^
 ^ $cline1 | @A1 @B1 @C1 @D1 ^
 ^ $cline2 | @A2 @B2 @C2 @D2 ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:10
 ^ %???$temp_4% |      ^
 ^ -------------- ^
@@ -3122,6 +3161,9 @@ $temp_1 = 1
 ^ $cline2 | @A2 @B2 @C2 @D2 ^
 ^ $cline3 | @A3 @B3 @C3 @D3 ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:11
 ^ %???$temp_4% |      ^
 ^ -------------- ^
@@ -3130,6 +3172,9 @@ $temp_1 = 1
 ^ $cline3 | @A3 @B3 @C3 @D3 ^
 ^ $cline4 | @A4 @B4 @C4 @D4 ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:12
 ^ %???$temp_4% |      ^
 ^ -------------- ^
@@ -3139,21 +3184,33 @@ $temp_1 = 1
 ^ $cline4 | @A4 @B4 @C4 @D4 ^
 ^ $cline5 | @A5 @B5 @C5 @D5 ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:13
 ^ %?$temp_2??% |      ^
 ^ -------------- ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:14
 ^ %?$temp_2??% |      ^
 ^ -------------- ^
 ^ $cline1 | @A1 @B1 @C1 @D1 ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:15
 ^ %?$temp_2??% |      ^
 ^ -------------- ^
 ^ $cline1 | @A1 @B1 @C1 @D1 ^
 ^ $cline2 | @A2 @B2 @C2 @D2 ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:16
 ^ %?$temp_2??% |      ^
 ^ -------------- ^
@@ -3161,6 +3218,9 @@ $temp_1 = 1
 ^ $cline2 | @A2 @B2 @C2 @D2 ^
 ^ $cline3 | @A3 @B3 @C3 @D3 ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:17
 ^ %?$temp_2??% |      ^
 ^ -------------- ^
@@ -3169,6 +3229,9 @@ $temp_1 = 1
 ^ $cline3 | @A3 @B3 @C3 @D3 ^
 ^ $cline4 | @A4 @B4 @C4 @D4 ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #page:18
 ^ %?$temp_2??% |      ^
 ^ -------------- ^
@@ -3178,6 +3241,9 @@ $temp_1 = 1
 ^ $cline4 | @A4 @B4 @C4 @D4 ^
 ^ $cline5 | @A5 @B5 @C5 @D5 ^
 ^ @temp_10@temp_11@temp_12@temp_13 |      ^
+^                                         ^
+^ @cowl_1                                 ^
+^ @cowl_2                                 ^
 #end
 
 #site:cow_help
@@ -3187,9 +3253,9 @@ $temp_1 = 1
 #case:cow 'Играть дальше'
 
 #site:cow_init
-$echars.spy = 3
-$slineS1    = 5  // Попыток до подсказки
-$slineS2    = 10 // Попыток до поражения
+$echars.spy = 2
+$slineS1    = 100  // Попыток до подсказки
+$slineS2    = 1000 // Попыток до поражения
 $slineS3    = 0
 $temp_9 = 0
 $cline1 = 0
@@ -3226,6 +3292,8 @@ $temp_4 = <1..8>
 
 #site:cow { $temp_9 + 1 + $slineS3 }
 #caim
+$cowl_1  = $echars.spy
+$cowl_2  = $echars.spy
 $temp_8  = 0
 $temp_10 = 0
 $temp_11 = 0
