@@ -92,6 +92,8 @@ $variant = <3..9>
 $variant = <10..12>
 #case:swap_init { 1 = 1 } 'Перестановка'
 $variant = 13 // <13..14>
+#case:cross_init { 1 = 1 } 'Крест'
+$variant = 15
 #case:cow_init { 1 = 1 } 'Быки и коровы'
 #case:mine_init { 1 = 1 } 'Сапёр'
 
@@ -3688,7 +3690,7 @@ $temp_4 = $temp_4 + 1
 #case:mine 'Играть дальше'
 
 #site:mine_init #show:charges:countdown
-$echars.spy = 1
+$echars.spy = 2
 $cl60   = 0
 $cl61   = 0
 $cl62   = 0
@@ -3993,6 +3995,300 @@ $countdown = $countdown - 1
 %!!! Вас обнаружили !!!%
 #case:entry 'Сыграем ещё?'
 
+#macro:crcell
+  #text:0..0 '.'
+  #text:1..1 '1'
+  #text:2..2 '2'
+  #text:3..3 '3'
+  #text:4..4 '4'
+  #text:5..5 '5'
+#end
+
+#for:i:1..10
+  #var:CRE[$i] #range:0..5 #default:0 #hide
+    #crcell
+  #var:CRF[$i] #range:0..5 #default:0 #hide
+    #crcell
+#end
+
+#for:i:5..6
+  #var:CRA[$i] #range:0..5 #default:0 #hide
+    #crcell
+  #var:CRB[$i] #range:0..5 #default:0 #hide
+    #crcell
+  #var:CRC[$i] #range:0..5 #default:0 #hide
+    #crcell
+  #var:CRD[$i] #range:0..5 #default:0 #hide
+    #crcell
+  #var:CRG[$i] #range:0..5 #default:0 #hide
+    #crcell
+  #var:CRH[$i] #range:0..5 #default:0 #hide
+    #crcell
+  #var:CRI[$i] #range:0..5 #default:0 #hide
+    #crcell
+  #var:CRJ[$i] #range:0..5 #default:0 #hide
+    #crcell
+#end
+
+#macro:craim
+^           +-----+        ^
+^%10%         |<link=вниз> @CRE10 @CRF10 </link>|        ^
+^ %9%         |<link=вниз> @CRE9 @CRF9 </link>|        ^
+^ %8%         |<link=вниз> @CRE8 @CRF8 </link>|        ^
+^ %7% +-------+<link=вниз> @CRE7 @CRF7 </link>+-------+^
+^ %6% |<link=вправо> @CRA6 @CRB6 @CRC6 @CRD6 </link>@CRE6 @CRF6<link=влево> @CRG6 @CRH6 @CRI6 @CRJ6 </link>|^
+^ %5% |<link=вправо> @CRA5 @CRB5 @CRC5 @CRD5 </link>@CRE5 @CRF5<link=влево> @CRG5 @CRH5 @CRI5 @CRJ5 </link>|^
+^ %4% +-------+<link=вверх> @CRE4 @CRF4 </link>+-------+^
+^ %3%         |<link=вверх> @CRE3 @CRF3 </link>|        ^
+^ %2%         |<link=вверх> @CRE2 @CRF2 </link>|        ^
+^ %1%         |<link=вверх> @CRE1 @CRF1 </link>|        ^
+^           +-----+        ^
+^     %A% %B% %C% %D% %E% %F% %G% %H% %I% %J%  ^
+#end
+
+#site:cross_init
+$CRE10 = 0
+$CRF10 = 0
+$CRE9  = 0
+$CRF9  = 0
+$CRE8  = 1
+$CRF8  = 1
+$CRE7  = 1
+$CRF7  = 1
+$CRA6  = 0
+$CRB6  = 0
+$CRC6  = 2
+$CRD6  = 2
+$CRE6  = 3
+$CRF6  = 3
+$CRG6  = 4
+$CRH6  = 4
+$CRI6  = 0
+$CRJ6  = 0
+$CRA5  = 0
+$CRB5  = 0
+$CRC5  = 2
+$CRD5  = 2
+$CRE5  = 3
+$CRF5  = 3
+$CRG5  = 4
+$CRH5  = 4
+$CRI5  = 0
+$CRJ5  = 0
+$CRE4  = 5
+$CRF4  = 5
+$CRE3  = 5
+$CRF3  = 5
+$CRE2  = 0
+$CRF2  = 0
+$CRE1  = 0
+$CRF1  = 0
+#case:cross_shuffle
+$temp_1 = 20
+
+#site:cross_shuffle
+$temp_1 = $temp_1 - 1
+#case:cross { $temp_1 = 0 }
+#case:cross_shuffle_1 { $temp_1 <> 0 }
+
+#site:cross_shuffle_1
+#case:cross_shuffle { $CRE10 = 0 and $CRF10 = 0 }
+$CRE10 = $CRE9
+$CRF10 = $CRF9
+$CRE9  = $CRE8
+$CRF9  = $CRF8
+$CRE8  = $CRE7
+$CRF8  = $CRF7
+$CRE7  = $CRE6
+$CRF7  = $CRF6
+$CRE6  = $CRE5
+$CRF6  = $CRF5
+$CRE5  = $CRE4
+$CRF5  = $CRF4
+$CRE4  = $CRE3
+$CRF4  = $CRF3
+$CRE3  = $CRE2
+$CRF3  = $CRF2
+$CRE2  = $CRE1
+$CRF2  = $CRF1
+$CRE1  = 0
+$CRF1  = 0
+#case:cross_shuffle { $CRE1 = 0 and $CRF1 = 0 }
+$CRE1  = $CRE2
+$CRF1  = $CRF2
+$CRE2  = $CRE3
+$CRF2  = $CRF3
+$CRE3  = $CRE4
+$CRF3  = $CRF4
+$CRE4  = $CRE5
+$CRF4  = $CRF5
+$CRE5  = $CRE6
+$CRF5  = $CRF6
+$CRE6  = $CRE7
+$CRF6  = $CRF7
+$CRE7  = $CRE8
+$CRF7  = $CRF8
+$CRE8  = $CRE9
+$CRF8  = $CRF9
+$CRE9  = $CRE10
+$CRF9  = $CRF10
+$CRE10 = 0
+$CRF10 = 0
+#case:cross_shuffle { $CRJ6 = 0 and $CRJ5 = 0 }
+$CRJ6  = $CRI6
+$CRJ5  = $CRI5
+$CRI6  = $CRH6
+$CRI5  = $CRH5
+$CRH6  = $CRG6
+$CRH5  = $CRG5
+$CRG6  = $CRF6
+$CRG5  = $CRF5
+$CRF6  = $CRE6
+$CRF5  = $CRE5
+$CRE6  = $CRD6
+$CRE5  = $CRD5
+$CRD6  = $CRC6
+$CRD5  = $CRC5
+$CRC6  = $CRB6
+$CRC5  = $CRB5
+$CRB6  = $CRA6
+$CRB5  = $CRA5
+$CRA6  = 0
+$CRA5  = 0
+#case:cross_shuffle { $CRA6 = 0 and $CRA5 = 0 }
+$CRA6  = $CRB6
+$CRA5  = $CRB5
+$CRB6  = $CRC6
+$CRB5  = $CRC5
+$CRC6  = $CRD6
+$CRC5  = $CRD5
+$CRD6  = $CRE6
+$CRD5  = $CRE5
+$CRE6  = $CRF6
+$CRE5  = $CRF5
+$CRF6  = $CRG6
+$CRF5  = $CRG5
+$CRG6  = $CRH6
+$CRG5  = $CRH5
+$CRH6  = $CRI6
+$CRH5  = $CRI5
+$CRI6  = $CRJ6
+$CRI5  = $CRJ5
+$CRJ6  = 0
+$CRJ5  = 0
+
+#site:cross
+#craim
+#case:cross_check 'вверх' { $CRE10 = 0 and $CRF10 = 0 } #order:1 #sound:slide
+$CRE10 = $CRE9
+$CRF10 = $CRF9
+$CRE9  = $CRE8
+$CRF9  = $CRF8
+$CRE8  = $CRE7
+$CRF8  = $CRF7
+$CRE7  = $CRE6
+$CRF7  = $CRF6
+$CRE6  = $CRE5
+$CRF6  = $CRF5
+$CRE5  = $CRE4
+$CRF5  = $CRF4
+$CRE4  = $CRE3
+$CRF4  = $CRF3
+$CRE3  = $CRE2
+$CRF3  = $CRF2
+$CRE2  = $CRE1
+$CRF2  = $CRF1
+$CRE1  = 0
+$CRF1  = 0
+#case:cross_check 'вниз' { $CRE1 = 0 and $CRF1 = 0 } #order:1 #sound:slide
+$CRE1  = $CRE2
+$CRF1  = $CRF2
+$CRE2  = $CRE3
+$CRF2  = $CRF3
+$CRE3  = $CRE4
+$CRF3  = $CRF4
+$CRE4  = $CRE5
+$CRF4  = $CRF5
+$CRE5  = $CRE6
+$CRF5  = $CRF6
+$CRE6  = $CRE7
+$CRF6  = $CRF7
+$CRE7  = $CRE8
+$CRF7  = $CRF8
+$CRE8  = $CRE9
+$CRF8  = $CRF9
+$CRE9  = $CRE10
+$CRF9  = $CRF10
+$CRE10 = 0
+$CRF10 = 0
+#case:cross_check 'вправо' { $CRJ6 = 0 and $CRJ5 = 0 } #order:1 #sound:slide
+$CRJ6  = $CRI6
+$CRJ5  = $CRI5
+$CRI6  = $CRH6
+$CRI5  = $CRH5
+$CRH6  = $CRG6
+$CRH5  = $CRG5
+$CRG6  = $CRF6
+$CRG5  = $CRF5
+$CRF6  = $CRE6
+$CRF5  = $CRE5
+$CRE6  = $CRD6
+$CRE5  = $CRD5
+$CRD6  = $CRC6
+$CRD5  = $CRC5
+$CRC6  = $CRB6
+$CRC5  = $CRB5
+$CRB6  = $CRA6
+$CRB5  = $CRA5
+$CRA6  = 0
+$CRA5  = 0
+#case:cross_check 'влево' { $CRA6 = 0 and $CRA5 = 0 } #order:1 #sound:slide
+$CRA6  = $CRB6
+$CRA5  = $CRB5
+$CRB6  = $CRC6
+$CRB5  = $CRC5
+$CRC6  = $CRD6
+$CRC5  = $CRD5
+$CRD6  = $CRE6
+$CRD5  = $CRE5
+$CRE6  = $CRF6
+$CRE5  = $CRF5
+$CRF6  = $CRG6
+$CRF5  = $CRG5
+$CRG6  = $CRH6
+$CRG5  = $CRH5
+$CRH6  = $CRI6
+$CRH5  = $CRI5
+$CRI6  = $CRJ6
+$CRI5  = $CRJ5
+$CRJ6  = 0
+$CRJ5  = 0
+#case:cross_help 'Почитать правила' #order:8
+#case:game_lose 'Отказаться от выполнения' #order:9
+
+#site:cross_help
+#page:1
+Перемещая блоки вверх-вниз и вправо-влево, разместите блоки цифр по порядку.
+
+^           +-----+        ^
+^%10%         | . . |        ^
+^ %9%         | . . |        ^
+^ %8%         | %1% %1% |        ^
+^ %7% +-------+ %1% %1% +-------+^
+^ %6% | . . %2% %2% %3% %3% %4% %4% . . |^
+^ %5% | . . %2% %2% %3% %3% %4% %4% . . |^
+^ %4% +-------+ %5% %5% +-------+^
+^ %3%         | %5% %5% |        ^
+^ %2%         | . . |        ^
+^ %1%         | . . |        ^
+^           +-----+        ^
+^     %A% %B% %C% %D% %E% %F% %G% %H% %I% %J%  ^
+#case:cross 'Играть дальше'
+
+#site:cross_check
+#case:game_win { $CRE8 = 1 and $CRF8 = 1 and $CRE7 = 1 and $CRF7 = 1 and $CRC6 = 2 and $CRD6 = 2 and $CRE6 = 3 and $CRF6 = 3 and $CRG6 = 4 and $CRH6 = 4 and $CRC5 = 2 and $CRD5 = 2 and $CRE5 = 3 and $CRF5 = 3 and $CRG5 = 4 and $CRH5 = 4 and $CRE4 = 5 and $CRF4 = 5 and $CRE3 = 5 and $CRF3 = 5 }
+#case:cross { $CRE8 <> 1 or $CRF8 <> 1 or $CRE7 <> 1 or $CRF7 <> 1 or $CRC6 <> 2 or $CRD6 <> 2 or $CRE6 <> 3 or $CRF6 <> 3 or $CRG6 <> 4 or $CRH6 <> 4 or $CRC5 <> 2 or $CRD5 <> 2 or $CRE5 <> 3 or $CRF5 <> 3 or $CRG5 <> 4 or $CRH5 <> 4 or $CRE4 <> 5 or $CRF4 <> 5 or $CRE3 <> 5 or $CRF3 <> 5 }
+
 #position:entry:96:399
 #position:inc:96:441
 #position:dec:160:441
@@ -4010,7 +4306,7 @@ $countdown = $countdown - 1
 #position:transf:224:315
 #position:attack:288:315
 #position:scienc:352:315
-#position:intelg:416:315
+#posiion:intelg:416:315
 #position:wait:96:483
 #position:transf_num:224:231
 #position:transf_where:224:189
