@@ -1,6 +1,16 @@
 ﻿- Разработка
+  - Bugs
+    - Быки и Коровы падают $slineS2 = 0
   - links
+    - no-link версии для dagaz-quest
     - добавить в старые квесты
+      - KnashHunting
+      - Logic
+      - Exam
+      - Player
+      - Edelweiss
+      - Maze
+      - Lunolet
   - qms
     - image не декомпилируется
   - swap

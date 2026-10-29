@@ -80,7 +80,7 @@
 
 #var:variant #range:0..1000 #default:0 #hide // Вариант выбора
 
-#site:entry #default
+#site:entry #default #image:amnesia_07
 #page:1
 Planet War
 #case:start { 1 = 0 } 'Играть'
@@ -879,7 +879,7 @@ $temp_5 = 0
 Соберите %все% сесмена в амбаре.
 #case:mancala 'Играть дальше'
 
-#site:mancala
+#site:mancala #image:glavred_07
 #maim
 #case:mancala_cont 'A' { $temp_1 = 1 and $manc.a > 0 } #order:1 // #sound:seed
 $temp_1 = 0
@@ -1410,7 +1410,7 @@ $C4 = <0..1>
 $D4 = <0..1>
 #case:lightoff
 
-#site:lightoff
+#site:lightoff #image:player_00
 #laim
 $LC = 0
 #case:lightoff_row 'A' #order:1
@@ -2281,7 +2281,7 @@ $sline2 = 31  // o o o o o
 $sline1 = 0   // . . . . .
 $temp_2 = 8
 
-#site:solit
+#site:solit #image:jumper_00
 #page:1
 ^   +-----------+ ^
 ^ %5% |@slineS5 | ^
@@ -2705,7 +2705,7 @@ $B5 = 3
 $C5 = 5
 $D5 = 7
 
-#site:swap
+#site:swap #image:bank_07
 #page:1
 #saim
 $LC = 0
@@ -3292,7 +3292,7 @@ $temp_2 = <1..8>
 $temp_3 = <1..8>
 $temp_4 = <1..8>
 
-#site:cow { $temp_9 + 1 + $slineS3 }
+#site:cow { $temp_9 + 1 + $slineS3 } #image:borzukhan_05
 #caim
 $cowl_1  = $echars.spy
 $cowl_2  = $echars.spy
@@ -3779,7 +3779,7 @@ $temp_1 = 1
 $col = $col + 1
 #case:mine { $col >= 7 }
 
-#site:mine
+#site:mine #image:siege_01
 $col = -1
 #aim
 #case:mine_ad 'A-D' #order:1
@@ -3978,9 +3978,9 @@ $countdown = <5..8>
 
 #site:mine_step_2
 $temp_9 = 0
-#case:mine_lose { $temp_4 >= 9 } #sound:shoot
+#case:mine_lose { $temp_4 >= 9 } #sound:shoot #image:penetrator_03
 $variant = 1                                    
-#case:mine_lose { $countdown = 1 }
+#case:mine_lose { $countdown = 1 } #image:borzukhan_08
 $variant = 2                                    
 #case:game_win { $temp_4 < 9 and $temp_1 >= 7 and $countdown <> 1 } 
 #case:mine_show { $temp_4 < 9 and $temp_1 < 7 and $countdown <> 1 } #return:mine
@@ -4177,7 +4177,7 @@ $CRI5  = $CRJ5
 $CRJ6  = 0
 $CRJ5  = 0
 
-#site:cross
+#site:cross #image:bank_08
 #craim
 #case:cross_check 'вверх' { $CRE10 = 0 and $CRF10 = 0 } #order:1 #sound:slide
 $CRE10 = $CRE9
