@@ -33,7 +33,7 @@ function prepareText(s: string, varId: number | null): string {
 }
 
 /**
- * Формирует строку вида `#show:p1;p2` или `#hide:p1;p2`.
+ * Формирует строку вида `#show:p1:p2` или `#hide:p1:p2`.
  */
 function buildShowHideString(changes: QMParam["paramsChanges"][0][], paramsCount: number, type: 1 | 2): string {
   const names: string[] = [];
@@ -42,7 +42,7 @@ function buildShowHideString(changes: QMParam["paramsChanges"][0][], paramsCount
       names.push(`p${i + 1}`);
     }
   }
-  return names.length > 0 ? ` #${type === 1 ? "show" : "hide"}:${names.join(";")}` : "";
+  return names.length > 0 ? ` #${type === 1 ? "show" : "hide"}:${names.join(":")}` : "";
 }
 
 /**

@@ -851,10 +851,6 @@ function parseSite(line: string, ctx: ParseContext) {
   if (p) {
     site.expr = p[1];
   }
-  p = line.match(/#image:(\S+)/);
-  if (p) {
-    site.image = p[1];
-  }
   site.isDay = /#day/.test(line);
 
   const imgMatch = line.match(/#image:(\S+)/);
