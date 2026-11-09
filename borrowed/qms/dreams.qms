@@ -125,6 +125,7 @@ $variant = <1..100>
 В камине потрескивал огонь... Три двери вели отсюда: одна, с затейливой резьбой, предположительно в %столовую%, другая, полускрытая тяжёлой портьерой, — в %библиотеку% и третья, самая узкая и тёмная, уходила в спальное крыло, откуда доносился едва слышный скрип, словно старый дом вздыхал во сне.
 #page:2
 Светало...
+#case:zugs_init 'Зуги' { 1 = 1 } #order:1
 #case:zug 'Спать' {$tired > 60 and $excited < 30 and $time < 180}
 #case:dagon 'Спать' {$blood < -15 and $humor < -15 and  $tired > 60 and $excited < 30 and $time < 180}
 #case:dawn 'Сегодня заснуть уже не удастся' {$time >= 180}
@@ -656,6 +657,83 @@ $wine=1
 Как ты заозирался в поисках своей зебры. Каково же было твоё изумление, когда ты увидел несчастное животное распростертым на земле у колонны, к которой ты его привязал, и еще более удивился, увидев, что %копытное мертво%, а вся его кровь выпита сквозь крохотную ранку на горле. Кто-то рылся в твоих узлах, откуда исчезло несколько блестящих безделушек, а весь песок вокруг был испещрен многочисленными, как бы птичьими, следами, которые не принадлежали ни одному из известных ему животных. Тут тебе на ум пришли рассказы собирателей лавы, и ты вспомнил о легких прикосновениях к лицу ночью.
 
 #case:earth_10 'Продолжать свой путь пешком'
+
+#macro:zc
+  #text 0..0 '.'
+  #text 1..1 'x' // Зуг
+  #text 2..2 '*' // Дерево или колодец
+  #text 3..3 '+' // Игрок
+#end
+
+#macro:zcell:X:Y
+  #var:ZC[$X]_[$Y] #range:0..3 #default:0 #hide
+    #zc
+#end
+
+#for:X:0..10
+  #for:Y:0..10
+    #zcell:[$X]:[$Y]
+  #end
+#end
+
+#macro:zaim
+#page:1
+A10 B10 C10 <link=north>D10 E10 F10 G10 H10</link> I10 J10 K10
+A9 B9 C9 <link=north>D9 E9 F9 G9 H9</link> I9 J9 K9
+A8 B8 C8 D8 <link=north>E8 F8 G8</link> H8 I8 J8 K8
+<link=west>A7 B7</link> C7 D7 <link=north>E7 F7 G7</link> H7 I7 <link=east>J7 K7</link>
+<link=west>A6 B6 C6 D6</link> E6 <link=north>F6</link> G6 <link=east>H6 I6 J6 K6</link>
+<link=west>A5 B5 C5 D5 E5</link> F5 <link=east>G5 H5 I5 J5 K5</link>
+<link=west>A4 B4 C4 D4</link> E4 <link=south>F4</link> G4 <link=east>H4 I4 J4 K4</link>
+<link=west>A3 B3</link> C3 D3 <link=south>E3 F3 G3</link> H3 I3 <link=east>J3 K3</link>
+A2 B2 C2 D2 <link=south>E2 F2 G2</link> H2 I2 J2 K2
+A1 B1 C1 <link=south>D1 E1 F1 G1 H1</link> I1 J1 K1
+A0 B0 C0 <link=south>D0 E0 F0 G0 H0</link> I0 J0 K0
+#page:2
+<link=north;west>A10 B10 C10</link> D10 <link=north;north>E10 F10 G10</link> H10 <link=north;east>I10 J10 K10</link>
+<link=north;west>A9 B9 C9</link> D9 <link=north;north>E9 F9 G9</link> H9 <link=north;east>I9 J9 K9</link>
+<link=north;west>A8 B8 C8</link> D8 <link=north;north>E8 F8 G8</link> H8 <link=north;east>I8 J8 K8</link>
+A7 B7 C7 <link=north;west>D7</link> E7 <link=north;north>F7</link> G7 <link=north;east>H7</link> I7 J7 K7
+<link=west;west>A6 B6 C6</link> D6 <link=north;west>E6</link> <link=north;north>F6</link> <link=north;north>G6</link> H6 <link=east;east>I6 J6 K6</link>
+<link=west;west>A5 B5 C5 D5 E5</link> F5 <link=east;east>G5 H5 I5 J5 K5</link>
+<link=west;west>A4 B4 C4</link> D4 <link=south;west>E4</link> <link=south;south>F4</link> <link=south;east>G4</link> H4 <link=east;east>I4 J4 K4</link>
+A3 B3 C3 <link=south;west>D3</link> E3 <link=south;south>F3</link> G3 <link=south;east>H3</link> I3 J3 K3
+<link=south;west>A2 B2 C2</link> D2 <link=south;south>E2 F2 G2</link> H2 <link=south;east>I2 J2 K2</link>
+<link=south;west>A1 B1 C1</link> D1 <link=south;south>E1 F1 G1</link> H1 <link=south;east>I1 J1 K1</link>
+<link=south;west>A0 B0 C0</link> D0 <link=south;south>E0 F0 G0</link> H0 <link=south;east>I0 J0 K0</link>
+#page:3
+A10 <link=north;north;west>B10 C10 D10</link> <link=north;north;north>E10 F10 G10</link> <link=north;north;east>H10 I10 J10</link> K10
+<link=north;west;west>A9</link> B9 <link=north;north;west>C9 D9</link> <link=north;north;north>E9 F9 G9</link> <link=north;north;east>H9 I9</link> J9 <link=north;east;east>K9</link>
+<link=north;west;west>A8 B8</link> C8 <link=north;north;west>D8 E8</link> <link=north;north;north>F8</link> <link=north;north;east>G8 H8</link> I8 <link=north;east;east>J8 K8</link>
+<link=north;west;west>A7 B7 C7</link> D7 <link=north;north;west>E7</link> <link=north;north;north>F7</link> <link=north;north;east>G7</link> H7 <link=north;east;east>I7 J7 K7</link>
+<link=west;west;west>A6 B6</link> <link=north;west;west>C6 D6</link> E6 <link=north;north;north>F6</link> G6 <link=north;east;east>H6 I6</link> <link=east;east;east>J6 K6</link>
+<link=west;west;west>A5 B5 C5 D5 E5</link> F5 <link=east;east;east>G5 H5 I5 J5 K5</link>
+<link=west;west;west>A4 B4</link> <link=south;west;west>C4 D4</link> E4 <link=south;south;south>F4</link> G4 <link=south;east;east>H4 I4</link> <link=east;east;east>J4 K4</link>
+<link=south;west;west>A3 B3 C3</link> D3 <link=south;south;west>E3</link> <link=south;south;south>F3</link> <link=south;south;east>G3</link> H3 <link=south;east;east>I3 J3 K3</link>
+<link=south;west;west>A2 B2</link> C2 <link=south;south;west>D2 E2</link> <link=south;south;south>F2</link> <link=south;south;east>G2 H2</link> I2 <link=south;east;east>J2 K2</link>
+<link=south;west;west>A1</link> B1 <link=south;south;west>C1 D1</link> <link=south;south;south>E1 F1 G1</link> <link=south;south;east>H1 I1</link> J1 <link=south;east;east>K1</link>
+A0 <link=south;south;west>B0 C0 D0</link> <link=south;south;south>E0 F0 G0</link> <link=south;south;east>H0 I0 J0</link> K0
+#end
+
+#macro:ztree:IX
+  #field:Y[$IX]
+  #field:X[$IX]
+#end
+
+#var:zt #range:0.. #default:0 #mod:10 #hide
+#for:i:1..4
+  #ztree:[$i]
+#end
+
+#site:zugs_init
+$ztY1 = <0..9>
+$ztX1 = <0..9>
+$ztY2 = <0..9>
+$ztX2 = <0..9>
+$ztY3 = <0..9>
+$ztX3 = <0..9>
+$ztY4 = <0..9>
+$ztX4 = <0..9>
 
 #position:start:96:525
 #position:start_1:96:483
