@@ -113,8 +113,8 @@ $Zug = <-1..1>
 $Cat = <-1..1>
 #page:1
 Особняк представлял собой старинное, изрядно обветшавшее здание, построенное на окраине %Аркхема% в начале XIX века. Фасад его, некогда украшенный строгими пилястрами и лепными фризами, ныне покрылся сетью глубоких трещин. Узкие стрельчатые окна с мутными, словно затянутыми катарактой стёклами, напоминали слепые глазницы %древних истуканов%, а карниз, неестественно прогнулся под тяжестью почерневшей черепицы.
-#case:zug 'Тест'
-#case:start_1 'Пройти в дом'
+#case:zugs_init 'Зуги' { 1 = 1 } #order:1
+#case:start_1 {1 = 0} 'Пройти в дом'
 Высокий потолок гостинной комнаты терялся в зыбком полумраке, где мерцали лишь причудливые тени от пламени камина, сложенного из грубого, словно %обожжённого в преисподней%, камня. В одном углу возвышался массивный буфет из тёмного дуба, в другом — пустые кресла с высокими спинками, напоминающие троны %безмолвных судей%.
 $time = $time + <10..15>
 $tired = $tired + <0..7>
@@ -125,34 +125,33 @@ $variant = <1..100>
 В камине потрескивал огонь... Три двери вели отсюда: одна, с затейливой резьбой, предположительно в %столовую%, другая, полускрытая тяжёлой портьерой, — в %библиотеку% и третья, самая узкая и тёмная, уходила в спальное крыло, откуда доносился едва слышный скрип, словно старый дом вздыхал во сне.
 #page:2
 Светало...
-#case:zugs_init 'Зуги' { 1 = 1 } #order:1
-#case:zug 'Спать' {$tired > 60 and $excited < 30 and $time < 180}
-#case:dagon 'Спать' {$blood < -15 and $humor < -15 and  $tired > 60 and $excited < 30 and $time < 180}
-#case:dawn 'Сегодня заснуть уже не удастся' {$time >= 180}
-#case:book 'Пройти в библиотеку' {$book_stage < 3 and $time < 180}
+#case:zug 'Спать' {$tired > 60 and $excited < 30 and $time < 180 and 1 = 0}
+#case:dagon 'Спать' {$blood < -15 and $humor < -15 and  $tired > 60 and $excited < 30 and $time < 180 and 1 = 0}
+#case:dawn 'Сегодня заснуть уже не удастся' {$time >= 180 and 1 = 0}
+#case:book 'Пройти в библиотеку' {$book_stage < 3 and $time < 180 and 1 = 0}
 $time = $time + <1..5>
-#case:sheep 'Считать баранов' {$time < 180} #count:1
+#case:sheep 'Считать баранов' {$time < 180 and 1 = 0} #count:1
 $time = $time + <1..5>
-#case:start_2 'Слегка перекусить' {$variant mod 7 > 0 and $tired < 21 and $eat = 0}
+#case:start_2 'Слегка перекусить' {$variant mod 7 > 0 and $tired < 21 and $eat = 0 and 1 = 0}
 $time = $time + <10..15>
 $eat = 1
 tired = $tired + <5..10>
 $excited = $excited + <0..3>
 Нельзя наедаться перед сном. 
 Немного сыра, зелени, хлеб, бокал вина...
-#case:start_2 'Плотно поужинать' {$variant mod 7 = 0 and $tired < 21 and $eat = 0}
+#case:start_2 'Плотно поужинать' {$variant mod 7 = 0 and $tired < 21 and $eat = 0 and 1 = 0}
 $time = $time + <30..40>
 $eat = 2
 $tired = $tired + <10..15>
 $excited = $excited + <20..25>
 Шикарный ужин: Вино! Мясо! %Много мяса%!!!
-#case:start_2 'Углы! Что за невероятные углы?' {$variant mod 7 = 3 and $tired > 50}
+#case:start_2 'Углы! Что за невероятные углы?' {$variant mod 7 = 3 and $tired > 50 and 1 = 0}
 $time = $time + <5..10>
 $tired = $tired + <1..3>
 $excited = $excited + <5..10>
 В нашей реальности не может существовать %таких% углов! 
 А тени? В них лежат %тени%...
-#case:start_2 'Не думать о Короле в жёлтом!' {$variant mod 13 = 0 and $tired > 20}
+#case:start_2 'Не думать о Короле в жёлтом!' {$variant mod 13 = 0 and $tired > 20 and 1 = 0}
 $time = $time + <1..3>
 $KoY = 1
 $excited=$excited + <20..40>
@@ -160,15 +159,15 @@ $tired=$tired - <0..10>
 В хладной и безжизненной пустоши... На плато Лэнг...
 Король в жёлтом восседает на своём троне! Он следит за тобой!
 Не думать о нём! %Не думать!!!%
-#case:start_2 'У стен есть глаза!' {$variant mod 7 = 0 and $tired > 30}
+#case:start_2 'У стен есть глаза!' {$variant mod 7 = 0 and $tired > 30 and 1 = 0}
 $time = $time + <1..3>
 $excited=$excited + <10..20>
 Они %смотрят%...
-#case:zug 'Медитировать' {$blood > 5 and $humor > 5} #count:1
+#case:zug 'Медитировать' {$blood > 5 and $humor > 5 and 1 = 0} #count:1
 Твёрдость воли... Ясность %намерения%...
 Вы достаточно сильны чтобы добиться %цели%...
 Вы войдёте в страну %грёз%...
-#case:start_3 'Заняться аутотренингом' {$blood > 5 and $humor < 5} #count:1
+#case:start_3 'Заняться аутотренингом' {$blood > 5 and $humor < 5 and 1 = 0} #count:1
 $variant = <1..100>
 #site:start_2
 #case:start_1
@@ -659,81 +658,379 @@ $wine=1
 #case:earth_10 'Продолжать свой путь пешком'
 
 #macro:zc
-  #text 0..0 '.'
-  #text 1..1 'x' // Зуг
-  #text 2..2 '*' // Дерево или колодец
-  #text 3..3 '+' // Игрок
+  #text:0..0 '.'
+  #text:1..1 'x' // Зуг
+  #text:2..2 '*' // Дерево или колодец
+  #text:3..3 '+' // Игрок
 #end
 
-#macro:zcell:X:Y
-  #var:ZC[$X]_[$Y] #range:0..3 #default:0 #hide
+#macro:zcell:Y
+  #var:A[$Y] #range:0..3 #default:0 #hide
+    #zc
+  #var:B[$Y] #range:0..3 #default:0 #hide
+    #zc
+  #var:C[$Y] #range:0..3 #default:0 #hide
+    #zc
+  #var:D[$Y] #range:0..3 #default:0 #hide
+    #zc
+  #var:E[$Y] #range:0..3 #default:0 #hide
+    #zc
+  #var:F[$Y] #range:0..3 #default:0 #hide
+    #zc
+  #var:G[$Y] #range:0..3 #default:0 #hide
+    #zc
+  #var:H[$Y] #range:0..3 #default:0 #hide
+    #zc
+  #var:I[$Y] #range:0..3 #default:0 #hide
+    #zc
+  #var:J[$Y] #range:0..3 #default:0 #hide
+    #zc
+  #var:K[$Y] #range:0..3 #default:0 #hide
     #zc
 #end
 
-#for:X:0..10
-  #for:Y:0..10
-    #zcell:[$X]:[$Y]
-  #end
+#for:Y:0..10
+  #zcell:[$Y]
 #end
 
 #macro:zaim
 #page:1
-A10 B10 C10 <link=north>D10 E10 F10 G10 H10</link> I10 J10 K10
-A9 B9 C9 <link=north>D9 E9 F9 G9 H9</link> I9 J9 K9
-A8 B8 C8 D8 <link=north>E8 F8 G8</link> H8 I8 J8 K8
-<link=west>A7 B7</link> C7 D7 <link=north>E7 F7 G7</link> H7 I7 <link=east>J7 K7</link>
-<link=west>A6 B6 C6 D6</link> E6 <link=north>F6</link> G6 <link=east>H6 I6 J6 K6</link>
-<link=west>A5 B5 C5 D5 E5</link> F5 <link=east>G5 H5 I5 J5 K5</link>
-<link=west>A4 B4 C4 D4</link> E4 <link=south>F4</link> G4 <link=east>H4 I4 J4 K4</link>
-<link=west>A3 B3</link> C3 D3 <link=south>E3 F3 G3</link> H3 I3 <link=east>J3 K3</link>
-A2 B2 C2 D2 <link=south>E2 F2 G2</link> H2 I2 J2 K2
-A1 B1 C1 <link=south>D1 E1 F1 G1 H1</link> I1 J1 K1
-A0 B0 C0 <link=south>D0 E0 F0 G0 H0</link> I0 J0 K0
+^@A10 @B10 @C10 <link=north>@D10 @E10 @F10 @G10 @H10</link> @I10 @J10 @K10^
+^@A9 @B9 @C9 <link=north>@D9 @E9 @F9 @G9 @H9</link> @I9 @J9 @K9^
+^@A8 @B8 @C8 @D8 <link=north>@E8 @F8 @G8</link> @H8 @I8 @J8 @K8^
+^<link=west>@A7 @B7</link> @C7 @D7 <link=north>@E7 @F7 @G7</link> @H7 @I7 <link=east>@J7 @K7</link>^
+^<link=west>@A6 @B6 @C6 @D6</link> @E6 <link=north>@F6</link> @G6 <link=east>@H6 @I6 @J6 @K6</link>^
+^<link=west>@A5 @B5 @C5 @D5 @E5</link> @F5 <link=east>@G5 @H5 @I5 @J5 @K5</link>^
+^<link=west>@A4 @B4 @C4 @D4</link> @E4 <link=south>@F4</link> @G4 <link=east>@H4 @I4 @J4 @K4</link>^
+^<link=west>@A3 @B3</link> @C3 @D3 <link=south>@E3 @F3 @G3</link> @H3 @I3 <link=east>@J3 @K3</link>^
+^@A2 @B2 @C2 @D2 <link=south>@E2 @F2 @G2</link> @H2 @I2 @J2 @K2^
+^@A1 @B1 @C1 <link=south>@D1 @E1 @F1 @G1 @H1</link> @I1 @J1 @K1^
+^@A0 @B0 @C0 <link=south>@D0 @E0 @F0 @G0 @H0</link> @I0 @J0 @K0^
 #page:2
-<link=north;west>A10 B10 C10</link> D10 <link=north;north>E10 F10 G10</link> H10 <link=north;east>I10 J10 K10</link>
-<link=north;west>A9 B9 C9</link> D9 <link=north;north>E9 F9 G9</link> H9 <link=north;east>I9 J9 K9</link>
-<link=north;west>A8 B8 C8</link> D8 <link=north;north>E8 F8 G8</link> H8 <link=north;east>I8 J8 K8</link>
-A7 B7 C7 <link=north;west>D7</link> E7 <link=north;north>F7</link> G7 <link=north;east>H7</link> I7 J7 K7
-<link=west;west>A6 B6 C6</link> D6 <link=north;west>E6</link> <link=north;north>F6</link> <link=north;north>G6</link> H6 <link=east;east>I6 J6 K6</link>
-<link=west;west>A5 B5 C5 D5 E5</link> F5 <link=east;east>G5 H5 I5 J5 K5</link>
-<link=west;west>A4 B4 C4</link> D4 <link=south;west>E4</link> <link=south;south>F4</link> <link=south;east>G4</link> H4 <link=east;east>I4 J4 K4</link>
-A3 B3 C3 <link=south;west>D3</link> E3 <link=south;south>F3</link> G3 <link=south;east>H3</link> I3 J3 K3
-<link=south;west>A2 B2 C2</link> D2 <link=south;south>E2 F2 G2</link> H2 <link=south;east>I2 J2 K2</link>
-<link=south;west>A1 B1 C1</link> D1 <link=south;south>E1 F1 G1</link> H1 <link=south;east>I1 J1 K1</link>
-<link=south;west>A0 B0 C0</link> D0 <link=south;south>E0 F0 G0</link> H0 <link=south;east>I0 J0 K0</link>
+^<link=north;west>@A10 @B10 @C10</link> @D10 <link=north;north>@E10 @F10 @G10</link> @H10 <link=north;east>@I10 @J10 @K10</link>^
+^<link=north;west>@A9 @B9 @C9</link> @D9 <link=north;north>@E9 @F9 @G9</link> @H9 <link=north;east>@I9 @J9 @K9</link>^
+^<link=north;west>@A8 @B8 @C8</link> @D8 <link=north;north>@E8 @F8 @G8</link> @H8 <link=north;east>@I8 @J8 @K8</link>^
+^@A7 @B7 @C7 <link=north;west>@D7</link> @E7 <link=north;north>@F7</link> @G7 <link=north;east>@H7</link> @I7 @J7 @K7^
+^<link=west;west>@A6 @B6 @C6</link> @D6 <link=north;west>@E6</link> <link=north;north>@F6</link> <link=north;north>@G6</link> @H6 <link=east;east>@I6 @J6 @K6</link>^
+^<link=west;west>@A5 @B5 @C5 @D5 @E5</link> @F5 <link=east;east>@G5 @H5 @I5 @J5 @K5</link>^
+^<link=west;west>@A4 @B4 @C4</link> @D4 <link=south;west>@E4</link> <link=south;south>@F4</link> <link=south;east>@G4</link> @H4 <link=east;east>@I4 @J4 @K4</link>^
+^@A3 @B3 @C3 <link=south;west>@D3</link> @E3 <link=south;south>@F3</link> @G3 <link=south;east>@H3</link> @I3 @J3 @K3^
+^<link=south;west>@A2 @B2 @C2</link> @D2 <link=south;south>@E2 @F2 @G2</link> @H2 <link=south;east>@I2 @J2 @K2</link>^
+^<link=south;west>@A1 @B1 @C1</link> @D1 <link=south;south>@E1 @F1 @G1</link> @H1 <link=south;east>@I1 @J1 @K1</link>^
+^<link=south;west>@A0 @B0 @C0</link> @D0 <link=south;south>@E0 @F0 @G0</link> @H0 <link=south;east>@I0 @J0 @K0</link>^
 #page:3
-A10 <link=north;north;west>B10 C10 D10</link> <link=north;north;north>E10 F10 G10</link> <link=north;north;east>H10 I10 J10</link> K10
-<link=north;west;west>A9</link> B9 <link=north;north;west>C9 D9</link> <link=north;north;north>E9 F9 G9</link> <link=north;north;east>H9 I9</link> J9 <link=north;east;east>K9</link>
-<link=north;west;west>A8 B8</link> C8 <link=north;north;west>D8 E8</link> <link=north;north;north>F8</link> <link=north;north;east>G8 H8</link> I8 <link=north;east;east>J8 K8</link>
-<link=north;west;west>A7 B7 C7</link> D7 <link=north;north;west>E7</link> <link=north;north;north>F7</link> <link=north;north;east>G7</link> H7 <link=north;east;east>I7 J7 K7</link>
-<link=west;west;west>A6 B6</link> <link=north;west;west>C6 D6</link> E6 <link=north;north;north>F6</link> G6 <link=north;east;east>H6 I6</link> <link=east;east;east>J6 K6</link>
-<link=west;west;west>A5 B5 C5 D5 E5</link> F5 <link=east;east;east>G5 H5 I5 J5 K5</link>
-<link=west;west;west>A4 B4</link> <link=south;west;west>C4 D4</link> E4 <link=south;south;south>F4</link> G4 <link=south;east;east>H4 I4</link> <link=east;east;east>J4 K4</link>
-<link=south;west;west>A3 B3 C3</link> D3 <link=south;south;west>E3</link> <link=south;south;south>F3</link> <link=south;south;east>G3</link> H3 <link=south;east;east>I3 J3 K3</link>
-<link=south;west;west>A2 B2</link> C2 <link=south;south;west>D2 E2</link> <link=south;south;south>F2</link> <link=south;south;east>G2 H2</link> I2 <link=south;east;east>J2 K2</link>
-<link=south;west;west>A1</link> B1 <link=south;south;west>C1 D1</link> <link=south;south;south>E1 F1 G1</link> <link=south;south;east>H1 I1</link> J1 <link=south;east;east>K1</link>
-A0 <link=south;south;west>B0 C0 D0</link> <link=south;south;south>E0 F0 G0</link> <link=south;south;east>H0 I0 J0</link> K0
+^@A10 <link=north;north;west>@B10 @C10 @D10</link> <link=north;north;north>@E10 @F10 @G10</link> <link=north;north;east>@H10 @I10 @J10</link> @K10^
+^<link=north;west;west>@A9</link> @B9 <link=north;north;west>@C9 @D9</link> <link=north;north;north>@E9 @F9 @G9</link> <link=north;north;east>@H9 @I9</link> @J9 <link=north;east;east>@K9</link>^
+^<link=north;west;west>@A8 @B8</link> @C8 <link=north;north;west>@D8 @E8</link> <link=north;north;north>@F8</link> <link=north;north;east>@G8 @H8</link> @I8 <link=north;east;east>@J8 @K8</link>^
+^<link=north;west;west>@A7 @B7 @C7</link> @D7 <link=north;north;west>@E7</link> <link=north;north;north>@F7</link> <link=north;north;east>@G7</link> @H7 <link=north;east;east>@I7 @J7 @K7</link>^
+^<link=west;west;west>@A6 @B6</link> <link=north;west;west>@C6 @D6</link> @E6 <link=north;north;north>@F6</link> @G6 <link=north;east;east>@H6 @I6</link> <link=east;east;east>@J6 @K6</link>^
+^<link=west;west;west>@A5 @B5 @C5 @D5 @E5</link> @F5 <link=east;east;east>@G5 @H5 @I5 @J5 @K5</link>^
+^<link=west;west;west>@A4 @B4</link> <link=south;west;west>@C4 @D4</link> @E4 <link=south;south;south>@F4</link> @G4 <link=south;east;east>@H4 @I4</link> <link=east;east;east>@J4 @K4</link>^
+^<link=south;west;west>@A3 @B3 @C3</link> @D3 <link=south;south;west>@E3</link> <link=south;south;south>@F3</link> <link=south;south;east>@G3</link> @H3 <link=south;east;east>@I3 @J3 @K3</link>^
+^<link=south;west;west>@A2 @B2</link> @C2 <link=south;south;west>@D2 @E2</link> <link=south;south;south>@F2</link> <link=south;south;east>@G2 @H2</link> @I2 <link=south;east;east>@J2 @K2</link>^
+^<link=south;west;west>@A1</link> @B1 <link=south;south;west>@C1 @D1</link> <link=south;south;south>@E1 @F1 @G1</link> <link=south;south;east>@H1 @I1</link> @J1 <link=south;east;east>@K1</link>^
+^@A0 <link=south;south;west>@B0 @C0 @D0</link> <link=south;south;south>@E0 @F0 @G0</link> <link=south;south;east>@H0 @I0 @J0</link> @K0^
 #end
 
-#macro:ztree:IX
-  #field:Y[$IX]
-  #field:X[$IX]
-#end
+#var:zt #range:0..100000000 #default:0 #mod:10 #hide
 
-#var:zt #range:0.. #default:0 #mod:10 #hide
-#for:i:1..4
-  #ztree:[$i]
+#var:temp_1 #range:0..100000000 #default:0 #hide
+#var:temp_2 #range:0..100000000 #default:0 #hide
+#var:temp_3 #range:0..100000000 #default:0 #hide
+
+#site:zugs_show
+#for:Y:0..10
+  $A[$Y] = 0
+  $B[$Y] = 0
+  $C[$Y] = 0
+  $D[$Y] = 0
+  $E[$Y] = 0
+  $F[$Y] = 0
+  $G[$Y] = 0
+  $H[$Y] = 0
+  $I[$Y] = 0
+  $J[$Y] = 0
+  $K[$Y] = 0
 #end
+$temp_1 = $zt
+#case:zugs_show_next
+
+#site:zugs_show_next
+$temp_2 = $temp_1 mod 10
+$temp_3 = ($temp_1 div 10) mod 10
+#case:zugs_show_0 { $temp_1 <> 0 and $temp_3 = 0 }
+$temp_1 = $temp_1 div 100
+#case:zugs_show_1 { $temp_1 <> 0 and $temp_3 = 1 }
+$temp_1 = $temp_1 div 100
+#case:zugs_show_2 { $temp_1 <> 0 and $temp_3 = 2 }
+$temp_1 = $temp_1 div 100
+#case:zugs_show_3 { $temp_1 <> 0 and $temp_3 = 3 }
+$temp_1 = $temp_1 div 100
+#case:zugs_show_4 { $temp_1 <> 0 and $temp_3 = 4 }
+$temp_1 = $temp_1 div 100
+#case:zugs_show_5 { $temp_1 <> 0 and $temp_3 = 5 }
+$temp_1 = $temp_1 div 100
+#case:zugs_show_6 { $temp_1 <> 0 and $temp_3 = 6 }
+$temp_1 = $temp_1 div 100
+#case:zugs_show_7 { $temp_1 <> 0 and $temp_3 = 7 }
+$temp_1 = $temp_1 div 100
+#case:zugs_show_8 { $temp_1 <> 0 and $temp_3 = 8 }
+$temp_1 = $temp_1 div 100
+#case:zugs_show_9 { $temp_1 <> 0 and $temp_3 = 9 }
+$temp_1 = $temp_1 div 100
+#case:zugs_show_ret { $temp_1 = 0 }
+
+#site:zugs_show_0
+#case:zugs_show_next { $temp_2 = 0 }
+$A0 = 2
+#case:zugs_show_next { $temp_2 = 1 }
+$B0 = 2
+#case:zugs_show_next { $temp_2 = 2 }
+$C0 = 2
+#case:zugs_show_next { $temp_2 = 3 }
+$D0 = 2
+#case:zugs_show_next { $temp_2 = 4 }
+$E0 = 2
+#case:zugs_show_next { $temp_2 = 5 }
+$G0 = 2
+#case:zugs_show_next { $temp_2 = 6 }
+$H0 = 2
+#case:zugs_show_next { $temp_2 = 7 }
+$I0 = 2
+#case:zugs_show_next { $temp_2 = 8 }
+$J0 = 2
+#case:zugs_show_next { $temp_2 = 9 }
+$K0 = 2
+
+#site:zugs_show_1
+#case:zugs_show_next { $temp_2 = 0 }
+$A1 = 2
+#case:zugs_show_next { $temp_2 = 1 }
+$B1 = 2
+#case:zugs_show_next { $temp_2 = 2 }
+$C1 = 2
+#case:zugs_show_next { $temp_2 = 3 }
+$D1 = 2
+#case:zugs_show_next { $temp_2 = 4 }
+$E1 = 2
+#case:zugs_show_next { $temp_2 = 5 }
+$G1 = 2
+#case:zugs_show_next { $temp_2 = 6 }
+$H1 = 2
+#case:zugs_show_next { $temp_2 = 7 }
+$I1 = 2
+#case:zugs_show_next { $temp_2 = 8 }
+$J1 = 2
+#case:zugs_show_next { $temp_2 = 9 }
+$K1 = 2
+
+#site:zugs_show_1
+#case:zugs_show_next { $temp_2 = 0 }
+$A1 = 2
+#case:zugs_show_next { $temp_2 = 1 }
+$B1 = 2
+#case:zugs_show_next { $temp_2 = 2 }
+$C1 = 2
+#case:zugs_show_next { $temp_2 = 3 }
+$D1 = 2
+#case:zugs_show_next { $temp_2 = 4 }
+$E1 = 2
+#case:zugs_show_next { $temp_2 = 5 }
+$G1 = 2
+#case:zugs_show_next { $temp_2 = 6 }
+$H1 = 2
+#case:zugs_show_next { $temp_2 = 7 }
+$I1 = 2
+#case:zugs_show_next { $temp_2 = 8 }
+$J1 = 2
+#case:zugs_show_next { $temp_2 = 9 }
+$K1 = 2
+
+#site:zugs_show_2
+#case:zugs_show_next { $temp_2 = 0 }
+$A2 = 2
+#case:zugs_show_next { $temp_2 = 1 }
+$B2 = 2
+#case:zugs_show_next { $temp_2 = 2 }
+$C2 = 2
+#case:zugs_show_next { $temp_2 = 3 }
+$D2 = 2
+#case:zugs_show_next { $temp_2 = 4 }
+$E2 = 2
+#case:zugs_show_next { $temp_2 = 5 }
+$G2 = 2
+#case:zugs_show_next { $temp_2 = 6 }
+$H2 = 2
+#case:zugs_show_next { $temp_2 = 7 }
+$I2 = 2
+#case:zugs_show_next { $temp_2 = 8 }
+$J2 = 2
+#case:zugs_show_next { $temp_2 = 9 }
+$K2 = 2
+
+#site:zugs_show_3
+#case:zugs_show_next { $temp_2 = 0 }
+$A3 = 2
+#case:zugs_show_next { $temp_2 = 1 }
+$B3 = 2
+#case:zugs_show_next { $temp_2 = 2 }
+$C3 = 2
+#case:zugs_show_next { $temp_2 = 3 }
+$D3 = 2
+#case:zugs_show_next { $temp_2 = 4 }
+$E3 = 2
+#case:zugs_show_next { $temp_2 = 5 }
+$G3 = 2
+#case:zugs_show_next { $temp_2 = 6 }
+$H3 = 2
+#case:zugs_show_next { $temp_2 = 7 }
+$I3 = 2
+#case:zugs_show_next { $temp_2 = 8 }
+$J3 = 2
+#case:zugs_show_next { $temp_2 = 9 }
+$K3 = 2
+
+#site:zugs_show_4
+#case:zugs_show_next { $temp_2 = 0 }
+$A4 = 2
+#case:zugs_show_next { $temp_2 = 1 }
+$B4 = 2
+#case:zugs_show_next { $temp_2 = 2 }
+$C4 = 2
+#case:zugs_show_next { $temp_2 = 3 }
+$D4 = 2
+#case:zugs_show_next { $temp_2 = 4 }
+$E4 = 2
+#case:zugs_show_next { $temp_2 = 5 }
+$G4 = 2
+#case:zugs_show_next { $temp_2 = 6 }
+$H4 = 2
+#case:zugs_show_next { $temp_2 = 7 }
+$I4 = 2
+#case:zugs_show_next { $temp_2 = 8 }
+$J4 = 2
+#case:zugs_show_next { $temp_2 = 9 }
+$K4 = 2
+
+#site:zugs_show_5
+#case:zugs_show_next { $temp_2 = 0 }
+$A5 = 2
+#case:zugs_show_next { $temp_2 = 1 }
+$B5 = 2
+#case:zugs_show_next { $temp_2 = 2 }
+$C5 = 2
+#case:zugs_show_next { $temp_2 = 3 }
+$D5 = 2
+#case:zugs_show_next { $temp_2 = 4 }
+$E5 = 2
+#case:zugs_show_next { $temp_2 = 5 }
+$G5 = 2
+#case:zugs_show_next { $temp_2 = 6 }
+$H5 = 2
+#case:zugs_show_next { $temp_2 = 7 }
+$I5 = 2
+#case:zugs_show_next { $temp_2 = 8 }
+$J5 = 2
+#case:zugs_show_next { $temp_2 = 9 }
+$K5 = 2
+
+#site:zugs_show_6
+#case:zugs_show_next { $temp_2 = 0 }
+$A6 = 2
+#case:zugs_show_next { $temp_2 = 1 }
+$B6 = 2
+#case:zugs_show_next { $temp_2 = 2 }
+$C6 = 2
+#case:zugs_show_next { $temp_2 = 3 }
+$D6 = 2
+#case:zugs_show_next { $temp_2 = 4 }
+$E6 = 2
+#case:zugs_show_next { $temp_2 = 5 }
+$G6 = 2
+#case:zugs_show_next { $temp_2 = 6 }
+$H6 = 2
+#case:zugs_show_next { $temp_2 = 7 }
+$I6 = 2
+#case:zugs_show_next { $temp_2 = 8 }
+$J6 = 2
+#case:zugs_show_next { $temp_2 = 9 }
+$K6 = 2
+
+#site:zugs_show_7
+#case:zugs_show_next { $temp_2 = 0 }
+$A7 = 2
+#case:zugs_show_next { $temp_2 = 1 }
+$B7 = 2
+#case:zugs_show_next { $temp_2 = 2 }
+$C7 = 2
+#case:zugs_show_next { $temp_2 = 3 }
+$D7 = 2
+#case:zugs_show_next { $temp_2 = 4 }
+$E7 = 2
+#case:zugs_show_next { $temp_2 = 5 }
+$G7 = 2
+#case:zugs_show_next { $temp_2 = 6 }
+$H7 = 2
+#case:zugs_show_next { $temp_2 = 7 }
+$I7 = 2
+#case:zugs_show_next { $temp_2 = 8 }
+$J7 = 2
+#case:zugs_show_next { $temp_2 = 9 }
+$K7 = 2
+
+#site:zugs_show_8
+#case:zugs_show_next { $temp_2 = 0 }
+$A8 = 2
+#case:zugs_show_next { $temp_2 = 1 }
+$B8 = 2
+#case:zugs_show_next { $temp_2 = 2 }
+$C8 = 2
+#case:zugs_show_next { $temp_2 = 3 }
+$D8 = 2
+#case:zugs_show_next { $temp_2 = 4 }
+$E8 = 2
+#case:zugs_show_next { $temp_2 = 5 }
+$G8 = 2
+#case:zugs_show_next { $temp_2 = 6 }
+$H8 = 2
+#case:zugs_show_next { $temp_2 = 7 }
+$I8 = 2
+#case:zugs_show_next { $temp_2 = 8 }
+$J8 = 2
+#case:zugs_show_next { $temp_2 = 9 }
+$K8 = 2
+
+#site:zugs_show_9
+#case:zugs_show_next { $temp_2 = 0 }
+$A9 = 2
+#case:zugs_show_next { $temp_2 = 1 }
+$B9 = 2
+#case:zugs_show_next { $temp_2 = 2 }
+$C9 = 2
+#case:zugs_show_next { $temp_2 = 3 }
+$D9 = 2
+#case:zugs_show_next { $temp_2 = 4 }
+$E9 = 2
+#case:zugs_show_next { $temp_2 = 5 }
+$G9 = 2
+#case:zugs_show_next { $temp_2 = 6 }
+$H9 = 2
+#case:zugs_show_next { $temp_2 = 7 }
+$I9 = 2
+#case:zugs_show_next { $temp_2 = 8 }
+$J9 = 2
+#case:zugs_show_next { $temp_2 = 9 }
+$K9 = 2
+
+#site:zugs_show_ret
+#return
 
 #site:zugs_init
-$ztY1 = <0..9>
-$ztX1 = <0..9>
-$ztY2 = <0..9>
-$ztX2 = <0..9>
-$ztY3 = <0..9>
-$ztX3 = <0..9>
-$ztY4 = <0..9>
-$ztX4 = <0..9>
+$zt = <0..9> + <0..9> * 10 + <0..9> * 100 + <0..9> * 1000 + <0..9> * 10000 + <0..9> * 100000 + <0..9> * 1000000 + <0..9> * 10000000
+#case:zugs_show #return:zugs
+
+#site:zugs #win
+#zaim
 
 #position:start:96:525
 #position:start_1:96:483
@@ -750,3 +1047,19 @@ $ztX4 = <0..9>
 #position:book_2:288:525
 #position:sheep_2:288:483
 #position:book_3:352:483
+
+#position:zugs_init:288:273
+#position:zugs_show:352:357
+#position:zugs_show_next:416:357
+#position:zugs_show_0:544:693
+#position:zugs_show_1:608:651
+#position:zugs_show_2:672:609
+#position:zugs_show_3:736:567
+#position:zugs_show_4:800:525
+#position:zugs_show_5:864:483
+#position:zugs_show_6:928:441
+#position:zugs_show_7:992:399
+#position:zugs_show_8:1056:357
+#position:zugs_show_9:1120:315
+#position:zugs_show_ret:352:273
+#position:zugs:416:273
