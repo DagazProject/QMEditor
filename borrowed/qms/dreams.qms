@@ -734,9 +734,10 @@ $wine=1
 
 #var:zt #range:0..100000000 #default:0 #mod:10 #hide
 
-#var:temp_1 #range:0..100000000 #default:0 #hide
+#var:temp_1 #range:-10..100000000 #default:0 #hide
 #var:temp_2 #range:0..100000000 #default:0 #hide
 #var:temp_3 #range:0..100000000 #default:0 #hide
+#var:temp_4 #range:-100..100000000 #default:0 #hide
 
 #site:zugs_show
 #for:Y:0..10
@@ -778,7 +779,7 @@ $temp_1 = $temp_1 div 100
 $temp_1 = $temp_1 div 100
 #case:zugs_show_9 { $temp_1 <> 0 and $temp_3 = 9 }
 $temp_1 = $temp_1 div 100
-#case:zugs_show_ret { $temp_1 = 0 }
+#case:zugs_show_center { $temp_1 = 0 }
 
 #site:zugs_show_0
 #case:zugs_show_next { $temp_2 = 0 }
@@ -1022,15 +1023,56 @@ $J9 = 2
 #case:zugs_show_next { $temp_2 = 9 }
 $K9 = 2
 
+#site:zugs_show_center
+$F5 = 3
+#case:zugs_show_ret
+
 #site:zugs_show_ret
 #return
 
 #site:zugs_init
-$zt = <0..9> + <0..9> * 10 + <0..9> * 100 + <0..9> * 1000 + <0..9> * 10000 + <0..9> * 100000 + <0..9> * 1000000 + <0..9> * 10000000
+$zt = <0..4> + <0..4> * 10 + <0..4> * 100 + <5..9> * 1000 + <5..9> * 10000 + <5..9> * 100000 + <5..9> * 1000000 + <0..4> * 10000000
 #case:zugs_show #return:zugs
 
-#site:zugs #win
+#site:zugs
 #zaim
+$temp_2 = $zt
+$temp_3 = 0
+#case:zugs_move_1 'north' #order:1
+$temp_1 = -10
+#case:zugs_move_1 'west'  #order:2
+$temp_1 = 1
+#case:zugs_move_1 'east'  #order:3
+$temp_1 = -1
+#case:zugs_move_1 'south' #order:4
+$temp_1 = 10
+
+#site:zugs_move_1
+$temp_4 = $temp_2 mod 100
+#case:zugs_show { $temp_2 = 0 } #return:zugs
+$zt = $temp_3
+#case:zugs_move_2 { $temp_2 <> 0 and $temp_1 = -10 and (($temp_4 div 10) = 0) }
+$temp_4 = 90 + <0..9>
+#case:zugs_move_2 { $temp_2 <> 0 and $temp_1 = -10 and (($temp_4 div 10) <> 0) }
+$temp_4 = $temp_4 + $temp_1
+#case:zugs_move_2 { $temp_2 <> 0 and $temp_1 = -1 and (($temp_4 mod 10) = 0) }
+$temp_4 = <0..9> * 10 + 9
+#case:zugs_move_2 { $temp_2 <> 0 and $temp_1 = -1 and (($temp_4 mod 10) <> 0) }
+$temp_4 = $temp_4 + $temp_1
+#case:zugs_move_2 { $temp_2 <> 0 and $temp_1 = 1 and (($temp_4 mod 10) = 9) }
+$temp_4 = <0..9> * 10
+#case:zugs_move_2 { $temp_2 <> 0 and $temp_1 = 1 and (($temp_4 mod 10) <> 9) }
+$temp_4 = $temp_4 + $temp_1
+#case:zugs_move_2 { $temp_2 <> 0 and $temp_1 = 10 and (($temp_4 div 10) = 9) }
+$temp_4 = <0..9>
+#case:zugs_move_2 { $temp_2 <> 0 and $temp_1 = 10 and (($temp_4 div 10) <> 9) }
+$temp_4 = $temp_4 + $temp_1
+
+#site:zugs_move_2
+$temp_2 = $temp_2 div 100
+$temp_3 = $temp_3 * 100
+#case:zugs_move_1
+$temp_3 = $temp_3 + $temp_4
 
 #position:start:96:525
 #position:start_1:96:483
@@ -1063,3 +1105,6 @@ $zt = <0..9> + <0..9> * 10 + <0..9> * 100 + <0..9> * 1000 + <0..9> * 10000 + <0.
 #position:zugs_show_9:1120:315
 #position:zugs_show_ret:352:273
 #position:zugs:416:273
+#position:zugs_show_center:352:315
+#position:zugs_move_1:480:273
+#position:zugs_move_2:544:273
